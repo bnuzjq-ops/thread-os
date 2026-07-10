@@ -1,0 +1,31 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+coverage/
+.nyc_output/
+
+# Logs and local runtime files
+*.log
+tmp/
+temp/
+
+# Secrets
+.env
+.env.*
+!.env.example
