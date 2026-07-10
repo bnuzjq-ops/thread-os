@@ -28,6 +28,15 @@
 
 - `GITHUB_REPO=bnuzjq-ops/thread-os`
 
+## `GITHUB_PAT` 的权限要求
+
+因为这条桥调用的是 GitHub `repository_dispatch`，所以这个 PAT 需要对目标仓库有：
+
+- fine-grained PAT：`Contents: write`
+- classic PAT：`repo`
+
+如果仓库选错了，或者权限不够，Worker 会在发 dispatch 时返回失败。
+
 ## 不需要放进 CW 的东西
 
 - `App Secret` 不参与这条回调桥的验签
