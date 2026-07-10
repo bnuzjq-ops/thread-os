@@ -99,6 +99,10 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
     requests[0].init.headers.Authorization,
     'Bearer github-pat',
   );
+  assert.equal(
+    requests[0].init.headers['User-Agent'],
+    'threads-reply-worker',
+  );
 
   const dispatchBody = JSON.parse(requests[0].init.body);
   assert.deepEqual(dispatchBody, {

@@ -156,6 +156,7 @@ async function dispatchToGithub({ fetchImpl, repo, pat, eventType, payload }) {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${pat}`,
+      'User-Agent': 'threads-reply-worker',
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json',
       'X-GitHub-Api-Version': '2022-11-28',
