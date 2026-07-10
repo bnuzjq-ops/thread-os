@@ -73,7 +73,7 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
       body,
     }),
     {
-      FEISHU_VERIFICATION_TOKEN: verificationToken,
+      FEISHU_VERIFICATION_TOKEN: ` ${verificationToken}\n`,
       GITHUB_DISPATCH_EVENT: 'threads_reply_action',
       GITHUB_PAT: 'github-pat',
       GITHUB_REPO: 'bnuzjq-ops/thread-os',

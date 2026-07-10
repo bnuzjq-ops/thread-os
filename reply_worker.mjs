@@ -115,8 +115,9 @@ async function verifyFeishuSignature(request, bodyText, verificationToken) {
   const timestamp = readHeader(request.headers, 'x-lark-request-timestamp');
   const nonce = readHeader(request.headers, 'x-lark-request-nonce');
   const signature = readHeader(request.headers, 'x-lark-signature');
+  const normalizedToken = String(verificationToken ?? '').trim();
 
-  if (!verificationToken) {
+  if (!normalizedToken) {
     return {
       ok: false,
       status: 500,
@@ -135,7 +136,7 @@ async function verifyFeishuSignature(request, bodyText, verificationToken) {
   const expectedSignature = await computeFeishuSignature({
     timestamp,
     nonce,
-    token: verificationToken,
+    token: normalizedToken,
     body: bodyText,
   });
 
