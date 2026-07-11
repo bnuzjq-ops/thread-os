@@ -19,6 +19,7 @@ flowchart LR
 
 - 内容仓库: 存放可发布素材、待审草稿、人工整理内容
 - 执行仓库: 存放自动化代码、状态文件、测试和运行文档
+- 回复任务状态文件: `state/reply_tasks.json`
 - Threads API: 执行发布和回复动作
 - GitHub Actions: 定时监控与任务调度
 - 飞书: 人工审核入口
@@ -39,3 +40,11 @@ flowchart LR
 - `status`
 - `last_error`
 
+## Current MVP boundary
+
+- JSON is the current runtime state backend for local validation and the temporary GitHub Actions bridge.
+- Publish tasks use `ready`, `publishing`, `published`, `failed`, and `unknown` states.
+- Reply tasks remain semi-automatic: DeepSeek drafts, Feishu reviews, and a human action triggers dispatch.
+- `unknown` means the external result was not confirmed and is never automatically retried.
+- Reply monitor and dispatch share a concurrency group and commit JSON state as MVP persistence.
+- State Worker/D1 is separate from the Feishu Callback Worker and is not the current runtime backend.

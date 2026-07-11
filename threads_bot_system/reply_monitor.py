@@ -15,6 +15,7 @@ class CommentSnapshot:
 
     comment_id: str
     text: str
+    media_id: str = ""
 
 
 @dataclass(slots=True)
@@ -41,7 +42,7 @@ def scan_comments(comments: Iterable[CommentSnapshot]) -> ReplyMonitorReport:
     """Run the first-pass reply intake over a batch of comments."""
     comment_list = list(comments)
     intakes = [
-        prepare_reply_intake(comment.comment_id, comment.text)
+        prepare_reply_intake(comment.comment_id, comment.text, comment.media_id)
         for comment in comment_list
     ]
     return ReplyMonitorReport(comments=comment_list, intakes=intakes)

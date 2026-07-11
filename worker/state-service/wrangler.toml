@@ -1,0 +1,9 @@
+name = "threads-state-service"
+main = "src/index.mjs"
+compatibility_date = "2026-07-10"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "threads-state"
+database_id = "b5226aba-33f1-4b7a-bcd7-336ca9c4e3c6"
+migrations_dir = "migrations"

@@ -4,6 +4,7 @@ from threads_bot_system.reply_action import (
     mark_awaiting_review,
     mark_drafted,
     mark_failed,
+    mark_rewrite_requested,
     mark_sent,
     mark_skipped,
 )
@@ -51,6 +52,14 @@ class ReplyActionTests(unittest.TestCase):
 
         self.assertEqual(updated.status, ReplyTaskStatus.SKIPPED)
         self.assertEqual(updated.last_error, "low value")
+
+    def test_mark_rewrite_requested_keeps_draft_flow_open(self) -> None:
+        task = mark_drafted(new_reply_task("comment-1"), "draft text")
+
+        updated = mark_rewrite_requested(task, "rewrite_requested")
+
+        self.assertEqual(updated.status, ReplyTaskStatus.DRAFTED)
+        self.assertEqual(updated.last_error, "rewrite_requested")
 
 
 if __name__ == "__main__":

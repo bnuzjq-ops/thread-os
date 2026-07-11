@@ -14,19 +14,21 @@ class ReplyIntake:
 
     comment_id: str
     text: str
+    media_id: str
     decision: ReplyDecision
     plan: ReplyPlan
     task: ReplyTask | None
 
 
-def prepare_reply_intake(comment_id: str, text: str) -> ReplyIntake:
+def prepare_reply_intake(comment_id: str, text: str, media_id: str = "") -> ReplyIntake:
     """Prepare the reply intake bundle for a comment."""
     decision = classify_comment(text)
     plan = build_reply_plan(text)
-    task = new_reply_task(comment_id) if decision.route is ReplyRoute.REVIEW else None
+    task = new_reply_task(comment_id, media_id=media_id) if decision.route is ReplyRoute.REVIEW else None
     return ReplyIntake(
         comment_id=comment_id,
         text=text,
+        media_id=media_id,
         decision=decision,
         plan=plan,
         task=task,

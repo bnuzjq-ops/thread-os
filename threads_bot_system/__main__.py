@@ -1,11 +1,7 @@
-"""CLI entrypoint for the project contract summary."""
+"""CLI entrypoint for the project."""
 
-from .contract import render_project_summary
-
-
-def main() -> None:
-    print(render_project_summary())
+from .cli import main
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,0 +1,95 @@
+"""Operational helpers for publish automation."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable
+
+from .publish_store import JsonPublishStore
+from .publish_task import PublishTask, PublishTaskStatus
+from .threads_api import ThreadsApiClient
+
+
+@dataclass(frozen=True, slots=True)
+class PublishRunReport:
+    """Summary of a publish run."""
+
+    attempted: int
+    posted: int
+    tasks: list[PublishTask]
+
+
+class PublishRunError(RuntimeError):
+    """Raised when the publish workflow cannot produce a successful post."""
+
+
+def _resolve_publish_store(store: JsonPublishStore | str | Path) -> JsonPublishStore:
+    if isinstance(store, (str, Path)):
+        return JsonPublishStore.load(store)
+    return store
+
+
+def run_publish(
+    store: JsonPublishStore | str | Path,
+    threads_client: ThreadsApiClient,
+    task_ids: Iterable[str] | None = None,
+) -> PublishRunReport:
+    """Publish pending tasks and persist the result."""
+    publish_store = _resolve_publish_store(store)
+    selected_task_ids = _normalize_task_ids(task_ids)
+    tasks = _select_tasks(publish_store, selected_task_ids)
+    attempted = 0
+    posted = 0
+    processed: list[PublishTask] = []
+
+    for task in tasks:
+        claim = publish_store.claim_publish(task.publish_task_id)
+        if not claim.ok or not claim.claimed or claim.task is None:
+            processed.append(claim.task or task)
+            continue
+
+        attempted += 1
+        try:
+            post_id = threads_client.publish_post(text=claim.task.text)
+        except TimeoutError as exc:
+            try:
+                uncertain = publish_store.mark_unknown(task.publish_task_id, str(exc))
+            except Exception:
+                uncertain = claim.task
+            processed.append(uncertain)
+            continue
+        except Exception as exc:
+            try:
+                failed = publish_store.fail_task(task.publish_task_id, str(exc))
+            except Exception:
+                failed = claim.task
+            processed.append(failed)
+            continue
+
+        completed = publish_store.complete_publish(task.publish_task_id, post_id)
+        posted += 1
+        processed.append(completed)
+
+    if attempted > 0 and posted == 0:
+        raise PublishRunError("Publish workflow attempted posts but none succeeded")
+
+    return PublishRunReport(attempted=attempted, posted=posted, tasks=processed)
+
+
+def _select_tasks(store: JsonPublishStore, task_ids: set[str]) -> list[PublishTask]:
+    tasks = [
+        task
+        for task in store.tasks.values()
+        if task.status is PublishTaskStatus.READY
+    ]
+    tasks.sort(key=lambda item: item.publish_task_id)
+    if not task_ids:
+        return tasks
+    return [task for task in tasks if task.publish_task_id in task_ids]
+
+
+def _normalize_task_ids(task_ids: Iterable[str] | None) -> set[str]:
+    if task_ids is None:
+        return set()
+    return {str(task_id).strip() for task_id in task_ids if str(task_id).strip()}

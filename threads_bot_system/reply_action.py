@@ -53,6 +53,11 @@ def mark_skipped(task: ReplyTask, reason: str) -> ReplyTask:
     return replace(task, status=ReplyTaskStatus.SKIPPED, last_error=reason)
 
 
+def mark_rewrite_requested(task: ReplyTask, reason: str) -> ReplyTask:
+    """Record that a reviewer wants the draft rewritten."""
+    return replace(task, status=ReplyTaskStatus.DRAFTED, last_error=reason)
+
+
 def mark_failed(task: ReplyTask, error: str) -> ReplyTask:
     """Mark a task as failed."""
     return replace(task, status=ReplyTaskStatus.FAILED, last_error=error)
