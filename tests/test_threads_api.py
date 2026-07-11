@@ -1,7 +1,9 @@
 import json
+from urllib.error import HTTPError
+import io
 import unittest
 
-from threads_bot_system.threads_api import ThreadsApiClient
+from threads_bot_system.threads_api import ThreadsApiClient, ThreadsApiError
 
 
 class DummyResponse:
@@ -14,6 +16,25 @@ class DummyResponse:
 
 
 class ThreadsApiTests(unittest.TestCase):
+    def test_http_error_body_is_preserved_in_threads_error(self) -> None:
+        def fake_request(request: object) -> DummyResponse:
+            raise HTTPError(
+                request.full_url,
+                400,
+                "Bad Request",
+                hdrs=None,
+                fp=io.BytesIO(b'{"error":"missing permission"}'),
+            )
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="token-1",
+            request_impl=fake_request,
+        )
+
+        with self.assertRaisesRegex(ThreadsApiError, "missing permission"):
+            client.fetch_replies("media-1")
+
     def test_fetch_user_threads_pages_through_results(self) -> None:
         requests: list[object] = []
 
