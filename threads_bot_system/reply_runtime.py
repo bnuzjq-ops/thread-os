@@ -95,15 +95,12 @@ def run_reply_monitor(
 
     report = scan_comments(comments)
     store = _resolve_task_store(store_path)
-    existing_task_ids = set(store.tasks) if isinstance(store, JsonTaskStore) else set()
-    if isinstance(store, JsonTaskStore) and not existing_task_ids:
-        return report
     for intake in report.intakes:
-        if intake.task is None or intake.task.reply_task_id in existing_task_ids:
+        if intake.task is None:
             continue
 
         created = store.create_task(intake.comment_id, intake.media_id)
-        if not created.created:
+        if _should_skip_monitor_refresh(created.task):
             continue
 
         try:
@@ -246,3 +243,15 @@ def _comment_id_from_task_id(reply_task_id: str) -> str:
     if reply_task_id.startswith(prefix):
         return reply_task_id[len(prefix) :]
     return reply_task_id
+
+
+def _should_skip_monitor_refresh(task: ReplyTask) -> bool:
+    """Skip tasks that have already reached a stable review state."""
+    return task.status in {
+        ReplyTaskStatus.DRAFTED,
+        ReplyTaskStatus.AWAITING_REVIEW,
+        ReplyTaskStatus.SENDING,
+        ReplyTaskStatus.SENT,
+        ReplyTaskStatus.SKIPPED,
+        ReplyTaskStatus.UNKNOWN,
+    }
