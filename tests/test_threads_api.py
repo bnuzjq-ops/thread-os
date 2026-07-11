@@ -14,6 +14,35 @@ class DummyResponse:
 
 
 class ThreadsApiTests(unittest.TestCase):
+    def test_fetch_user_threads_pages_through_results(self) -> None:
+        requests: list[object] = []
+
+        def fake_request(request: object) -> DummyResponse:
+            requests.append(request)
+            if "after=cursor-1" in request.full_url:
+                return DummyResponse(json.dumps({"data": [{"id": "media-2"}]}))
+            return DummyResponse(
+                json.dumps(
+                    {
+                        "data": [{"id": "media-1"}],
+                        "paging": {"cursors": {"after": "cursor-1"}},
+                    }
+                )
+            )
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="token-1",
+            request_impl=fake_request,
+        )
+
+        media_ids = client.fetch_user_threads(limit=50)
+
+        self.assertEqual(media_ids, ["media-1", "media-2"])
+        self.assertEqual(requests[0].get_method(), "GET")
+        self.assertIn("/user-1/threads", requests[0].full_url)
+        self.assertIn("access_token=token-1", requests[0].full_url)
+
     def test_fetch_replies_pages_through_results(self) -> None:
         requests: list[object] = []
 

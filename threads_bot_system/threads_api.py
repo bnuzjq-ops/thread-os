@@ -21,6 +21,7 @@ class ThreadsComment:
     text: str
     username: str | None = None
     timestamp: str | None = None
+    reply_to_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +29,14 @@ class ThreadsReplyPage:
     """A single paginated page of Threads replies."""
 
     comments: list[ThreadsComment]
+    next_after: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class ThreadsMediaPage:
+    """A single paginated page of Threads media objects."""
+
+    media_ids: list[str]
     next_after: str | None
 
 
@@ -53,6 +62,59 @@ class ThreadsApiClient:
 
         return comments
 
+    def fetch_user_threads(self, limit: int = 100) -> list[str]:
+        media_ids: list[str] = []
+        after: str | None = None
+
+        while True:
+            page = self.fetch_user_threads_page(limit=limit, after=after)
+            media_ids.extend(page.media_ids)
+            if not page.next_after:
+                break
+            after = page.next_after
+
+        return media_ids
+
+    def fetch_user_replies(self, limit: int = 100) -> list[ThreadsComment]:
+        comments: list[ThreadsComment] = []
+        after: str | None = None
+
+        while True:
+            page = self.fetch_user_replies_page(limit=limit, after=after)
+            comments.extend(page.comments)
+            if not page.next_after:
+                break
+            after = page.next_after
+
+        return comments
+
+    def fetch_user_threads_page(
+        self,
+        limit: int = 100,
+        after: str | None = None,
+    ) -> ThreadsMediaPage:
+        params = {
+            "access_token": self.access_token,
+            "fields": "id",
+            "limit": str(limit),
+        }
+        if after:
+            params["after"] = after
+
+        url = f"{self.base_url}/{self.user_id}/threads?{urlencode(params)}"
+        payload = self._request_json("GET", url)
+        data = payload.get("data", [])
+        media_ids = [self._parse_media_id(item) for item in data if isinstance(item, dict)]
+
+        paging = payload.get("paging", {})
+        next_after = None
+        if isinstance(paging, dict):
+            cursors = paging.get("cursors", {})
+            if isinstance(cursors, dict):
+                next_after = self._optional_text(cursors.get("after"))
+
+        return ThreadsMediaPage(media_ids=media_ids, next_after=next_after)
+
     def fetch_replies_page(
         self,
         media_id: str,
@@ -68,6 +130,33 @@ class ThreadsApiClient:
             params["after"] = after
 
         url = f"{self.base_url}/{media_id}/replies?{urlencode(params)}"
+        payload = self._request_json("GET", url)
+        data = payload.get("data", [])
+        comments = [self._parse_comment(item) for item in data if isinstance(item, dict)]
+
+        paging = payload.get("paging", {})
+        next_after = None
+        if isinstance(paging, dict):
+            cursors = paging.get("cursors", {})
+            if isinstance(cursors, dict):
+                next_after = self._optional_text(cursors.get("after"))
+
+        return ThreadsReplyPage(comments=comments, next_after=next_after)
+
+    def fetch_user_replies_page(
+        self,
+        limit: int = 100,
+        after: str | None = None,
+    ) -> ThreadsReplyPage:
+        params = {
+            "access_token": self.access_token,
+            "fields": "id,text,username,timestamp,reply_to_id",
+            "limit": str(limit),
+        }
+        if after:
+            params["after"] = after
+
+        url = f"{self.base_url}/{self.user_id}/replies?{urlencode(params)}"
         payload = self._request_json("GET", url)
         data = payload.get("data", [])
         comments = [self._parse_comment(item) for item in data if isinstance(item, dict)]
@@ -131,12 +220,22 @@ class ThreadsApiClient:
         text = self._optional_text(item.get("text")) or ""
         username = self._optional_text(item.get("username"))
         timestamp = self._optional_text(item.get("timestamp"))
+        reply_to_id = self._optional_text(
+            item.get("reply_to_id")
+            or item.get("replyToId")
+            or item.get("parent_id")
+            or item.get("parentId")
+        )
         return ThreadsComment(
             comment_id=comment_id,
             text=text,
             username=username,
             timestamp=timestamp,
+            reply_to_id=reply_to_id,
         )
+
+    def _parse_media_id(self, item: dict[str, object]) -> str:
+        return self._required_text(item.get("id"), "media id")
 
     def _request_json(
         self,

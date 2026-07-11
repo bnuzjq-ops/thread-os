@@ -27,9 +27,13 @@ class FakeThreadsClient:
         self.comments = comments
         self.timeout = timeout
         self.published: list[tuple[str, str]] = []
+        self.user_replies: list[ThreadsComment] = []
 
     def fetch_replies(self, media_id: str, limit: int = 100) -> list[ThreadsComment]:
         return self.comments
+
+    def fetch_user_replies(self, limit: int = 100) -> list[ThreadsComment]:
+        return self.user_replies
 
     def publish_reply(self, reply_to_id: str, text: str) -> str:
         if self.timeout:
@@ -131,6 +135,30 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertIsNotNone(task)
             self.assertEqual(task.status, ReplyTaskStatus.AWAITING_REVIEW)
             self.assertEqual(task.feishu_message_id, "msg-1")
+
+    def test_run_reply_monitor_skips_comments_already_replied_by_user(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            threads_client = FakeThreadsClient(
+                [ThreadsComment(comment_id="comment-2", text="How should we reply to this?")]
+            )
+            threads_client.user_replies = [
+                ThreadsComment(comment_id="reply-1", text="I already answered", reply_to_id="comment-2")
+            ]
+            feishu_client = FakeFeishuClient()
+            deepseek_client = FakeDeepSeekClient()
+
+            report = run_reply_monitor(
+                ["media-1"],
+                threads_client,
+                feishu_client,
+                store_path,
+                deepseek_client=deepseek_client,
+            )
+
+            self.assertEqual(report.review_count, 0)
+            self.assertEqual(feishu_client.cards, [])
+            self.assertFalse(store_path.exists())
 
     def test_run_reply_monitor_retries_failed_tasks_after_config_recovers(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -61,7 +61,10 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Path to the reply task store",
     )
 
-    monitor = subparsers.add_parser("monitor", help="Scan Threads comments and build review cards")
+    monitor = subparsers.add_parser(
+        "monitor",
+        help="Scan replies for the user's Threads posts and build review cards",
+    )
     monitor.add_argument(
         "--store-path",
         default=_env("THREADS_STORE_PATH", str(DEFAULT_STATE_PATH)),
@@ -98,11 +101,14 @@ def _run_dispatch(store_path: Path) -> int:
 
 
 def _run_monitor(store_path: Path, media_ids: list[str]) -> int:
-    resolved_media_ids = _resolve_media_ids(media_ids, os.environ)
-    if not resolved_media_ids:
-        raise ValueError("Missing media ids. Set THREADS_MEDIA_IDS or pass --media-id.")
-
     threads_client = _build_threads_client(os.environ)
+    resolved_media_ids = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
+    if not resolved_media_ids:
+        resolved_media_ids = threads_client.fetch_user_threads()
+
+    if not resolved_media_ids:
+        raise ValueError("No Threads posts found for the current user")
+
     feishu_client = _build_feishu_client(os.environ)
     deepseek_client = _build_deepseek_client(os.environ)
     report = run_reply_monitor(
@@ -196,23 +202,6 @@ def _build_deepseek_client(env: Mapping[str, str]) -> DeepSeekClient | None:
         base_url=_env("DEEPSEEK_BASE_URL", "https://api.deepseek.com", env=env).strip()
         or "https://api.deepseek.com",
     )
-
-
-def _resolve_media_ids(media_ids: list[str], env: Mapping[str, str]) -> list[str]:
-    resolved = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
-    if resolved:
-        return resolved
-
-    raw = _env("THREADS_MEDIA_IDS", env=env).strip()
-    if not raw:
-        return []
-
-    items = []
-    for chunk in raw.replace("\n", ",").split(","):
-        text = chunk.strip()
-        if text:
-            items.append(text)
-    return items
 
 
 def _required_env(name: str, env: Mapping[str, str]) -> str:

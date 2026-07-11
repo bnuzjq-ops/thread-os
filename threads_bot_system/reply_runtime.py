@@ -93,6 +93,13 @@ def run_reply_monitor(
     for media_id in media_id_list:
         comments.extend(_fetch_comment_snapshots(threads_client.fetch_replies(media_id)))
 
+    replied_comment_ids = {
+        reply.reply_to_id
+        for reply in threads_client.fetch_user_replies()
+        if reply.reply_to_id
+    }
+    comments = [comment for comment in comments if comment.comment_id not in replied_comment_ids]
+
     report = scan_comments(comments)
     store = _resolve_task_store(store_path)
     for intake in report.intakes:
