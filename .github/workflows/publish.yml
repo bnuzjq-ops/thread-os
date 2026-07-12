@@ -47,7 +47,7 @@ jobs:
             grep -rlZ --include='*.md' \
               -e '^platform:[[:space:]]*threads[[:space:]]*$' \
               -e '^editorial_status:[[:space:]]*ready[[:space:]]*$' \
-              content-repo
+              content-repo/posts/queue
           )
           for source in "${sources[@]}"; do
             if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
