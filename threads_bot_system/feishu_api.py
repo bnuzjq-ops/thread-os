@@ -100,6 +100,7 @@ class FeishuClient:
     def _build_interactive_card(self, payload: ReplyCardPayload) -> dict[str, object]:
         actions: list[dict[str, object]] = []
         for action in payload.actions:
+            command, reply_task_id = action.value.split(":", 1)
             actions.append(
                 {
                     "tag": "button",
@@ -108,7 +109,10 @@ class FeishuClient:
                         "content": action.label,
                     },
                     "type": "primary" if action.value.startswith("send:") else "default",
-                    "value": action.value,
+                    "value": {
+                        "action": command,
+                        "reply_task_id": reply_task_id,
+                    },
                 }
             )
 
