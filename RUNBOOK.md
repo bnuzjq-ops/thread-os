@@ -65,4 +65,18 @@ python -m threads_bot_system publish --help
 
 `publish --source path/to/post.md` 会创建或复用一个 JSON 发布任务。明确 API 错误进入 `failed`，结果不确定的超时进入 `unknown`，两者都不会被自动重试。回复链路同样遵循此规则，并且发送前必须经过飞书人工确认。
 
+## Publish feed export
+
+Export an approved Obsidian draft explicitly; do not synchronize the whole vault:
+
+```powershell
+& .\scripts\export-threads-post.ps1 `
+  -Source 'C:\jq\OBS\Threads\20_Drafts\example.md' `
+  -ContentId 'stable-content-id'
+```
+
+The source must contain `platform: threads` and `editorial_status: ready`. The exporter writes only `posts/queue/<content_id>.md` to `bnuzjq-ops/threads-publish-feed`.
+
+After publishing, inspect `state/publish_tasks.json`. A successful task has `status: published`, `post_id`/`platform_post_id`, and normally `permalink`. A permalink lookup failure must not trigger another publish.
+
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。
