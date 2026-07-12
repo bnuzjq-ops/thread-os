@@ -11,6 +11,17 @@
       "last_error": null,
       "created_at": null,
       "updated_at": null
+    },
+    "publish:threads-plain-123": {
+      "publish_task_id": "publish:threads-plain-123",
+      "source_key": "threads-plain-123",
+      "text": "123",
+      "status": "published",
+      "post_id": "18107171105007446",
+      "claimed_at": null,
+      "last_error": null,
+      "created_at": null,
+      "updated_at": null
     }
   }
 }
