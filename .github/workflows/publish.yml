@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: threads-publish-state
+  group: thread-os-state-write
   cancel-in-progress: false
 
 jobs:
@@ -49,6 +49,9 @@ jobs:
               -e '^editorial_status:[[:space:]]*ready[[:space:]]*$' \
               content-repo/posts/queue
           )
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "${#sources[@]}" -gt 1 ]; then
+            sources=("${sources[0]}")
+          fi
           for source in "${sources[@]}"; do
             if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
                grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source" && \

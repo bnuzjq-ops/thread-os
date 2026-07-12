@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: threads-reply-state
+  group: thread-os-state-write
   cancel-in-progress: false
 
 jobs:
