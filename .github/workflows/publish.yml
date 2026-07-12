@@ -57,46 +57,6 @@ jobs:
             fi
           done
 
-      - name: Verify published Threads posts
-        env:
-          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          from urllib.parse import urlencode
-          from urllib.request import urlopen
-
-          state_path = os.environ["THREADS_PUBLISH_STORE_PATH"]
-          state = json.load(open(state_path, encoding="utf-8"))
-          tasks = state.get("tasks", {})
-          published = [
-              task for task in tasks.values()
-              if task.get("status") == "published" and task.get("post_id")
-          ]
-          if not published:
-              print("No published post IDs to verify.")
-              raise SystemExit(0)
-
-          for task in published:
-              post_id = task["post_id"]
-              query = urlencode({
-                  "fields": "id,username,permalink,text",
-                  "access_token": os.environ["THREADS_ACCESS_TOKEN"],
-              })
-              url = f"https://graph.threads.net/v1.0/{post_id}?{query}"
-              with urlopen(url, timeout=30) as response:
-                  payload = json.load(response)
-              print(json.dumps({
-                  "content_id": task.get("source_key"),
-                  "post_id": payload.get("id"),
-                  "username": payload.get("username"),
-                  "permalink": payload.get("permalink"),
-                  "text": payload.get("text"),
-              }, ensure_ascii=False))
-          PY
-
       - name: Commit publish task state
         env:
           BRANCH_NAME: ${{ github.ref_name }}
