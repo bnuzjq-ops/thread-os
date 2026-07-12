@@ -42,6 +42,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Reply failed/unknown handling | PASS | `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py` |
 | DeepSeek failure and empty-output rejection | PASS | `tests/test_deepseek_api.py`, `tests/test_reply_runtime.py` |
 | DeepSeek error classification coverage | PASS | `tests/test_deepseek_api.py`; HTTP auth failure, invalid JSON, and empty message content are rejected explicitly |
+| Comment prompt-injection boundary | PASS | `DeepSeekClient` treats comment text as untrusted data; `tests/test_deepseek_api.py` verifies the system rule |
 | Feishu card action contract | PASS | `tests/test_feishu_api.py`, `tests/test_reply_card.py` |
 | Worker signature and callback contract | PASS | `tests/reply_worker.test.mjs` |
 | State Worker atomic claim contract | PASS | `worker/state-service/test/index.test.mjs` |

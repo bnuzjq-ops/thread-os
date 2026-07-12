@@ -50,6 +50,7 @@ class DeepSeekApiTests(unittest.TestCase):
         self.assertEqual(request.get_header("Authorization"), "Bearer deepseek-key")
         body = json.loads(request.data.decode("utf-8"))
         self.assertEqual(body["model"], "deepseek-v4-flash")
+        self.assertIn("untrusted data", body["messages"][0]["content"])
         self.assertEqual(body["messages"][1]["content"].splitlines()[-1], "这篇文章为什么这样设计？")
 
 
