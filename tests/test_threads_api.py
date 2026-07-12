@@ -139,6 +139,8 @@ class ThreadsApiTests(unittest.TestCase):
 
         def fake_request(request: object) -> DummyResponse:
             requests.append(request)
+            if request.full_url.endswith("/threads"):
+                return DummyResponse(json.dumps({"id": "creation-1"}))
             return DummyResponse(json.dumps({"id": "post-1"}))
 
         client = ThreadsApiClient(
@@ -150,11 +152,13 @@ class ThreadsApiTests(unittest.TestCase):
         post_id = client.publish_post(text="Hello Threads")
 
         self.assertEqual(post_id, "post-1")
+        self.assertEqual(len(requests), 2)
         self.assertEqual(requests[0].get_method(), "POST")
-        body = requests[0].data.decode("utf-8")
-        self.assertIn("media_type=TEXT", body)
-        self.assertIn("text=Hello+Threads", body)
-        self.assertNotIn("reply_to_id", body)
+        create_body = requests[0].data.decode("utf-8")
+        self.assertIn("media_type=TEXT", create_body)
+        self.assertIn("text=Hello+Threads", create_body)
+        publish_body = requests[1].data.decode("utf-8")
+        self.assertIn("creation_id=creation-1", publish_body)
 
 
 if __name__ == "__main__":
