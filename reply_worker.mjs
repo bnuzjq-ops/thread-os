@@ -47,11 +47,21 @@ export async function computeFeishuSignature({ timestamp, nonce, token, body }) 
 }
 
 export function parseReplyActionValue(raw) {
-  if (typeof raw !== 'string' || raw.trim() === '') {
-    throw new Error('Reply action value must be a non-empty string');
+  let value = '';
+  if (typeof raw === 'string') {
+    value = raw.trim();
+  } else if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    const command = typeof raw.action === 'string' ? raw.action.trim() : '';
+    const replyTaskId = typeof raw.reply_task_id === 'string' ? raw.reply_task_id.trim() : '';
+    if (command && replyTaskId) {
+      value = `${command}:${replyTaskId}`;
+    }
   }
 
-  const value = raw.trim();
+  if (!value) {
+    throw new Error('Reply action value must be a non-empty string or object');
+  }
+
   const parts = value.split(':');
   if (parts.length < 3) {
     throw new Error(`Invalid reply action value: ${raw}`);
@@ -84,8 +94,12 @@ function extractActionValue(payload) {
   ];
 
   return (
-    candidates.find((candidate) => typeof candidate === 'string' && candidate.trim())?.trim() ??
-    null
+    candidates.find((candidate) => {
+      if (typeof candidate === 'string') {
+        return candidate.trim();
+      }
+      return candidate && typeof candidate === 'object' && !Array.isArray(candidate);
+    }) ?? null
   );
 }
 

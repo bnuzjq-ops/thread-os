@@ -49,6 +49,10 @@ class FeishuApiTests(unittest.TestCase):
         self.assertEqual(body["msg_type"], "interactive")
         content = json.loads(body["content"])
         self.assertEqual(content["card"]["header"]["title"]["content"], "Review comment-1")
+        self.assertEqual(
+            content["card"]["elements"][1]["actions"][0]["value"],
+            {"action": "send", "reply_task_id": "reply:comment-1"},
+        )
 
     def test_send_text_message_uses_text_payload(self) -> None:
         requests: list[object] = []
