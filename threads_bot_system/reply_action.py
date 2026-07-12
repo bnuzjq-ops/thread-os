@@ -38,13 +38,14 @@ def mark_sending(task: ReplyTask) -> ReplyTask:
     return replace(task, status=ReplyTaskStatus.SENDING, last_error=None)
 
 
-def mark_sent(task: ReplyTask, reply_id: str) -> ReplyTask:
+def mark_sent(task: ReplyTask, reply_id: str, dry_run: bool = False) -> ReplyTask:
     """Mark a task as successfully sent."""
     return replace(
         task,
         status=ReplyTaskStatus.SENT,
         reply_id=reply_id,
-        last_error=None,
+        dry_run=dry_run,
+        last_error="dry_run: Threads reply was not called" if dry_run else None,
     )
 
 

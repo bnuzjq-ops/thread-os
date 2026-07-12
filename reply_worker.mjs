@@ -254,6 +254,9 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
     source: 'feishu_card_callback',
     task_kind: action.taskKind,
   };
+  if (payload?.dry_run === true) {
+    payloadForDispatch.dry_run = true;
+  }
 
   const fetchImpl = runtime.fetch ?? globalThis.fetch.bind(globalThis);
   try {

@@ -28,6 +28,7 @@ jobs:
       - name: Execute reply dispatch
         env:
           CLIENT_PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          REPLY_DRY_RUN: ${{ github.event.client_payload.dry_run == true && '1' || '0' }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_STORE_PATH: state/reply_tasks.json

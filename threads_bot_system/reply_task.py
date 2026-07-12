@@ -32,6 +32,7 @@ class ReplyTask:
     draft_source: str = ""
     feishu_message_id: str | None = None
     reply_id: str | None = None
+    dry_run: bool = False
     claimed_at: str | None = None
     lease_until: str | None = None
     claimed_by: str | None = None

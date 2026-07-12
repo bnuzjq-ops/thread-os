@@ -108,7 +108,13 @@ def _run_dispatch(store_path: Path) -> int:
     payload = _load_client_payload(os.environ)
     threads_client = _build_threads_client(os.environ)
     feishu_client = _build_feishu_client(os.environ)
-    task = execute_reply_dispatch(payload, threads_client, store_path, feishu_client=feishu_client)
+    task = execute_reply_dispatch(
+        payload,
+        threads_client,
+        store_path,
+        feishu_client=feishu_client,
+        dry_run=_env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"},
+    )
     print(json.dumps(task_to_record(task), ensure_ascii=False, indent=2))
     return 0
 

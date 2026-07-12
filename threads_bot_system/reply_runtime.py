@@ -160,6 +160,7 @@ def execute_reply_dispatch(
     threads_client: ThreadsApiClient,
     store_path: TaskStore | str | Path,
     feishu_client: FeishuClient | None = None,
+    dry_run: bool = False,
 ) -> ReplyTask:
     """Execute a repository_dispatch payload produced by the Feishu callback worker."""
     reply_task_id = _required_text(client_payload.get("reply_task_id"), "reply_task_id")
@@ -195,6 +196,12 @@ def execute_reply_dispatch(
     claim = store.claim_send(reply_task_id, task.draft_version)
     if not claim.ok or not claim.claimed or claim.task is None:
         return claim.task or task
+
+    if dry_run:
+        completed = store.complete_send(reply_task_id, f"dry-run:{reply_task_id}", dry_run=True)
+        if feishu_client is not None:
+            feishu_client.send_text_message("Dry-run 已完成：未调用 Threads 回复 API。")
+        return completed
 
     try:
         reply_id = threads_client.publish_reply(reply_to_id=claim.task.comment_id, text=claim.task.draft)
