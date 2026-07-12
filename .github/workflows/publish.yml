@@ -61,6 +61,7 @@ jobs:
           done
 
       - name: Commit publish task state
+        if: always()
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
@@ -73,3 +74,14 @@ jobs:
           git add state/publish_tasks.json
           git commit -m "Update publish task state"
           git push origin "HEAD:${BRANCH_NAME}"
+
+      - name: Publish failure summary
+        if: failure()
+        run: |
+          {
+            echo "## Threads publish failure"
+            echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "- Event: ${GITHUB_EVENT_NAME}"
+            echo "- State file: state/publish_tasks.json"
+            echo "- Automatic retry: disabled; inspect the task's error_type and last_error before manual recovery."
+          } >> "$GITHUB_STEP_SUMMARY"
