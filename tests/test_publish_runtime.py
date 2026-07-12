@@ -9,9 +9,10 @@ from threads_bot_system.publish_task import PublishTaskStatus
 
 
 class FakeThreadsClient:
-    def __init__(self, *, fail: bool = False, timeout: bool = False) -> None:
+    def __init__(self, *, fail: bool = False, timeout: bool = False, permalink_fail: bool = False) -> None:
         self.fail = fail
         self.timeout = timeout
+        self.permalink_fail = permalink_fail
         self.published_texts: list[str] = []
 
     def publish_post(self, text: str) -> str:
@@ -23,6 +24,8 @@ class FakeThreadsClient:
         return f"post-{len(self.published_texts)}"
 
     def get_post_permalink(self, post_id: str) -> str:
+        if self.permalink_fail:
+            raise RuntimeError("permalink unavailable")
         return f"https://www.threads.com/post/{post_id}"
 
 
@@ -59,6 +62,20 @@ class PublishRuntimeTests(unittest.TestCase):
             self.assertEqual(report.attempted, 0)
             self.assertEqual(report.posted, 0)
             self.assertEqual(JsonPublishStore.load(path).get_task(task.publish_task_id).status, PublishTaskStatus.READY)
+
+    def test_permalink_failure_keeps_published_state_without_retry(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            store = JsonPublishStore.load(path)
+            task = store.create_task("permalink-failure", "Hello Threads").task
+
+            report = run_publish(store, FakeThreadsClient(permalink_fail=True))
+            updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
+
+            self.assertEqual(report.posted, 1)
+            self.assertEqual(updated.status, PublishTaskStatus.PUBLISHED)
+            self.assertEqual(updated.post_id, "post-1")
+            self.assertIn("permalink lookup failed", updated.last_error)
 
     def test_run_publish_marks_timeout_unknown(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

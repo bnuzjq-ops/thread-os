@@ -137,6 +137,7 @@ class JsonPublishStore:
         task_id: str,
         post_id: str,
         permalink: str | None = None,
+        metadata_error: str | None = None,
     ) -> PublishTask:
         task = self._require_task(task_id)
         updated = replace(
@@ -144,8 +145,8 @@ class JsonPublishStore:
             status=PublishTaskStatus.PUBLISHED,
             post_id=post_id,
             permalink=permalink,
-            last_error=None,
-            error_type=None,
+            last_error=metadata_error,
+            error_type="external_api_error" if metadata_error else None,
         )
         self.upsert(updated)
         self.save()

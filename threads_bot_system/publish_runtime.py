@@ -55,11 +55,13 @@ def run_publish(
         try:
             post_id = threads_client.publish_post(text=claim.task.text)
             permalink = None
+            metadata_error = None
             get_permalink = getattr(threads_client, "get_post_permalink", None)
             if get_permalink is not None:
                 try:
                     permalink = get_permalink(post_id)
                 except Exception as exc:
+                    metadata_error = f"permalink lookup failed: {exc}"
                     print(
                         f"Permalink lookup failed for {task.publish_task_id}: {exc}",
                         file=sys.stderr,
@@ -91,7 +93,12 @@ def run_publish(
             processed.append(failed)
             continue
 
-        completed = publish_store.complete_publish(task.publish_task_id, post_id, permalink)
+        completed = publish_store.complete_publish(
+            task.publish_task_id,
+            post_id,
+            permalink,
+            metadata_error,
+        )
         posted += 1
         processed.append(completed)
 
