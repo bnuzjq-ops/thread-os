@@ -49,6 +49,8 @@ class PublishRuntimeTests(unittest.TestCase):
             self.assertEqual(updated.status, PublishTaskStatus.PUBLISHED)
             self.assertEqual(updated.post_id, "post-1")
             self.assertEqual(updated.permalink, "https://www.threads.com/post/post-1")
+            self.assertIsNotNone(updated.claimed_at)
+            self.assertIsNotNone(updated.updated_at)
 
     def test_run_publish_skips_future_scheduled_task(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -34,6 +34,8 @@ class PublishStoreTests(unittest.TestCase):
             self.assertFalse(second.created)
             self.assertTrue(second.already_exists)
             self.assertEqual(first.task.publish_task_id, second.task.publish_task_id)
+            self.assertIsNotNone(first.task.created_at)
+            self.assertIsNotNone(first.task.updated_at)
             self.assertEqual(first.task.status, PublishTaskStatus.READY)
 
     def test_legacy_pending_state_loads_as_ready(self) -> None:

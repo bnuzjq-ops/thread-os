@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from enum import Enum
 
 
@@ -51,10 +52,13 @@ def new_publish_task(
     if not source_key:
         raise ValueError("source_key is required")
 
+    now = datetime.now(timezone.utc).isoformat()
     return PublishTask(
         publish_task_id=publish_task_id_for(source_key),
         source_key=source_key,
         text=text,
         status=PublishTaskStatus.READY,
         scheduled_time=scheduled_time,
+        created_at=now,
+        updated_at=now,
     )

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
@@ -127,7 +128,15 @@ class JsonPublishStore:
                 task=task,
             )
 
-        updated = replace(task, status=PublishTaskStatus.PUBLISHING, last_error=None)
+        now = _now()
+        updated = replace(
+            task,
+            status=PublishTaskStatus.PUBLISHING,
+            claimed_at=now,
+            updated_at=now,
+            last_error=None,
+            error_type=None,
+        )
         self.upsert(updated)
         self.save()
         return PublishClaimResult(ok=True, claimed=True, reason=None, task=updated)
@@ -147,6 +156,7 @@ class JsonPublishStore:
             permalink=permalink,
             last_error=metadata_error,
             error_type="external_api_error" if metadata_error else None,
+            updated_at=_now(),
         )
         self.upsert(updated)
         self.save()
@@ -159,14 +169,26 @@ class JsonPublishStore:
         error_type: str = "external_api_error",
     ) -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.FAILED, last_error=error, error_type=error_type)
+        updated = replace(
+            task,
+            status=PublishTaskStatus.FAILED,
+            last_error=error,
+            error_type=error_type,
+            updated_at=_now(),
+        )
         self.upsert(updated)
         self.save()
         return updated
 
     def mark_unknown(self, task_id: str, error: str) -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.UNKNOWN, last_error=error, error_type="unknown_result")
+        updated = replace(
+            task,
+            status=PublishTaskStatus.UNKNOWN,
+            last_error=error,
+            error_type="unknown_result",
+            updated_at=_now(),
+        )
         self.upsert(updated)
         self.save()
         return updated
@@ -176,6 +198,10 @@ class JsonPublishStore:
         if task is None:
             raise KeyError(f"Publish task not found: {task_id}")
         return task
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 # Backward-compatible alias for the JSON implementation.
