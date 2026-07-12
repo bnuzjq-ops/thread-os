@@ -181,6 +181,24 @@
       "created_at": null,
       "updated_at": null
     },
+    "reply:17894065266372865": {
+      "reply_task_id": "reply:17894065266372865",
+      "comment_id": "17894065266372865",
+      "status": "failed",
+      "media_id": "",
+      "draft": "谢谢你的分享，希望能帮到更多人。",
+      "draft_version": 1,
+      "draft_source": "",
+      "feishu_message_id": null,
+      "reply_id": null,
+      "claimed_at": null,
+      "lease_until": null,
+      "claimed_by": null,
+      "last_error": "Feishu request failed: HTTP Error 400: Bad Request",
+      "requires_manual_check": false,
+      "created_at": null,
+      "updated_at": null
+    },
     "reply:17895832209487986": {
       "reply_task_id": "reply:17895832209487986",
       "comment_id": "17895832209487986",
