@@ -31,6 +31,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | DeepSeek independent API draft | PASS | Workflow run `29197690303`; fixed test comment returned a non-empty draft without Threads/Feishu calls |
 | Reply dispatch dry-run guard | PASS | `tests/test_reply_runtime.py`; dry-run records test result and makes zero Threads calls |
 | Worker dry-run propagation | PASS | `tests/reply_worker.test.mjs`; explicit `dry_run` is forwarded, default payload is unchanged |
+| Live Feishu/dispatch dry-run | NOT_TESTED | Would send a real test receipt to Feishu; requires explicit external-action approval |
 | Feishu review card | NOT TESTED | No production card acceptance |
 | Feishu callback and GitHub dispatch | NOT TESTED | No production button click acceptance |
 | Real Threads reply | NOT TESTED | No end-to-end reply ID/permalink |
