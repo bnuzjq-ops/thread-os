@@ -85,6 +85,8 @@ For `failed` or `unknown`, inspect `error_type`, `error_phase`, `external_action
 
 If `state/publish_tasks.json` or `state/reply_tasks.json` is invalid JSON, stop the workflow and preserve the file for diagnosis. Do not delete it or rerun a publish. Restore from the last known-good Git commit, then inspect Threads by platform ID before any manual recovery.
 
+If Git push fails, download the run's `*-state-recovery-*` artifact before recovery. Treat it as the runner's latest state snapshot; inspect external platform results before manually recording or retrying anything.
+
 Reply dry-run sets `dry_run: true` in the dispatch payload. It records a `dry-run:<task_id>` result and sends a Feishu test receipt without calling the Threads reply API.
 
 The code-level reply checks are covered by `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py`, `tests/test_feishu_api.py`, and `tests/reply_worker.test.mjs`. These tests do not prove a live Feishu callback or a real Threads reply.

@@ -21,6 +21,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Publish errors contain recovery context | PASS | `tests/test_publish_runtime.py`; type, phase, external action, retry policy |
 | Corrupt JSON fails closed | PASS | `tests/test_publish_store.py`; invalid state raises before task/API execution |
 | Workflow state/concurrency contract | PASS | `tests/test_workflow_contract.py`; shared group, queue boundary, and dry-run switch |
+| State write failure preserves recovery artifact | PASS | `tests/test_workflow_contract.py`; failure paths upload state JSON for recovery |
 | Permalink lookup failure avoids republish | PASS | `tests/test_publish_runtime.py` |
 | Continuous multi-cycle real publish | NOT TESTED | Requires additional distinct test posts |
 | Failure/unknown external alert delivery | NOT TESTED | GitHub step summary exists; end-user notification not verified |

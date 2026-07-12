@@ -61,3 +61,12 @@ jobs:
             echo "- State file: state/reply_tasks.json"
             echo "- Automatic retry: disabled; verify the task status before manual recovery."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload reply state recovery artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reply-dispatch-state-recovery-${{ github.run_id }}
+          path: state/reply_tasks.json
+          if-no-files-found: warn
+          retention-days: 7

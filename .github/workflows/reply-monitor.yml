@@ -61,3 +61,14 @@ jobs:
             echo "- State files: state/reply_tasks.json, state/reply_monitor_cursor.json"
             echo "- Automatic retry: disabled; inspect the persisted task and cursor before recovery."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload reply state recovery artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reply-monitor-state-recovery-${{ github.run_id }}
+          path: |
+            state/reply_tasks.json
+            state/reply_monitor_cursor.json
+          if-no-files-found: warn
+          retention-days: 7

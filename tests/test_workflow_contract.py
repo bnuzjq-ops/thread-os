@@ -23,6 +23,12 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("REPLY_DRY_RUN", text)
         self.assertIn("CLIENT_PAYLOAD_JSON", text)
 
+    def test_state_writers_upload_recovery_artifacts_on_failure(self) -> None:
+        for name in ("publish.yml", "reply-monitor.yml", "reply-dispatch.yml"):
+            text = (WORKFLOW_ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("actions/upload-artifact@v4", text)
+            self.assertIn("if: failure()", text)
+
 
 if __name__ == "__main__":
     unittest.main()
