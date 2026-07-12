@@ -12,6 +12,7 @@ from .reply_action import (
     mark_rewrite_requested,
     mark_skipped,
 )
+from .reply_cursor import load_cursor, save_cursor
 from .reply_card import build_reply_card
 from .reply_draft import build_reply_draft
 from .reply_flow import ReplyIntake, prepare_reply_intake
@@ -86,12 +87,25 @@ def run_reply_monitor(
     feishu_client: FeishuClient,
     store_path: TaskStore | str | Path,
     deepseek_client: DeepSeekClient | None = None,
+    cursor_path: str | Path | None = None,
 ) -> ReplyMonitorReport:
     """Fetch comments, build review cards, and persist reply tasks."""
     media_id_list = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
     comments: list[CommentSnapshot] = []
     for media_id in media_id_list:
         comments.extend(_fetch_comment_snapshots(threads_client.fetch_replies(media_id)))
+
+    latest_timestamp = _latest_comment_timestamp(comments)
+    if cursor_path is not None:
+        cursor = load_cursor(cursor_path)
+        if cursor is None:
+            comments = []
+        else:
+            comments = [
+                comment
+                for comment in comments
+                if comment.timestamp and comment.timestamp > cursor
+            ]
 
     replied_comment_ids = {
         reply.reply_to_id
@@ -136,6 +150,8 @@ def run_reply_monitor(
             continue
 
         store.save_feishu_message(drafted.reply_task_id, message_id)
+    if cursor_path is not None and latest_timestamp:
+        save_cursor(cursor_path, latest_timestamp)
     return report
 
 
@@ -204,9 +220,14 @@ def execute_reply_dispatch(
 def materialize_comment_snapshots(items: Iterable[ThreadsComment]) -> list[CommentSnapshot]:
     """Convert API comment rows into the monitor snapshot shape."""
     return [
-        CommentSnapshot(comment_id=item.comment_id, text=item.text)
+        CommentSnapshot(comment_id=item.comment_id, text=item.text, timestamp=item.timestamp)
         for item in items
     ]
+
+
+def _latest_comment_timestamp(comments: Iterable[CommentSnapshot]) -> str | None:
+    timestamps = [comment.timestamp for comment in comments if comment.timestamp]
+    return max(timestamps) if timestamps else None
 
 
 def _fetch_comment_snapshots(items: Iterable[ThreadsComment]) -> list[CommentSnapshot]:

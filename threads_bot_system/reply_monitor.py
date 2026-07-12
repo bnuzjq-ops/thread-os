@@ -16,6 +16,7 @@ class CommentSnapshot:
     comment_id: str
     text: str
     media_id: str = ""
+    timestamp: str | None = None
 
 
 @dataclass(slots=True)

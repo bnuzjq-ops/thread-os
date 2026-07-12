@@ -37,7 +37,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if command == "dispatch":
             return _run_dispatch(Path(args.store_path))
         if command == "monitor":
-            return _run_monitor(Path(args.store_path), list(args.media_id))
+            return _run_monitor(Path(args.store_path), list(args.media_id), Path(args.cursor_path))
         if command == "publish":
             return _run_publish(Path(args.store_path), args.source)
         parser.error(f"Unsupported command: {command}")
@@ -76,6 +76,11 @@ def _build_parser() -> argparse.ArgumentParser:
         default=[],
         help="Threads media id to scan; may be repeated",
     )
+    monitor.add_argument(
+        "--cursor-path",
+        default=_env("THREADS_MONITOR_CURSOR_PATH", "state/reply_monitor_cursor.json"),
+        help="Path to the latest-seen comment cursor",
+    )
 
     publish = subparsers.add_parser("publish", help="Publish pending Threads posts")
     publish.add_argument(
@@ -100,7 +105,7 @@ def _run_dispatch(store_path: Path) -> int:
     return 0
 
 
-def _run_monitor(store_path: Path, media_ids: list[str]) -> int:
+def _run_monitor(store_path: Path, media_ids: list[str], cursor_path: Path) -> int:
     threads_client = _build_threads_client(os.environ)
     resolved_media_ids = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
     if not resolved_media_ids:
@@ -117,6 +122,7 @@ def _run_monitor(store_path: Path, media_ids: list[str]) -> int:
         feishu_client,
         store_path,
         deepseek_client=deepseek_client,
+        cursor_path=cursor_path,
     )
 
     print(
