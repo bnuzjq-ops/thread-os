@@ -4,7 +4,7 @@
     "publish:threads-online-smoke-001": {
       "publish_task_id": "publish:threads-online-smoke-001",
       "source_key": "threads-online-smoke-001",
-      "text": "Threads 线上联调测试：如果你看到这条内容，说明内容仓库、GitHub Actions 和 Threads 发布链路已经打通。",
+      "text": "online smoke test",
       "status": "published",
       "post_id": "18015044099711153",
       "claimed_at": null,
@@ -18,6 +18,17 @@
       "text": "123",
       "status": "published",
       "post_id": "18107171105007446",
+      "claimed_at": null,
+      "last_error": null,
+      "created_at": null,
+      "updated_at": null
+    },
+    "publish:threads-codex-123": {
+      "publish_task_id": "publish:threads-codex-123",
+      "source_key": "threads-codex-123",
+      "text": "123",
+      "status": "published",
+      "post_id": "18060289736735869",
       "claimed_at": null,
       "last_error": null,
       "created_at": null,
