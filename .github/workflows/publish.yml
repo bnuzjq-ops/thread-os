@@ -85,6 +85,16 @@ jobs:
             echo "- State file: state/publish_tasks.json"
             echo "- Automatic retry: disabled; inspect the task's error_type and last_error before manual recovery."
           } >> "$GITHUB_STEP_SUMMARY"
+          if [ -f state/publish_tasks.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          state = json.loads(Path("state/publish_tasks.json").read_text(encoding="utf-8"))
+          for task in state.get("tasks", {}).values():
+              if task.get("status") in {"failed", "unknown"}:
+                  print(f"- Task: `{task.get('publish_task_id')}`; phase: `{task.get('error_phase')}`; type: `{task.get('error_type')}`; external action: `{task.get('external_action')}`; retry allowed: `{task.get('retry_allowed')}`; recovery: {task.get('recovery_action')}")
+          PY
+          fi
 
       - name: Upload publish state recovery artifact
         if: failure()

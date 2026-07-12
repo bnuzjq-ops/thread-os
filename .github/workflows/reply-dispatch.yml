@@ -61,6 +61,16 @@ jobs:
             echo "- State file: state/reply_tasks.json"
             echo "- Automatic retry: disabled; verify the task status before manual recovery."
           } >> "$GITHUB_STEP_SUMMARY"
+          if [ -f state/reply_tasks.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          state = json.loads(Path("state/reply_tasks.json").read_text(encoding="utf-8"))
+          for task in state.get("tasks", {}).values():
+              if task.get("status") in {"failed", "unknown"}:
+                  print(f"- Task: `{task.get('reply_task_id')}`; comment: `{task.get('comment_id')}`; status: `{task.get('status')}`; error: {task.get('last_error')}")
+          PY
+          fi
 
       - name: Upload reply state recovery artifact
         if: failure()

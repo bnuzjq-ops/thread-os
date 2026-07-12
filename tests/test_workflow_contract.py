@@ -29,6 +29,15 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertIn("actions/upload-artifact@v4", text)
             self.assertIn("if: failure()", text)
 
+    def test_failure_summaries_include_task_context(self) -> None:
+        publish = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn("error_phase", publish)
+        self.assertIn("recovery_action", publish)
+        for name in ("reply-monitor.yml", "reply-dispatch.yml"):
+            text = (WORKFLOW_ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("comment_id", text)
+            self.assertIn("last_error", text)
+
 
 if __name__ == "__main__":
     unittest.main()
