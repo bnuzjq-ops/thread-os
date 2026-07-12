@@ -260,5 +260,6 @@ def _should_skip_monitor_refresh(task: ReplyTask) -> bool:
         ReplyTaskStatus.SENDING,
         ReplyTaskStatus.SENT,
         ReplyTaskStatus.SKIPPED,
+        ReplyTaskStatus.FAILED,
         ReplyTaskStatus.UNKNOWN,
     }

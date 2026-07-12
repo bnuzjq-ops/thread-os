@@ -35,10 +35,29 @@ test('parseReplyActionValue splits the command and task id', () => {
   });
 });
 
+test('parseReplyActionValue accepts Feishu card value objects', () => {
+  assert.deepEqual(
+    parseReplyActionValue({
+      action: 'send',
+      reply_task_id: 'reply:comment-2',
+    }),
+    {
+      command: 'send',
+      raw: 'send:reply:comment-2',
+      taskId: 'reply:comment-2',
+      taskKind: 'reply',
+      commentId: 'comment-2',
+    },
+  );
+});
+
 test('handleFeishuCallback dispatches a valid card action to GitHub', async () => {
   const body = JSON.stringify({
     action: {
-      value: 'send:reply:comment-2',
+      value: {
+        action: 'send',
+        reply_task_id: 'reply:comment-2',
+      },
     },
     message: {
       message_id: 'om_123',

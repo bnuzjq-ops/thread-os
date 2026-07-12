@@ -160,11 +160,11 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertEqual(feishu_client.cards, [])
             self.assertFalse(store_path.exists())
 
-    def test_run_reply_monitor_retries_failed_tasks_after_config_recovers(self) -> None:
+    def test_run_reply_monitor_does_not_retry_failed_tasks_automatically(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"
             store = JsonTaskStore.load(store_path)
-            store.upsert(mark_failed(new_reply_task("comment-fail"), "deepseek unavailable"))
+            store.upsert(mark_failed(new_reply_task("comment-fail"), "feishu card rejected"))
             store.save()
             threads_client = FakeThreadsClient(
                 [ThreadsComment(comment_id="comment-fail", text="How should we reply to this?")]
@@ -181,14 +181,13 @@ class ReplyRuntimeTests(unittest.TestCase):
             )
 
             self.assertEqual(report.review_count, 1)
-            self.assertEqual(len(feishu_client.cards), 1)
-
+            self.assertEqual(deepseek_client.inputs, [])
+            self.assertEqual(feishu_client.cards, [])
             restored = JsonTaskStore.load(store_path)
             task = restored.get("reply:comment-fail")
             self.assertIsNotNone(task)
-            self.assertEqual(task.status, ReplyTaskStatus.AWAITING_REVIEW)
-            self.assertEqual(task.feishu_message_id, "msg-1")
-            self.assertEqual(task.draft, "Generated draft text")
+            self.assertEqual(task.status, ReplyTaskStatus.FAILED)
+            self.assertEqual(task.last_error, "feishu card rejected")
 
     def test_execute_reply_dispatch_sends_reply_and_updates_store(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
