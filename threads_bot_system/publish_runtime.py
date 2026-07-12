@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import sys
 from typing import Iterable
 
 from .publish_store import JsonPublishStore
@@ -53,6 +54,10 @@ def run_publish(
         try:
             post_id = threads_client.publish_post(text=claim.task.text)
         except TimeoutError as exc:
+            print(
+                f"Publish uncertain for {task.publish_task_id}: {exc}",
+                file=sys.stderr,
+            )
             try:
                 uncertain = publish_store.mark_unknown(task.publish_task_id, str(exc))
             except Exception:
@@ -60,6 +65,10 @@ def run_publish(
             processed.append(uncertain)
             continue
         except Exception as exc:
+            print(
+                f"Publish failed for {task.publish_task_id}: {exc}",
+                file=sys.stderr,
+            )
             try:
                 failed = publish_store.fail_task(task.publish_task_id, str(exc))
             except Exception:
