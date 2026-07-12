@@ -77,6 +77,8 @@ Export an approved Obsidian draft explicitly; do not synchronize the whole vault
 
 The source must contain `platform: threads` and `editorial_status: ready`. The exporter writes only `posts/queue/<content_id>.md` to `bnuzjq-ops/threads-publish-feed`.
 
+Scheduled runs use `scheduled_time` as timezone-aware ISO 8601, compare in UTC, select the earliest due source, and publish at most one item. Sources without `scheduled_time` are manual-only.
+
 After publishing, inspect `state/publish_tasks.json`. A successful task has `status: published`, `post_id`/`platform_post_id`, and normally `permalink`. A permalink lookup failure must not trigger another publish.
 
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。

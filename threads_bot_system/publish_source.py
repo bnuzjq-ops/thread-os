@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -50,6 +51,13 @@ def load_publish_source(path: str | Path) -> PublishSource:
         raise ValueError("Publish source body is empty")
 
     scheduled_time = fields.get("scheduled_time", "").strip() or None
+    if scheduled_time is not None:
+        try:
+            parsed = datetime.fromisoformat(scheduled_time.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise ValueError("scheduled_time must be ISO 8601") from exc
+        if parsed.tzinfo is None:
+            raise ValueError("scheduled_time must include a timezone")
 
     return PublishSource(
         content_id=content_id,
@@ -58,3 +66,20 @@ def load_publish_source(path: str | Path) -> PublishSource:
         text=text,
         scheduled_time=scheduled_time,
     )
+
+
+def select_due_source(root: str | Path, now: datetime | None = None) -> Path | None:
+    """Select the earliest due scheduled source, stably ordered by content ID."""
+    current = now or datetime.now(timezone.utc)
+    candidates: list[tuple[datetime, str, Path]] = []
+    for path in sorted(Path(root).glob("*.md")):
+        source = load_publish_source(path)
+        if not source.scheduled_time:
+            continue
+        scheduled = datetime.fromisoformat(source.scheduled_time.replace("Z", "+00:00"))
+        if scheduled.astimezone(timezone.utc) <= current.astimezone(timezone.utc):
+            candidates.append((scheduled.astimezone(timezone.utc), source.content_id, path))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: (item[0], item[1]))
+    return candidates[0][2]

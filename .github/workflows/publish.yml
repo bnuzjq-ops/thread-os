@@ -43,22 +43,22 @@ jobs:
           PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
         run: |
           set -euo pipefail
-          mapfile -d '' sources < <(
-            grep -rlZ --include='*.md' \
-              -e '^platform:[[:space:]]*threads[[:space:]]*$' \
-              -e '^editorial_status:[[:space:]]*ready[[:space:]]*$' \
-              content-repo/posts/queue
-          )
-          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "${#sources[@]}" -gt 1 ]; then
-            sources=("${sources[0]}")
-          fi
-          for source in "${sources[@]}"; do
-            if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
-               grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source" && \
-               { [ "$GITHUB_EVENT_NAME" != "schedule" ] || grep -q '^scheduled_time:' "$source"; }; then
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            source="$(python -m threads_bot_system select-scheduled-source content-repo/posts/queue)"
+            if [ -n "$source" ]; then
               python -m threads_bot_system publish --source "$source"
+            else
+              echo "No scheduled source is due."
             fi
-          done
+          else
+            for source in content-repo/posts/queue/*.md; do
+              [ -f "$source" ] || continue
+              if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
+                 grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source"; then
+                python -m threads_bot_system publish --source "$source"
+              fi
+            done
+          fi
 
       - name: Commit publish task state
         if: always()

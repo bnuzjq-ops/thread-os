@@ -13,7 +13,7 @@ from .contract import render_project_summary
 from .deepseek_api import DeepSeekClient
 from .feishu_api import FeishuClient
 from .publish_runtime import run_publish
-from .publish_source import load_publish_source
+from .publish_source import load_publish_source, select_due_source
 from .publish_store import JsonPublishStore
 from .reply_runtime import execute_reply_dispatch, run_reply_monitor
 from .reply_state import task_to_record
@@ -40,6 +40,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_monitor(Path(args.store_path), list(args.media_id), Path(args.cursor_path))
         if command == "publish":
             return _run_publish(Path(args.store_path), args.source)
+        if command == "select-scheduled-source":
+            selected = select_due_source(args.root)
+            if selected is not None:
+                print(selected)
+            return 0
         parser.error(f"Unsupported command: {command}")
     except Exception as exc:
         print(f"Error: {exc}", file=sys.stderr)
@@ -88,6 +93,9 @@ def _build_parser() -> argparse.ArgumentParser:
         default=_env("THREADS_PUBLISH_STORE_PATH", str(DEFAULT_PUBLISH_STATE_PATH)),
         help="Path to the publish task store",
     )
+
+    select = subparsers.add_parser("select-scheduled-source")
+    select.add_argument("root", help="Queue directory containing publish snapshots")
     publish.add_argument(
         "--source",
         help="Markdown source to add to the publish task store before publishing",
