@@ -90,6 +90,10 @@ class PublishRuntimeTests(unittest.TestCase):
 
             updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
             self.assertEqual(updated.status, PublishTaskStatus.UNKNOWN)
+            self.assertEqual(updated.error_type, "unknown_result")
+            self.assertEqual(updated.error_phase, "threads_publish")
+            self.assertTrue(updated.external_action)
+            self.assertFalse(updated.retry_allowed)
 
     def test_run_publish_raises_when_every_attempt_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -106,6 +110,9 @@ class PublishRuntimeTests(unittest.TestCase):
             updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
             self.assertIsNotNone(updated)
             self.assertEqual(updated.status, PublishTaskStatus.FAILED)
+            self.assertEqual(updated.error_phase, "threads_publish")
+            self.assertFalse(updated.external_action)
+            self.assertFalse(updated.retry_allowed)
 
 
 if __name__ == "__main__":

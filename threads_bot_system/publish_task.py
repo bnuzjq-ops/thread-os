@@ -31,6 +31,10 @@ class PublishTask:
     permalink: str | None = None
     scheduled_time: str | None = None
     error_type: str | None = None
+    error_phase: str | None = None
+    external_action: bool = False
+    retry_allowed: bool = False
+    recovery_action: str | None = None
     claimed_at: str | None = None
     last_error: str | None = None
     created_at: str | None = None

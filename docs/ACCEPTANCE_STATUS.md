@@ -18,6 +18,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Due source selection is stable | PASS | `tests/test_publish_source.py`; UTC comparison and `content_id` tie-break |
 | Scheduled run publishes at most one source | PASS | `select-scheduled-source` CLI and `publish.yml` |
 | Publish state records transition timestamps | PASS | `tests/test_publish_store.py`; `created_at`, `claimed_at`, `updated_at` |
+| Publish errors contain recovery context | PASS | `tests/test_publish_runtime.py`; type, phase, external action, retry policy |
 | Permalink lookup failure avoids republish | PASS | `tests/test_publish_runtime.py` |
 | Continuous multi-cycle real publish | NOT TESTED | Requires additional distinct test posts |
 | Failure/unknown external alert delivery | NOT TESTED | GitHub step summary exists; end-user notification not verified |

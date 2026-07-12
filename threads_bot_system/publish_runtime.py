@@ -72,7 +72,7 @@ def run_publish(
                 file=sys.stderr,
             )
             try:
-                uncertain = publish_store.mark_unknown(task.publish_task_id, str(exc))
+                uncertain = publish_store.mark_unknown(task.publish_task_id, str(exc), "threads_publish")
             except Exception:
                 uncertain = claim.task
             processed.append(uncertain)
@@ -87,6 +87,8 @@ def run_publish(
                         task.publish_task_id,
                         str(exc),
                         error_type=_classify_error(exc),
+                        error_phase="threads_publish",
+                        external_action=False,
                     )
             except Exception:
                 failed = claim.task
