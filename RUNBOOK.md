@@ -85,4 +85,6 @@ For `failed` or `unknown`, inspect `error_type`, `error_phase`, `external_action
 
 Reply dry-run sets `dry_run: true` in the dispatch payload. It records a `dry-run:<task_id>` result and sends a Feishu test receipt without calling the Threads reply API.
 
+The code-level reply checks are covered by `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py`, `tests/test_feishu_api.py`, and `tests/reply_worker.test.mjs`. These tests do not prove a live Feishu callback or a real Threads reply.
+
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。
