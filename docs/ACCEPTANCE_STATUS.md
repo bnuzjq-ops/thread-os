@@ -28,7 +28,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Item | Status | Evidence |
 | --- | --- | --- |
 | Real Threads comment monitor | PASS | Workflow run `29196998480`; real scan returned `comments: 0` and committed cursor/state |
-| DeepSeek draft generation | NOT TESTED | No production comment run |
+| DeepSeek independent API draft | PASS | Workflow run `29197690303`; fixed test comment returned a non-empty draft without Threads/Feishu calls |
 | Feishu review card | NOT TESTED | No production card acceptance |
 | Feishu callback and GitHub dispatch | NOT TESTED | No production button click acceptance |
 | Real Threads reply | NOT TESTED | No end-to-end reply ID/permalink |
