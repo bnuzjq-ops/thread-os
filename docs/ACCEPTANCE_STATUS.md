@@ -20,6 +20,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Publish state records transition timestamps | PASS | `tests/test_publish_store.py`; `created_at`, `claimed_at`, `updated_at` |
 | Publish errors contain recovery context | PASS | `tests/test_publish_runtime.py`; type, phase, external action, retry policy |
 | Corrupt JSON fails closed | PASS | `tests/test_publish_store.py`; invalid state raises before task/API execution |
+| Repository and Git history contain no detected Secrets | PASS | Targeted tracked-file and history pattern scan; no values printed |
 | Workflow state/concurrency contract | PASS | `tests/test_workflow_contract.py`; shared group, queue boundary, and dry-run switch |
 | State write failure preserves recovery artifact | PASS | `tests/test_workflow_contract.py`; failure paths upload state JSON for recovery |
 | Permalink lookup failure avoids republish | PASS | `tests/test_publish_runtime.py` |

@@ -11,6 +11,7 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 | Threads two-step publish | PASS | Real post permalink in `docs/ACCEPTANCE_STATUS.md` |
 | Publish state, idempotency, and recovery metadata | PASS | Python tests and JSON state contract |
 | Corrupt JSON fail-closed | PASS | `tests/test_publish_store.py` |
+| Repository Secret scan | PASS | Current tracked files and Git history pattern scan found no configured keys |
 | Workflow concurrency and recovery artifacts | PASS | `tests/test_workflow_contract.py` |
 | DeepSeek independent API call | PASS | GitHub run `29197690303` |
 | Reply code-level state machine | PASS | Python reply/task-store tests |
