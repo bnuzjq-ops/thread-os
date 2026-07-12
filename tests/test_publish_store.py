@@ -7,6 +7,14 @@ from threads_bot_system.publish_task import PublishTaskStatus
 
 
 class PublishStoreTests(unittest.TestCase):
+    def test_corrupt_json_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            path.write_text("{not-json", encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                JsonPublishStore.load(path)
+
     def test_save_and_load_round_trip_publish_tasks(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "publish_tasks.json"
