@@ -1,0 +1,17 @@
+name: Verify Threads Post
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query published post
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --get 'https://graph.threads.net/v1.0/18107171105007446' \
+            --data-urlencode 'fields=id,username,permalink,text' \
+            --data-urlencode "access_token=${THREADS_ACCESS_TOKEN}"
