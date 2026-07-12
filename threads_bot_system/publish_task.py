@@ -35,7 +35,7 @@ class PublishTask:
 
 def publish_task_id_for(source_key: str) -> str:
     """Derive a stable task identifier from the source key."""
-    return f"publish:{source_key}"
+    return f"threads:{source_key}"
 
 
 def new_publish_task(source_key: str, text: str) -> PublishTask:

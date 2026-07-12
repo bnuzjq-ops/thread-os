@@ -14,6 +14,10 @@ class PublishSource:
     platform: str
     status: str
     text: str
+    scheduled_time: str | None = None
+    source_ref: str = ""
+    content_version: int = 1
+    exported_at: str = ""
 
 
 def load_publish_source(path: str | Path) -> PublishSource:
@@ -37,7 +41,7 @@ def load_publish_source(path: str | Path) -> PublishSource:
 
     content_id = fields.get("content_id", "").strip()
     platform = fields.get("platform", "").strip()
-    status = fields.get("status", "").strip()
+    status = (fields.get("editorial_status") or fields.get("status") or "").strip()
     text = "\n".join(lines[end + 1:]).strip()
     if not content_id:
         raise ValueError("Publish source requires content_id")
@@ -48,4 +52,18 @@ def load_publish_source(path: str | Path) -> PublishSource:
     if not text:
         raise ValueError("Publish source body is empty")
 
-    return PublishSource(content_id=content_id, platform=platform, status=status, text=text)
+    try:
+        content_version = int(fields.get("content_version", "1"))
+    except ValueError as exc:
+        raise ValueError("Publish source content_version must be an integer") from exc
+
+    return PublishSource(
+        content_id=content_id,
+        platform=platform,
+        status=status,
+        text=text,
+        scheduled_time=fields.get("scheduled_time", "").strip() or None,
+        source_ref=fields.get("source_ref", "").strip(),
+        content_version=content_version,
+        exported_at=fields.get("exported_at", "").strip(),
+    )

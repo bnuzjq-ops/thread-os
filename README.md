@@ -43,3 +43,23 @@ Feishu 卡片按钮只带 `action + reply_task_id`，它不是“旧仓库代码
 2. 再看 `ARCHITECTURE.md`
 3. 再看 `RUNBOOK.md`
 4. 最后才改业务代码
+
+## 三仓库发布契约（2026-07-12）
+
+本节是当前发布链路的准确信息，旧的双仓库路径说明不再作为发布依据。
+
+- A：`C:\jq\OBS`，本地 Obsidian 内容主库，可长期只保存在本机，不要求 Git 或 GitHub。
+- B：`C:\jq\AI\Thread OS\Threads-publish-feed` / `bnuzjq-ops/threads-publish-feed`，私有发布快照仓库。
+- C：本仓库 `bnuzjq-ops/thread-os`，保存执行代码、Actions 和 JSON 运行状态。
+- 唯一允许的数据流是：A 中人工批准的 Ready 文件，经显式命令导出到 B，再由 C 的 GitHub Actions 只读 B。
+- C 不读取 A；B 不保存运行状态；发布和回复状态仍由 C 的 JSON 文件承担，D1 后置。
+- B 中没有 `scheduled_time` 的内容只能被人工按 `content_id` 指定，不能被定时选择。
+- Git push 不等于已发布；只有 Threads 返回平台帖子 ID 才算发布成功。
+
+显式导出一篇 Ready 内容：
+
+```powershell
+python -m threads_bot_system export-content --source "C:\jq\OBS\30-Content\Threads\Ready\<file>.md" --feed-repo "C:\jq\AI\Thread OS\Threads-publish-feed" --push
+```
+
+没有 `--push` 时只写本地 B。覆盖未发布快照必须显式增加 `--replace`。

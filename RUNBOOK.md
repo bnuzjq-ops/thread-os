@@ -75,3 +75,35 @@ python -m threads_bot_system publish --help
 `publish --source path/to/post.md` 会创建或复用一个 JSON 发布任务。明确 API 错误进入 `failed`，结果不确定的超时进入 `unknown`，两者都不会被自动重试。回复链路同样遵循这条规则，并且发送前必须经过 Feishu 人工确认。
 
 GitHub Actions 现在通过共享变量和 commit 回写 JSON，这只是 MVP 过渡方案，不是最终生产数据仓库架构；后续仍需迁移到 State API / D1。
+
+## Publish feed operations（2026-07-12）
+
+### A 导出到 B
+
+```powershell
+python -m threads_bot_system export-content --source "C:\jq\OBS\30-Content\Threads\Ready\<file>.md" --feed-repo "C:\jq\AI\Thread OS\Threads-publish-feed"
+```
+
+- 命令只读取显式指定的单个 Ready 文件，不扫描整个 A。
+- 默认只生成本地 B 快照；显式增加 `--push` 才提交并推送 B 的 `main`。
+- B 已有同一 `content_id` 时默认停止；仅未发布内容可在确认后使用 `--replace`。
+- 命令不修改 A、不调用 Threads、不修改 C 的 JSON。
+
+### 本地只读 dry run
+
+```powershell
+python -m threads_bot_system publish --feed-dir "C:\jq\AI\Thread OS\Threads-publish-feed\posts\queue" --content-id threads-test-001 --dry-run
+python -m threads_bot_system publish --feed-dir "C:\jq\AI\Thread OS\Threads-publish-feed\posts\queue" --scheduled --dry-run
+```
+
+`threads-test-001` 没有 `scheduled_time`，第二条命令不得选中它。dry run 不写 JSON，也不初始化 Threads 客户端。
+
+### GitHub 配置
+
+- Repository variable：`CONTENT_REPO`，值为 `bnuzjq-ops/threads-publish-feed`。
+- Repository secret：`CONTENT_REPO_TOKEN`，fine-grained PAT 仅授权 B，`Contents: Read-only`、`Metadata: Read-only`。
+- 不要把 PAT 写入文件或日志。C 的 checkout 对 B 使用 `persist-credentials: false`。
+- 人工运行 `Publish Threads` 时必须填写明确的 `content_id`。
+- 定时模式只选择 `editorial_status=ready`、`scheduled_time` 带时区且已到期的内容，一次最多一条。
+
+真实发布前仍需人工确认 B 快照和目标 `content_id`。本轮只完成代码与 dry run，不运行线上 workflow。

@@ -53,6 +53,31 @@ class PublishStoreTests(unittest.TestCase):
                 PublishTaskStatus.READY,
             )
 
+    def test_new_task_uses_threads_content_id_as_idempotency_key(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = JsonPublishStore.load(Path(tmpdir) / "publish_tasks.json")
+
+            created = store.create_task("content-1", "First post")
+
+            self.assertEqual(created.task.publish_task_id, "threads:content-1")
+
+    def test_create_task_reuses_legacy_publish_idempotency_key(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            path.write_text(
+                '{"tasks": {"publish:content-1": {'
+                '"publish_task_id": "publish:content-1", "source_key": "content-1", '
+                '"text": "Already known", "status": "published", "post_id": "post-1"}}}',
+                encoding="utf-8",
+            )
+            store = JsonPublishStore.load(path)
+
+            result = store.create_task("content-1", "New text")
+
+            self.assertFalse(result.created)
+            self.assertEqual(result.task.publish_task_id, "publish:content-1")
+            self.assertEqual(result.task.status, PublishTaskStatus.PUBLISHED)
+
 
 if __name__ == "__main__":
     unittest.main()

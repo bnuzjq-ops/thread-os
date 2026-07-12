@@ -53,3 +53,14 @@
 - reply monitor 和 dispatch 共用回复状态并发组，dispatch 也会回写 JSON；这仍只是 MVP 过渡方案。
 - `python -m unittest discover -s tests` 已通过，共 52 个测试。
 - 未调用真实外部 API，未部署 Worker，未修改远程 Secret，未修改 Obsidian 内容，未 push。
+
+## 2026-07-12 三仓库接入
+
+- 当前发布内容链路固定为 A（`C:\jq\OBS`）→ 显式导出 → B（`threads-publish-feed`）→ C（`thread-os`）→ Threads API。
+- A 不进入 GitHub；C 不读取 A；B 只存 `posts/queue/<content_id>.md` 快照且不存运行状态。
+- C 新增 `export-content`，默认只写本地 B；`--push` 才只提交本次导出的文件到 B `main`。
+- `publish` 可用 `--feed-dir --content-id` 人工选一条，或用 `--feed-dir --scheduled` 选最早到期的一条。
+- `--dry-run` 不写状态、不调用 Threads。
+- `.github/workflows/publish.yml` 使用 `CONTENT_REPO` 和只读 `CONTENT_REPO_TOKEN` 稀疏检出 B 的 `posts/queue`。
+- 三个 JSON 写入 workflow 统一使用 `thread-os-state-write`，JSON 仍是 MVP，D1 后置。
+- 下一位 Agent 不得把 B 当作 Obsidian 主库，也不得让 workflow 根据 `source_ref` 访问 A。

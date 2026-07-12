@@ -7,6 +7,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from threads_bot_system.cli import main
+from threads_bot_system.export_feed import ExportResult
 
 
 class FakeThreadsClient:
@@ -51,7 +52,7 @@ class CliTests(unittest.TestCase):
             )
             captured: list[object] = []
 
-            def fake_run_publish(store, client):
+            def fake_run_publish(store, client, task_ids=None):
                 captured.append(store)
                 return SimpleNamespace(attempted=0, posted=0)
 
@@ -63,7 +64,100 @@ class CliTests(unittest.TestCase):
                 )
 
             self.assertEqual(exit_code, 0)
-            self.assertEqual(captured[0].get_task("publish:content-1").text, "Hello Threads")
+            self.assertEqual(captured[0].get_task("threads:content-1").text, "Hello Threads")
+
+    def test_export_content_command_writes_feed_without_push_by_default(self) -> None:
+        result = ExportResult(
+            content_id="content-1",
+            target_path=Path("feed/posts/queue/content-1.md"),
+            content_version=1,
+        )
+        with patch("threads_bot_system.cli.export_content", return_value=result) as export_mock, patch(
+            "threads_bot_system.cli.push_export"
+        ) as push_mock:
+            exit_code = main(
+                [
+                    "export-content",
+                    "--source",
+                    "ready/content-1.md",
+                    "--ready-root",
+                    "ready",
+                    "--feed-repo",
+                    "feed",
+                ]
+            )
+
+        self.assertEqual(exit_code, 0)
+        export_mock.assert_called_once()
+        push_mock.assert_not_called()
+
+    def test_export_content_push_checks_repo_before_export_and_pushes_result(self) -> None:
+        result = ExportResult(
+            content_id="content-1",
+            target_path=Path("feed/posts/queue/content-1.md"),
+            content_version=1,
+        )
+        with patch("threads_bot_system.cli.ensure_feed_repo_clean") as clean_mock, patch(
+            "threads_bot_system.cli.export_content", return_value=result
+        ) as export_mock, patch("threads_bot_system.cli.push_export") as push_mock:
+            exit_code = main(
+                [
+                    "export-content",
+                    "--source",
+                    "ready/content-1.md",
+                    "--ready-root",
+                    "ready",
+                    "--feed-repo",
+                    "feed",
+                    "--push",
+                ]
+            )
+
+        self.assertEqual(exit_code, 0)
+        clean_mock.assert_called_once_with(Path("feed"))
+        export_mock.assert_called_once()
+        push_mock.assert_called_once_with(Path("feed"), result)
+
+    def test_publish_feed_dry_run_does_not_build_client_or_write_state(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            queue_dir = root / "queue"
+            queue_dir.mkdir()
+            source_path = queue_dir / "content-1.md"
+            source_path.write_text(
+                "---\n"
+                "content_id: content-1\n"
+                "platform: threads\n"
+                "editorial_status: ready\n"
+                "content_version: 1\n"
+                "---\n\n"
+                "Hello Threads\n",
+                encoding="utf-8",
+            )
+            store_path = root / "publish_tasks.json"
+            buffer = io.StringIO()
+
+            with patch(
+                "threads_bot_system.cli._build_threads_client",
+                side_effect=AssertionError("dry run must not build a Threads client"),
+            ):
+                with redirect_stdout(buffer):
+                    exit_code = main(
+                        [
+                            "publish",
+                            "--store-path",
+                            str(store_path),
+                            "--feed-dir",
+                            str(queue_dir),
+                            "--content-id",
+                            "content-1",
+                            "--dry-run",
+                        ]
+                    )
+
+        self.assertEqual(exit_code, 0)
+        self.assertFalse(store_path.exists())
+        self.assertIn('"content_id": "content-1"', buffer.getvalue())
 
     def test_monitor_command_discovers_user_threads_when_no_media_id_is_given(self) -> None:
         with TemporaryDirectory() as tmpdir:

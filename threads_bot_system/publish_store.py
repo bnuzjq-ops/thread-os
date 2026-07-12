@@ -90,7 +90,7 @@ class JsonPublishStore:
 
     def create_task(self, source_key: str, text: str) -> PublishCreateResult:
         task_id = publish_task_id_for(source_key)
-        existing = self.get(task_id)
+        existing = self.get(task_id) or self.get(f"publish:{source_key}")
         if existing is not None:
             return PublishCreateResult(
                 ok=True,

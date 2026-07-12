@@ -48,3 +48,20 @@ flowchart LR
 - `unknown` means the external result was not confirmed and is never automatically retried.
 - Reply monitor and dispatch share a concurrency group and commit JSON state as MVP persistence.
 - State Worker/D1 is separate from the Feishu Callback Worker and is not the current runtime backend.
+
+## Current three-repository boundary
+
+```mermaid
+flowchart LR
+  A["A: Local Obsidian C:\\jq\\OBS"] -->|"explicit approved export"| B["B: private threads-publish-feed"]
+  B -->|"read-only sparse checkout"| C["C: thread-os GitHub Actions"]
+  C --> T["Threads API"]
+```
+
+- A is the only source of truth for complete content and the current editable version.
+- B contains only approved Markdown snapshots under `posts/queue/<content_id>.md`.
+- C never checks out or reads A. `source_ref` is traceability metadata, not a path C may follow.
+- B never stores `ready/publishing/published/failed/unknown` runtime state.
+- C stores publish state in `state/publish_tasks.json` and reply state in `state/reply_tasks.json` for the current MVP.
+- All workflows that write those JSON files use `thread-os-state-write` concurrency.
+- State API/D1 migration is deferred and is not part of this publishing-feed integration.

@@ -2,6 +2,11 @@ name: Publish Threads
 
 on:
   workflow_dispatch:
+    inputs:
+      content_id:
+        description: "Approved B snapshot content_id to publish"
+        required: true
+        type: string
   schedule:
     - cron: "0 2 * * *"
 
@@ -9,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: threads-publish-state
+  group: thread-os-state-write
   cancel-in-progress: false
 
 jobs:
@@ -20,21 +25,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Checkout approved publish feed
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.CONTENT_REPO }}
+          token: ${{ secrets.CONTENT_REPO_TOKEN }}
+          path: content-feed
+          persist-credentials: false
+          sparse-checkout: posts/queue
+          sparse-checkout-cone-mode: false
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Publish pending Threads posts
+      - name: Publish one due Threads post
+        if: github.event_name == 'schedule'
         env:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
-          PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
-          PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
-        run: python -m threads_bot_system publish
+        run: python -m threads_bot_system publish --feed-dir content-feed/posts/queue --scheduled
+
+      - name: Publish one explicitly selected Threads post
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
+          CONTENT_ID: ${{ inputs.content_id }}
+        run: python -m threads_bot_system publish --feed-dir content-feed/posts/queue --content-id "$CONTENT_ID"
 
       - name: Commit publish task state
+        if: always()
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |

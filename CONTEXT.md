@@ -61,3 +61,14 @@
 - 当前仍未完成：发布任务还只是 JSON 存储，后续必须迁到 State API / D1；发布源契约已建立，但尚未接入真实内容仓库。
 - 本轮没有修改 Feishu Callback Worker，也没有做远程部署或真实联调。
 - 后续恢复任务时，优先查看 `RESTART_HANDOFF.md`、`README.md`、`ARCHITECTURE.md`、`RUNBOOK.md`、`SPEC.md` 和本文件。
+
+## Three-repository decision（2026-07-12）
+
+- A is `C:\jq\OBS`, remains local-only, and is the complete content source of truth.
+- B is the private `bnuzjq-ops/threads-publish-feed`; it stores only approved publish snapshots.
+- C is `bnuzjq-ops/thread-os`; it reads B but never reads A.
+- The only write path into B is the explicit `export-content` command after user approval.
+- GitHub Actions uses `CONTENT_REPO` and read-only `CONTENT_REPO_TOKEN` for B.
+- Publish and reply runtime state remain JSON in C. D1 is deferred.
+- The B test snapshot intentionally has no `scheduled_time`; it cannot be selected by cron.
+- No real Threads publish, Feishu card delivery, Worker deployment, Secret update, or main merge was authorized in this phase.
