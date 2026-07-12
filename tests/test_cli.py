@@ -72,7 +72,14 @@ class CliTests(unittest.TestCase):
             fake_client = FakeThreadsClient(["media-1", "media-2"])
             captured: list[list[str]] = []
 
-            def fake_run_reply_monitor(media_ids, threads_client, feishu_client, store_path, deepseek_client=None):
+            def fake_run_reply_monitor(
+                media_ids,
+                threads_client,
+                feishu_client,
+                store_path,
+                deepseek_client=None,
+                cursor_path=None,
+            ):
                 captured.append(list(media_ids))
                 return SimpleNamespace(comments=[], like_only_count=0, review_count=0)
 

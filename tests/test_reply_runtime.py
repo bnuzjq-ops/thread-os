@@ -74,6 +74,81 @@ class FailingDeepSeekClient:
 
 
 class ReplyRuntimeTests(unittest.TestCase):
+    def test_run_reply_monitor_baselines_existing_comments_without_cards(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            cursor_path = Path(tmpdir) / "reply_monitor_cursor.json"
+            threads_client = FakeThreadsClient(
+                [
+                    ThreadsComment(
+                        comment_id="old-comment",
+                        text="How should we reply to this?",
+                        timestamp="2026-07-10T10:00:00Z",
+                    )
+                ]
+            )
+            feishu_client = FakeFeishuClient()
+            deepseek_client = FakeDeepSeekClient()
+
+            report = run_reply_monitor(
+                ["media-1"],
+                threads_client,
+                feishu_client,
+                store_path,
+                deepseek_client=deepseek_client,
+                cursor_path=cursor_path,
+            )
+
+            self.assertEqual(report.review_count, 0)
+            self.assertEqual(deepseek_client.inputs, [])
+            self.assertEqual(feishu_client.cards, [])
+            self.assertEqual(
+                json.loads(cursor_path.read_text(encoding="utf-8")),
+                {"last_seen_timestamp": "2026-07-10T10:00:00Z"},
+            )
+
+    def test_run_reply_monitor_sends_only_comments_after_cursor(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            cursor_path = Path(tmpdir) / "reply_monitor_cursor.json"
+            cursor_path.write_text(
+                json.dumps({"last_seen_timestamp": "2026-07-10T10:00:00Z"}),
+                encoding="utf-8",
+            )
+            threads_client = FakeThreadsClient(
+                [
+                    ThreadsComment(
+                        comment_id="old-comment",
+                        text="Old question",
+                        timestamp="2026-07-10T10:00:00Z",
+                    ),
+                    ThreadsComment(
+                        comment_id="new-comment",
+                        text="New question",
+                        timestamp="2026-07-10T10:01:00Z",
+                    ),
+                ]
+            )
+            feishu_client = FakeFeishuClient()
+            deepseek_client = FakeDeepSeekClient()
+
+            report = run_reply_monitor(
+                ["media-1"],
+                threads_client,
+                feishu_client,
+                store_path,
+                deepseek_client=deepseek_client,
+                cursor_path=cursor_path,
+            )
+
+            self.assertEqual(report.review_count, 1)
+            self.assertEqual(deepseek_client.inputs, ["New question"])
+            self.assertEqual(len(feishu_client.cards), 1)
+            self.assertEqual(
+                json.loads(cursor_path.read_text(encoding="utf-8")),
+                {"last_seen_timestamp": "2026-07-10T10:01:00Z"},
+            )
+
     def test_run_reply_monitor_builds_cards_and_persists_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"

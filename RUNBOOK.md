@@ -37,9 +37,11 @@
 - `THREADS_ACCESS_TOKEN`
 - `THREADS_USER_ID`
 - `THREADS_STORE_PATH`，可选，默认 `state/reply_tasks.json`
+- `THREADS_MONITOR_CURSOR_PATH`，可选，默认 `state/reply_monitor_cursor.json`
 
 监控入口会先按 `THREADS_USER_ID` 自动拉取当前用户的 Threads 帖子，再去扫每条帖子的回复；`--media-id` 仅保留给手动临时指定单帖扫描。
-监控也会跳过你已经在 Threads 里自己回复过的顶层评论，避免旧帖反复重新推进飞书。
+首次运行只记录当前已知评论的最新时间作为基线，不向飞书发送历史评论；之后只处理时间戳晚于游标的新评论。监控也会跳过你已经在 Threads 里自己回复过的顶层评论，以及已经进入稳定状态的任务。
+游标文件和 `state/reply_tasks.json` 必须一起提交，不能只更新其中一个。
 
 ## Cloudflare Worker 仍然需要的变量
 

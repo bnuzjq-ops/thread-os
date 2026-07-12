@@ -39,6 +39,6 @@
 
 ## 当前已验证范围
 
-JSON MVP 已有发布和人工审核回复链路的本地测试。运行 `python -m unittest discover -s tests` 可执行当前 52 个测试。通过只代表本地 mock 验证，不代表真实 Threads、飞书、DeepSeek、GitHub Actions 或 Worker 链路成功。
+JSON MVP 已有发布和人工审核回复链路的本地测试。运行 `python -m unittest discover -s tests` 可执行当前测试。通过只代表本地 mock 验证，不代表真实 Threads、飞书、DeepSeek、GitHub Actions 或 Worker 链路成功。
 
 发布输入契约是带有 `content_id`、`platform: threads`、`status: ready` frontmatter 和非空正文的 Markdown。执行仓库读取输入，Obsidian 内容仓库保持独立且本轮不修改。
