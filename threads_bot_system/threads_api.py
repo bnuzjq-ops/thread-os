@@ -186,7 +186,12 @@ class ThreadsApiClient:
         raise ThreadsApiError("Threads publish response did not include a reply id")
 
     def publish_post(self, text: str) -> str:
-        payload = self._publish_text(text=text)
+        creation = self._create_text_container(text)
+        creation_id = self._optional_text(creation.get("id"))
+        if not creation_id:
+            raise ThreadsApiError("Threads create response did not include a creation id")
+
+        payload = self._publish_container(creation_id)
         post_id = self._optional_text(payload.get("id"))
         if post_id:
             return post_id
@@ -198,6 +203,33 @@ class ThreadsApiClient:
                 return post_id
 
         raise ThreadsApiError("Threads publish response did not include a post id")
+
+    def _create_text_container(self, text: str) -> dict[str, object]:
+        url = f"{self.base_url}/{self.user_id}/threads"
+        payload = {
+            "access_token": self.access_token,
+            "media_type": "TEXT",
+            "text": text,
+        }
+        return self._request_json(
+            "POST",
+            url,
+            data=urlencode(payload).encode("utf-8"),
+            content_type="application/x-www-form-urlencoded",
+        )
+
+    def _publish_container(self, creation_id: str) -> dict[str, object]:
+        url = f"{self.base_url}/{self.user_id}/threads_publish"
+        payload = {
+            "access_token": self.access_token,
+            "creation_id": creation_id,
+        }
+        return self._request_json(
+            "POST",
+            url,
+            data=urlencode(payload).encode("utf-8"),
+            content_type="application/x-www-form-urlencoded",
+        )
 
     def _publish_text(self, text: str, reply_to_id: str | None = None) -> dict[str, object]:
         url = f"{self.base_url}/{self.user_id}/threads_publish"
