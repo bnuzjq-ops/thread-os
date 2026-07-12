@@ -71,13 +71,16 @@ def load_publish_source(path: str | Path) -> PublishSource:
 def select_due_source(root: str | Path, now: datetime | None = None) -> Path | None:
     """Select the earliest due scheduled source, stably ordered by content ID."""
     current = now or datetime.now(timezone.utc)
+    if current.tzinfo is None:
+        raise ValueError("now must include a timezone")
+    current = current.astimezone(timezone.utc)
     candidates: list[tuple[datetime, str, Path]] = []
     for path in sorted(Path(root).glob("*.md")):
         source = load_publish_source(path)
         if not source.scheduled_time:
             continue
         scheduled = datetime.fromisoformat(source.scheduled_time.replace("Z", "+00:00"))
-        if scheduled.astimezone(timezone.utc) <= current.astimezone(timezone.utc):
+        if scheduled.astimezone(timezone.utc) <= current:
             candidates.append((scheduled.astimezone(timezone.utc), source.content_id, path))
     if not candidates:
         return None

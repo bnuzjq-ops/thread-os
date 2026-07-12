@@ -15,6 +15,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | JSON state writeback | PASS | `state/publish_tasks.json`, status `published`, post ID recorded |
 | Future scheduled content is skipped | PASS | `tests/test_publish_runtime.py` |
 | Scheduled time requires timezone | PASS | `tests/test_publish_source.py` |
+| Scheduler reference time requires timezone | PASS | `tests/test_publish_source.py`; naive `now` is rejected before UTC comparison |
 | Due source selection is stable | PASS | `tests/test_publish_source.py`; UTC comparison and `content_id` tie-break |
 | Scheduled run publishes at most one source | PASS | `select-scheduled-source` CLI and `publish.yml` |
 | Publish state records transition timestamps | PASS | `tests/test_publish_store.py`; `created_at`, `claimed_at`, `updated_at` |

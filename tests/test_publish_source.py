@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 from threads_bot_system.publish_source import load_publish_source
@@ -7,6 +8,11 @@ from threads_bot_system.publish_source import select_due_source
 
 
 class PublishSourceTests(unittest.TestCase):
+    def test_select_due_source_rejects_naive_now(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with self.assertRaisesRegex(ValueError, "now must include a timezone"):
+                select_due_source(tmpdir, now=datetime(2026, 7, 12, 12, 0, 0))
+
     def test_load_publish_source_reads_ready_markdown(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir) / "post.md"
