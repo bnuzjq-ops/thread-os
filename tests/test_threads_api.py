@@ -35,6 +35,34 @@ class ThreadsApiTests(unittest.TestCase):
         with self.assertRaisesRegex(ThreadsApiError, "missing permission"):
             client.fetch_replies("media-1")
 
+    def test_authentication_error_preserves_http_status_and_body(self) -> None:
+        client = ThreadsApiClient(
+            user_id="user-1", access_token="token-1",
+            request_impl=lambda request: DummyResponse('{"error":"invalid token"}', status=401),
+        )
+        with self.assertRaisesRegex(ThreadsApiError, "HTTP 401.*invalid token"):
+            client.fetch_replies("media-1")
+
+    def test_network_error_is_wrapped_without_retrying(self) -> None:
+        requests: list[object] = []
+        def fake_request(request: object) -> DummyResponse:
+            requests.append(request)
+            raise TimeoutError("timed out")
+        client = ThreadsApiClient(
+            user_id="user-1", access_token="token-1", request_impl=fake_request,
+        )
+        with self.assertRaisesRegex(ThreadsApiError, "Threads request failed: timed out"):
+            client.fetch_replies("media-1")
+        self.assertEqual(len(requests), 1)
+
+    def test_invalid_json_is_rejected(self) -> None:
+        client = ThreadsApiClient(
+            user_id="user-1", access_token="token-1",
+            request_impl=lambda request: DummyResponse("not-json"),
+        )
+        with self.assertRaisesRegex(ThreadsApiError, "not valid JSON"):
+            client.fetch_replies("media-1")
+
     def test_fetch_user_threads_pages_through_results(self) -> None:
         requests: list[object] = []
 

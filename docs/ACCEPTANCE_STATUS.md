@@ -22,6 +22,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Corrupt JSON fails closed | PASS | `tests/test_publish_store.py`; invalid state raises before task/API execution |
 | Repository and Git history contain no detected Secrets | PASS | Targeted tracked-file and history pattern scan; no values printed |
 | Failure alerts include actionable task context | PASS | Workflow summaries include task ID, phase/status, error, action and recovery fields |
+| Publish error classification coverage | PASS | `tests/test_threads_api.py`; HTTP auth/permission, network timeout, and invalid JSON paths preserve actionable error context |
 | Workflow state/concurrency contract | PASS | `tests/test_workflow_contract.py`; shared group, queue boundary, and dry-run switch |
 | State write failure preserves recovery artifact | PASS | `tests/test_workflow_contract.py`; failure paths upload state JSON for recovery |
 | Permalink lookup failure avoids republish | PASS | `tests/test_publish_runtime.py` |
@@ -40,6 +41,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Reply task idempotency and draft-version claim | PASS | `tests/test_task_store_contract.py`, `tests/test_reply_runtime.py` |
 | Reply failed/unknown handling | PASS | `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py` |
 | DeepSeek failure and empty-output rejection | PASS | `tests/test_deepseek_api.py`, `tests/test_reply_runtime.py` |
+| DeepSeek error classification coverage | PASS | `tests/test_deepseek_api.py`; HTTP auth failure, invalid JSON, and empty message content are rejected explicitly |
 | Feishu card action contract | PASS | `tests/test_feishu_api.py`, `tests/test_reply_card.py` |
 | Worker signature and callback contract | PASS | `tests/reply_worker.test.mjs` |
 | State Worker atomic claim contract | PASS | `worker/state-service/test/index.test.mjs` |
