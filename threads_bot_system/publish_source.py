@@ -37,7 +37,7 @@ def load_publish_source(path: str | Path) -> PublishSource:
 
     content_id = fields.get("content_id", "").strip()
     platform = fields.get("platform", "").strip()
-    status = fields.get("status", "").strip()
+    status = fields.get("status", fields.get("editorial_status", "")).strip()
     text = "\n".join(lines[end + 1:]).strip()
     if not content_id:
         raise ValueError("Publish source requires content_id")
