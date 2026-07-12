@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from threads_bot_system.publish_runtime import PublishRunError, run_publish
@@ -21,6 +22,9 @@ class FakeThreadsClient:
         self.published_texts.append(text)
         return f"post-{len(self.published_texts)}"
 
+    def get_post_permalink(self, post_id: str) -> str:
+        return f"https://www.threads.com/post/{post_id}"
+
 
 class PublishRuntimeTests(unittest.TestCase):
     def test_run_publish_posts_pending_tasks_and_updates_store(self) -> None:
@@ -41,6 +45,20 @@ class PublishRuntimeTests(unittest.TestCase):
             self.assertIsNotNone(updated)
             self.assertEqual(updated.status, PublishTaskStatus.PUBLISHED)
             self.assertEqual(updated.post_id, "post-1")
+            self.assertEqual(updated.permalink, "https://www.threads.com/post/post-1")
+
+    def test_run_publish_skips_future_scheduled_task(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            store = JsonPublishStore.load(path)
+            future = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+            task = store.create_task("future", "Not yet", future).task
+
+            report = run_publish(store, FakeThreadsClient())
+
+            self.assertEqual(report.attempted, 0)
+            self.assertEqual(report.posted, 0)
+            self.assertEqual(JsonPublishStore.load(path).get_task(task.publish_task_id).status, PublishTaskStatus.READY)
 
     def test_run_publish_marks_timeout_unknown(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

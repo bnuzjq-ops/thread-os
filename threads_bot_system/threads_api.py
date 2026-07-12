@@ -204,6 +204,12 @@ class ThreadsApiClient:
 
         raise ThreadsApiError("Threads publish response did not include a post id")
 
+    def get_post_permalink(self, post_id: str) -> str | None:
+        """Read the permalink after publishing without changing external state."""
+        url = f"{self.base_url}/{post_id}?fields=permalink"
+        payload = self._request_json("GET", url)
+        return self._optional_text(payload.get("permalink"))
+
     def _create_text_container(self, text: str) -> dict[str, object]:
         url = f"{self.base_url}/{self.user_id}/threads"
         payload = {

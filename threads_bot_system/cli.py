@@ -145,7 +145,7 @@ def _run_publish(store_path: Path, source_path: str | None = None) -> int:
     store = JsonPublishStore.load(store_path)
     if source_path:
         source = load_publish_source(source_path)
-        store.create_task(source.content_id, source.text)
+        store.create_task(source.content_id, source.text, source.scheduled_time)
     report = run_publish(store, threads_client)
     print(
         json.dumps(

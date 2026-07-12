@@ -14,6 +14,7 @@ class PublishSource:
     platform: str
     status: str
     text: str
+    scheduled_time: str | None = None
 
 
 def load_publish_source(path: str | Path) -> PublishSource:
@@ -48,4 +49,12 @@ def load_publish_source(path: str | Path) -> PublishSource:
     if not text:
         raise ValueError("Publish source body is empty")
 
-    return PublishSource(content_id=content_id, platform=platform, status=status, text=text)
+    scheduled_time = fields.get("scheduled_time", "").strip() or None
+
+    return PublishSource(
+        content_id=content_id,
+        platform=platform,
+        status=status,
+        text=text,
+        scheduled_time=scheduled_time,
+    )

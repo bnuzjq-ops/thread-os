@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import sys
+from datetime import datetime, timezone
 from typing import Iterable
 
 from .publish_store import JsonPublishStore
@@ -53,6 +54,16 @@ def run_publish(
         attempted += 1
         try:
             post_id = threads_client.publish_post(text=claim.task.text)
+            permalink = None
+            get_permalink = getattr(threads_client, "get_post_permalink", None)
+            if get_permalink is not None:
+                try:
+                    permalink = get_permalink(post_id)
+                except Exception as exc:
+                    print(
+                        f"Permalink lookup failed for {task.publish_task_id}: {exc}",
+                        file=sys.stderr,
+                    )
         except TimeoutError as exc:
             print(
                 f"Publish uncertain for {task.publish_task_id}: {exc}",
@@ -70,13 +81,17 @@ def run_publish(
                 file=sys.stderr,
             )
             try:
-                failed = publish_store.fail_task(task.publish_task_id, str(exc))
+                    failed = publish_store.fail_task(
+                        task.publish_task_id,
+                        str(exc),
+                        error_type=_classify_error(exc),
+                    )
             except Exception:
                 failed = claim.task
             processed.append(failed)
             continue
 
-        completed = publish_store.complete_publish(task.publish_task_id, post_id)
+        completed = publish_store.complete_publish(task.publish_task_id, post_id, permalink)
         posted += 1
         processed.append(completed)
 
@@ -90,7 +105,7 @@ def _select_tasks(store: JsonPublishStore, task_ids: set[str]) -> list[PublishTa
     tasks = [
         task
         for task in store.tasks.values()
-        if task.status is PublishTaskStatus.READY
+        if task.status is PublishTaskStatus.READY and _is_due(task.scheduled_time)
     ]
     tasks.sort(key=lambda item: item.publish_task_id)
     if not task_ids:
@@ -102,3 +117,26 @@ def _normalize_task_ids(task_ids: Iterable[str] | None) -> set[str]:
     if task_ids is None:
         return set()
     return {str(task_id).strip() for task_id in task_ids if str(task_id).strip()}
+
+
+def _is_due(value: str | None) -> bool:
+    if not value:
+        return True
+    try:
+        scheduled = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if scheduled.tzinfo is None:
+        return False
+    return scheduled.astimezone(timezone.utc) <= datetime.now(timezone.utc)
+
+
+def _classify_error(exc: Exception) -> str:
+    message = str(exc).lower()
+    if isinstance(exc, ValueError):
+        return "validation_error"
+    if "401" in message or "unauthorized" in message or "token" in message:
+        return "authentication_error"
+    if "timeout" in message or isinstance(exc, TimeoutError):
+        return "network_error"
+    return "external_api_error"

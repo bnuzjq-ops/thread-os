@@ -27,6 +27,9 @@ class PublishTask:
     text: str
     status: PublishTaskStatus
     post_id: str | None = None
+    permalink: str | None = None
+    scheduled_time: str | None = None
+    error_type: str | None = None
     claimed_at: str | None = None
     last_error: str | None = None
     created_at: str | None = None
@@ -38,7 +41,11 @@ def publish_task_id_for(source_key: str) -> str:
     return f"publish:{source_key}"
 
 
-def new_publish_task(source_key: str, text: str) -> PublishTask:
+def new_publish_task(
+    source_key: str,
+    text: str,
+    scheduled_time: str | None = None,
+) -> PublishTask:
     """Create a fresh publish task record."""
     source_key = source_key.strip()
     if not source_key:
@@ -49,4 +56,5 @@ def new_publish_task(source_key: str, text: str) -> PublishTask:
         source_key=source_key,
         text=text,
         status=PublishTaskStatus.READY,
+        scheduled_time=scheduled_time,
     )

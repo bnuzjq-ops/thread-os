@@ -88,7 +88,12 @@ class JsonPublishStore:
     def upsert(self, task: PublishTask) -> None:
         self.tasks[task.publish_task_id] = task
 
-    def create_task(self, source_key: str, text: str) -> PublishCreateResult:
+    def create_task(
+        self,
+        source_key: str,
+        text: str,
+        scheduled_time: str | None = None,
+    ) -> PublishCreateResult:
         task_id = publish_task_id_for(source_key)
         existing = self.get(task_id)
         if existing is not None:
@@ -99,7 +104,7 @@ class JsonPublishStore:
                 task=existing,
             )
 
-        task = new_publish_task(source_key, text)
+        task = new_publish_task(source_key, text, scheduled_time=scheduled_time)
         self.upsert(task)
         self.save()
         return PublishCreateResult(
@@ -127,28 +132,40 @@ class JsonPublishStore:
         self.save()
         return PublishClaimResult(ok=True, claimed=True, reason=None, task=updated)
 
-    def complete_publish(self, task_id: str, post_id: str) -> PublishTask:
+    def complete_publish(
+        self,
+        task_id: str,
+        post_id: str,
+        permalink: str | None = None,
+    ) -> PublishTask:
         task = self._require_task(task_id)
         updated = replace(
             task,
             status=PublishTaskStatus.PUBLISHED,
             post_id=post_id,
+            permalink=permalink,
             last_error=None,
+            error_type=None,
         )
         self.upsert(updated)
         self.save()
         return updated
 
-    def fail_task(self, task_id: str, error: str) -> PublishTask:
+    def fail_task(
+        self,
+        task_id: str,
+        error: str,
+        error_type: str = "external_api_error",
+    ) -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.FAILED, last_error=error)
+        updated = replace(task, status=PublishTaskStatus.FAILED, last_error=error, error_type=error_type)
         self.upsert(updated)
         self.save()
         return updated
 
     def mark_unknown(self, task_id: str, error: str) -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.UNKNOWN, last_error=error)
+        updated = replace(task, status=PublishTaskStatus.UNKNOWN, last_error=error, error_type="unknown_result")
         self.upsert(updated)
         self.save()
         return updated
