@@ -67,9 +67,10 @@ class FeishuApiTests(unittest.TestCase):
         self.assertEqual(body["receive_id"], "chat-id")
         self.assertEqual(body["msg_type"], "interactive")
         content = json.loads(body["content"])
+        self.assertEqual(content["card"]["schema"], "2.0")
         self.assertEqual(content["card"]["header"]["title"]["content"], "回复审核 · comment-1")
         self.assertEqual(
-            content["card"]["elements"][1]["actions"][0]["value"],
+            content["card"]["body"]["elements"][1]["actions"][0]["behaviors"][0]["value"],
             {"action": "send", "reply_task_id": "reply:comment-1"},
         )
 
