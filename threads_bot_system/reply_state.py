@@ -19,6 +19,7 @@ def task_to_record(task: ReplyTask) -> dict[str, object]:
         "draft_version": task.draft_version,
         "draft_source": task.draft_source,
         "feishu_message_id": task.feishu_message_id,
+        "card_message_id": task.feishu_message_id,
         "card_sent_at": task.card_sent_at,
         "active_card_version": task.active_card_version,
         "reply_id": task.reply_id,
@@ -44,7 +45,9 @@ def task_from_record(record: Mapping[str, object]) -> ReplyTask:
         draft=str(record.get("draft", "")),
         draft_version=int(record.get("draft_version", 0)),
         draft_source=str(record.get("draft_source", "")),
-        feishu_message_id=_optional_text(record.get("feishu_message_id")),
+        feishu_message_id=_optional_text(
+            record.get("feishu_message_id", record.get("card_message_id"))
+        ),
         card_sent_at=_optional_text(record.get("card_sent_at")),
         active_card_version=_optional_int(record.get("active_card_version")),
         reply_id=_optional_text(record.get("reply_id")),
