@@ -50,7 +50,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | State Worker atomic claim contract | PASS | `worker/state-service/test/index.test.mjs` |
 | Feishu review card | PASS | Live review card run `29223845054`; persisted `feishu_message_id` |
 | Feishu callback and GitHub dispatch | PASS (skip path) | Live runs `29226259880`, `29226261576`, `29226273680` |
-| Real Threads reply | BLOCKED | New real comment and controlled `send` are still required |
+| Real Threads reply | NOT_TESTED (3-reply gate) | One controlled real reply is verified; three are required for final acceptance |
 
 ## Current Boundary
 
@@ -99,3 +99,12 @@ This document records verified evidence only. `PASS` requires a runtime or test 
   schedules scans every five minutes; GitHub may still add platform-side
   scheduling delay, but manual workflow dispatch is no longer required for
   normal operation.
+
+## Real Reply Evidence (2026-07-13)
+
+- First controlled real reply: **PASS**. `reply-dispatch` run `29227348273`
+  completed successfully for task `reply:18014390051710719`.
+- Persisted result: `status=sent`, `dry_run=false`, and
+  `reply_id=17988946037829563` in `state/reply_tasks.json`.
+- Final real-reply acceptance: **NOT_TESTED**. Two additional distinct
+  comments must be reviewed and replied to without duplication.
