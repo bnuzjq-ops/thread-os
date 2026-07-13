@@ -35,3 +35,9 @@ Read, in order:
 - Real publish: `https://www.threads.com/@jq.sifu/post/DasjI8XETAR`
 - DeepSeek verification: GitHub Actions run `29197690303`
 - Real monitor scan: GitHub Actions run `29197058923`, `comments: 0`
+
+## Latest Runtime Evidence
+
+- Real Feishu review card: verified by run `29223845054`.
+- Feishu `skip` -> Worker -> GitHub dispatch: verified by runs `29226259880`, `29226261576`, `29226273680`.
+- Do not reuse the terminal `skipped` task for `send`; wait for a fresh comment/task.

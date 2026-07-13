@@ -30,6 +30,12 @@
 - Live Feishu/dispatch dry-run: `NOT_TESTED`; it sends a real Feishu test receipt.
 - Continuous three-post real acceptance: `NOT_TESTED`; it requires real Threads publishing.
 - Real reply end to end: `BLOCKED` by `no_new_real_comment`.
+
+## Current Evidence Override (2026-07-13)
+
+- A real comment produced a DeepSeek draft and Feishu review card.
+- Feishu `skip` was accepted by the live Worker and dispatched to GitHub successfully; the task is terminal `skipped`.
+- Real reply and live dry-run remain unverified because the skipped task cannot be reused; a new comment must create a fresh task.
 - Do not rerun empty comment monitors waiting for data.
 
 ## Continuation Rules

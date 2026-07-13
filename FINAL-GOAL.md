@@ -19,6 +19,10 @@ The system must run repeatable publish and semi-automatic reply cycles without d
 - Reply code path: local tests and safe dry-run logic implemented.
 - Real reply end to end: `BLOCKED` by `no_new_real_comment`.
 
+## Current Evidence Override (2026-07-13)
+
+The external blocker is no longer comment discovery for the existing test task. Feishu card delivery and the live `skip` callback path are verified. Real `send` and live dry-run require a fresh comment/task because the existing task is terminal `skipped`.
+
 ## Completion Rule
 
 Do not mark the whole system complete until every non-blocked acceptance item is `PASS`. Real reply acceptance may remain `BLOCKED` only with its cause and unblock condition recorded.
