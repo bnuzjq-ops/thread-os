@@ -97,7 +97,12 @@ def run_reply_monitor(
     media_id_list = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
     comments: list[CommentSnapshot] = []
     for media_id in media_id_list:
-        comments.extend(_fetch_comment_snapshots(threads_client.fetch_replies(media_id)))
+        comments.extend(
+            _fetch_comment_snapshots(
+                threads_client.fetch_replies(media_id),
+                media_id=media_id,
+            )
+        )
 
     latest_timestamp = _latest_comment_timestamp(comments)
     if cursor_path is not None:
@@ -235,10 +240,19 @@ def execute_reply_dispatch(
     return completed
 
 
-def materialize_comment_snapshots(items: Iterable[ThreadsComment]) -> list[CommentSnapshot]:
+def materialize_comment_snapshots(
+    items: Iterable[ThreadsComment],
+    *,
+    media_id: str = "",
+) -> list[CommentSnapshot]:
     """Convert API comment rows into the monitor snapshot shape."""
     return [
-        CommentSnapshot(comment_id=item.comment_id, text=item.text, timestamp=item.timestamp)
+        CommentSnapshot(
+            comment_id=item.comment_id,
+            text=item.text,
+            timestamp=item.timestamp,
+            media_id=media_id,
+        )
         for item in items
     ]
 
@@ -248,8 +262,12 @@ def _latest_comment_timestamp(comments: Iterable[CommentSnapshot]) -> str | None
     return max(timestamps) if timestamps else None
 
 
-def _fetch_comment_snapshots(items: Iterable[ThreadsComment]) -> list[CommentSnapshot]:
-    return materialize_comment_snapshots(items)
+def _fetch_comment_snapshots(
+    items: Iterable[ThreadsComment],
+    *,
+    media_id: str = "",
+) -> list[CommentSnapshot]:
+    return materialize_comment_snapshots(items, media_id=media_id)
 
 
 def _build_reply_draft(

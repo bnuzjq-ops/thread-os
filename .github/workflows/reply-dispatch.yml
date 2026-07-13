@@ -48,6 +48,8 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "${BRANCH_NAME}"
+          git rebase "origin/${BRANCH_NAME}"
           git add state/reply_tasks.json
           git commit -m "Update reply task state"
           git push origin "HEAD:${BRANCH_NAME}"

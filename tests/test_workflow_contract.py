@@ -11,6 +11,8 @@ class WorkflowContractTests(unittest.TestCase):
             text = (WORKFLOW_ROOT / name).read_text(encoding="utf-8")
             self.assertIn("group: thread-os-state-write", text)
             self.assertIn("cancel-in-progress: false", text)
+            self.assertIn('git fetch origin "${BRANCH_NAME}"', text)
+            self.assertIn('git rebase "origin/${BRANCH_NAME}"', text)
 
     def test_publish_workflow_uses_queue_and_content_secret(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
@@ -25,7 +27,7 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_reply_monitor_is_scheduled_every_five_minutes(self) -> None:
         text = (WORKFLOW_ROOT / "reply-monitor.yml").read_text(encoding="utf-8")
-        self.assertIn('cron: "3,8,13,18,23,28,33,38,43,48,53,58 * * * *"', text)
+        self.assertIn('cron: "3-58/5 * * * *"', text)
 
     def test_state_writers_upload_recovery_artifacts_on_failure(self) -> None:
         for name in ("publish.yml", "reply-monitor.yml", "reply-dispatch.yml"):

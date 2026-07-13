@@ -183,6 +183,7 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertEqual(task.status, ReplyTaskStatus.AWAITING_REVIEW)
             self.assertEqual(task.feishu_message_id, "msg-1")
             self.assertEqual(task.draft, "Generated draft text")
+            self.assertEqual(task.media_id, "media-1")
 
     def test_run_reply_monitor_marks_new_tasks_as_dry_run(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
