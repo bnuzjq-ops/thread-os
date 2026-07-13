@@ -65,6 +65,12 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 
 ## Latest Live Evidence
 
+### Status Overrides
+
+- `Feishu review card`: PASS, evidenced by run `29223845054` and saved `feishu_message_id`.
+- `Feishu callback and GitHub dispatch`: PASS for `skip`, evidenced by runs `29226259880`, `29226261576`, and `29226273680`.
+- `Real Threads reply`: BLOCKED pending a new task and one controlled `send`; the skipped task must not be reused.
+
 - Feishu review card: PASS. GitHub Actions run `29223845054` reached success; task `reply:18080707790256878` is `awaiting_review` and has a saved Feishu message ID.
 - Feishu callback and GitHub dispatch: NOT_TESTED. No button action was sent, so no Threads reply was attempted.
 

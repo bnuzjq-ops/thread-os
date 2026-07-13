@@ -23,6 +23,11 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 
 ## Rules
 
+## Live Evidence Override 2026-07-13
+
+- Live Feishu review card and `skip` callback: `PASS`; see runs `29223845054`, `29226259880`, `29226261576`, and `29226273680`.
+- Real comment reply: `BLOCKED` pending a new review task and one controlled `send`; the prior task is terminal `skipped`.
+
 - No item may be `PASS` without evidence.
 - `BLOCKED` does not mean `FAIL` and does not pause unrelated development.
 - A real publish or reply must never be repeated solely because state writeback or permalink lookup failed.
