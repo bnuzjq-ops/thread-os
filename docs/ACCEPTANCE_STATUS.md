@@ -16,8 +16,8 @@ current remote `main` at commit `9dd35c0`.
 | Callback diagnostic logging and trace | PASS | Worker creates a per-click `trace_id`, includes it in logs and GitHub dispatch payload, and reply-dispatch writes it to the run summary; focused Worker tests pass |
 | Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
 | Rewrite regenerates a draft on the same task | PASS | Same task and `draft_version + 1` are covered by focused runtime tests; live card update remains unverified |
-| Rewrite updates the original card instead of sending a second card | FAIL | `reply_runtime.py` still calls `send_review_card()` during rewrite; Feishu card update API is not implemented |
-| Card sent timestamp and active card version persistence | FAIL | State currently persists only `feishu_message_id`; `card_sent_at` and `active_card_version` are absent |
+| Rewrite updates the original card instead of sending a second card | PASS | `FeishuClient.update_review_card()` and the rewrite runtime path reuse the persisted message ID; focused runtime/API tests pass; live verification remains NOT_TESTED |
+| Card sent timestamp and active card version persistence | PASS | JSON state now persists `card_sent_at` and `active_card_version`; focused state/runtime tests pass |
 | Live `send` on a fresh task | NOT_TESTED | Previous live send failed with Threads `Media Not Found`; requires a new comment/task after current `main` is active |
 | Live `rewrite` on a fresh task | NOT_TESTED | Current code fix is not yet exercised by a new Feishu card |
 | Live `skip` on a fresh task | NOT_TESTED | Historical skip runs are retained below but are not current-baseline evidence |

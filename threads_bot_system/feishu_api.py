@@ -39,6 +39,38 @@ class FeishuClient:
         """Send an interactive card payload to the configured chat."""
         return self._send_message("interactive", card)
 
+    def update_review_card(self, message_id: str, title: str, body: str) -> None:
+        """Replace the existing review card without creating another message."""
+        access_token = self.get_tenant_access_token()
+        url = f"{self.base_url}/im/v1/messages/{message_id}"
+        content = {
+            "schema": "2.0",
+            "body": {
+                "direction": "vertical",
+                "padding": "12px 12px 12px 12px",
+                "elements": [{"tag": "markdown", "content": body}],
+            },
+            "header": {
+                "template": "blue",
+                "title": {"tag": "plain_text", "content": title},
+            },
+        }
+        body_bytes = json.dumps(
+            {"content": json.dumps(content, ensure_ascii=False), "msg_type": "interactive"},
+            ensure_ascii=False,
+        ).encode("utf-8")
+        request = Request(
+            url,
+            data=body_bytes,
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/json",
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            method="PUT",
+        )
+        self._request_json(request)
+
     def _send_message(self, msg_type: str, content: dict[str, object]) -> str:
         access_token = self.get_tenant_access_token()
         url = f"{self.base_url}/im/v1/messages?receive_id_type=chat_id"

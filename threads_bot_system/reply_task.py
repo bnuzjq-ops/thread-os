@@ -32,6 +32,8 @@ class ReplyTask:
     draft_version: int = 0
     draft_source: str = ""
     feishu_message_id: str | None = None
+    card_sent_at: str | None = None
+    active_card_version: int | None = None
     reply_id: str | None = None
     dry_run: bool = False
     claimed_at: str | None = None
