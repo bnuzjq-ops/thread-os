@@ -12,11 +12,14 @@ from typing import Mapping, Sequence
 from .contract import render_project_summary
 from .deepseek_api import DeepSeekClient
 from .feishu_api import FeishuClient
+from .operator_state import OperatorStateStore, select_next_review_task
 from .publish_runtime import run_publish
 from .publish_source import load_publish_source, select_due_source
 from .publish_store import JsonPublishStore
 from .reply_runtime import execute_reply_dispatch, run_reply_monitor
 from .reply_state import task_to_record
+from .reply_task import ReplyTaskStatus
+from .task_store import JsonTaskStore
 from .threads_api import ThreadsApiClient
 
 
@@ -35,6 +38,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(render_project_summary())
             return 0
         if command == "dispatch":
+            payload = _load_client_payload(os.environ)
+            if payload.get("event_key"):
+                return _run_menu_event(payload, Path(args.store_path), Path(args.operator_state_path))
             return _run_dispatch(Path(args.store_path))
         if command == "monitor":
             return _run_monitor(Path(args.store_path), list(args.media_id), Path(args.cursor_path))
@@ -64,6 +70,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--store-path",
         default=_env("THREADS_STORE_PATH", str(DEFAULT_STATE_PATH)),
         help="Path to the reply task store",
+    )
+    dispatch.add_argument(
+        "--operator-state-path",
+        default=_env("THREADS_OPERATOR_STATE_PATH", "state/operator_state.json"),
+        help="Path to per-operator menu state",
     )
 
     monitor = subparsers.add_parser(
@@ -118,6 +129,51 @@ def _run_dispatch(store_path: Path) -> int:
         dry_run=_env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"},
     )
     print(json.dumps(task_to_record(task), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _run_menu_event(payload: Mapping[str, object], store_path: Path, operator_state_path: Path) -> int:
+    """Handle safe menu queries before wiring real send/rewrite side effects."""
+    event_key = str(payload.get("event_key", "")).strip()
+    user_open_id = str(payload.get("user_open_id", "")).strip()
+    trace_id = str(payload.get("trace_id", "")).strip() or "missing"
+    if not user_open_id:
+        raise ValueError("Menu event is missing user_open_id")
+
+    feishu_client = _build_feishu_client(os.environ)
+    if event_key == "system_health":
+        store = JsonTaskStore.load(store_path)
+        counts = {status.value: 0 for status in ReplyTaskStatus}
+        for task in store.tasks.values():
+            counts[task.status.value] = counts.get(task.status.value, 0) + 1
+        text = (
+            "Threads 助手状态\n"
+            f"Git SHA: {_env('GITHUB_SHA', 'unknown', env=os.environ)[:12]}\n"
+            f"awaiting_review: {counts.get('awaiting_review', 0)}\n"
+            f"sending: {counts.get('sending', 0)}\n"
+            f"failed: {counts.get('failed', 0)}\n"
+            f"unknown: {counts.get('unknown', 0)}\n"
+            f"trace_id: {trace_id}"
+        )
+    elif event_key == "review_next":
+        store = JsonTaskStore.load(store_path)
+        operator_state = OperatorStateStore.load(operator_state_path)
+        task = select_next_review_task(store.tasks.values(), user_open_id, operator_state)
+        operator_state.save()
+        if task is None:
+            text = f"当前没有待审核任务。\ntrace_id: {trace_id}"
+        else:
+            text = (
+                f"任务：{task.reply_task_id}\n"
+                f"评论：{task.comment_text}\n"
+                f"草稿 v{task.draft_version}：{task.draft}\n"
+                f"状态：{task.status.value}\n"
+                f"trace_id: {trace_id}"
+            )
+    else:
+        text = f"已收到 {event_key}，该动作尚未开放真实副作用。\ntrace_id: {trace_id}"
+    message_id = feishu_client.send_text_message_to_open_id(user_open_id, text)
+    print(json.dumps({"event_key": event_key, "trace_id": trace_id, "message_id": message_id}, ensure_ascii=False))
     return 0
 
 
@@ -214,7 +270,7 @@ def _build_feishu_client(env: Mapping[str, str]) -> FeishuClient:
     return FeishuClient(
         app_id=_required_env("FEISHU_APP_ID", env),
         app_secret=_required_env("FEISHU_APP_SECRET", env),
-        chat_id=_required_env("FEISHU_CHAT_ID", env),
+        chat_id=_env("FEISHU_CHAT_ID", env=env).strip(),
         base_url=_env("FEISHU_API_BASE_URL", "https://open.feishu.cn/open-apis", env=env).strip()
         or "https://open.feishu.cn/open-apis",
     )
