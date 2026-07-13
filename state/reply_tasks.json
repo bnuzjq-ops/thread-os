@@ -1752,7 +1752,7 @@
     "reply:18277262557288838": {
       "reply_task_id": "reply:18277262557288838",
       "comment_id": "18277262557288838",
-      "status": "awaiting_review",
+      "status": "failed",
       "media_id": "",
       "draft": "感谢您的关注，关于大家都想了解的内容，我们正在整理更多信息，后续会及时更新，请保持关注。",
       "draft_version": 1,
@@ -1763,7 +1763,7 @@
       "claimed_at": null,
       "lease_until": null,
       "claimed_by": null,
-      "last_error": null,
+      "last_error": "Threads API returned HTTP 500: {\"error\":{\"message\":\"The parameter creation_id is required.\",\"type\":\"THApiException\",\"code\":100,\"fbtrace_id\":\"Aac9lmCxyJ1wIeRkaEksFVr\"}}",
       "requires_manual_check": false,
       "created_at": null,
       "updated_at": null
