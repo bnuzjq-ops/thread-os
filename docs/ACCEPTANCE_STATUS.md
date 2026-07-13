@@ -95,11 +95,12 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 - Real reply end-to-end acceptance: **BLOCKED**, not PASS or FAIL. It still
   requires a new comment, a Feishu `send` click, a successful dispatch, a
   Threads `reply_id`, and the final Feishu receipt.
-- Automatic monitor trigger: **IMPLEMENTED, DEPLOYMENT PENDING**. Cloudflare
+- Automatic monitor trigger: **BLOCKED_EXTERNAL_DEPLOYMENT**. Cloudflare
   Worker cron is configured for every five minutes and dispatches
   `threads_reply_monitor`; the GitHub workflow now consumes that event instead
-  of relying on GitHub's unreliable `schedule` trigger. Deployment must be
-  verified by observing a real `schedule` event from Cloudflare.
+  of relying on GitHub's unreliable `schedule` trigger. Deployment was
+  attempted with `--keep-vars` but Wrangler could not fetch the existing
+  Worker's dashboard metadata. No production Worker change was made.
 
 ## Real Reply Evidence (2026-07-13)
 
