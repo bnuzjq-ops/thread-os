@@ -110,34 +110,19 @@ class FeishuClient:
                         "content": action.label,
                     },
                     "type": "primary" if action.value.startswith("send:") else "default",
-                    "width": "default",
-                    "size": "medium",
-                    "behaviors": [
-                        {
-                            "type": "callback",
-                            "value": {
-                                "action": command,
-                                "reply_task_id": reply_task_id,
-                            },
-                        }
-                    ],
+                    "value": {"action": command, "reply_task_id": reply_task_id},
                 }
             )
 
         return {
-            "schema": "2.0",
-            "config": {
-                "update_multi": True,
-            },
-            "body": {
-                "direction": "vertical",
-                "padding": "12px 12px 12px 12px",
-                "elements": [{"tag": "markdown", "content": payload.body}, *actions],
-            },
             "header": {
                 "template": "blue",
                 "title": {"tag": "plain_text", "content": payload.title},
             },
+            "elements": [
+                {"tag": "div", "text": {"tag": "lark_md", "content": payload.body}},
+                {"tag": "action", "actions": actions},
+            ],
         }
 
     def _request_json(self, request: Request) -> dict[str, object]:
