@@ -19,6 +19,8 @@ def task_to_record(task: ReplyTask) -> dict[str, object]:
         "draft_version": task.draft_version,
         "draft_source": task.draft_source,
         "feishu_message_id": task.feishu_message_id,
+        "card_sent_at": task.card_sent_at,
+        "active_card_version": task.active_card_version,
         "reply_id": task.reply_id,
         "dry_run": task.dry_run,
         "claimed_at": task.claimed_at,
@@ -43,6 +45,8 @@ def task_from_record(record: Mapping[str, object]) -> ReplyTask:
         draft_version=int(record.get("draft_version", 0)),
         draft_source=str(record.get("draft_source", "")),
         feishu_message_id=_optional_text(record.get("feishu_message_id")),
+        card_sent_at=_optional_text(record.get("card_sent_at")),
+        active_card_version=_optional_int(record.get("active_card_version")),
         reply_id=_optional_text(record.get("reply_id")),
         dry_run=bool(record.get("dry_run", False)),
         claimed_at=_optional_text(record.get("claimed_at")),
@@ -81,3 +85,9 @@ def _optional_bool(value: object) -> bool:
         return bool(value)
     text = str(value).strip().lower()
     return text in {"1", "true", "yes", "on"}
+
+
+def _optional_int(value: object) -> int | None:
+    if value is None or value == "":
+        return None
+    return int(value)

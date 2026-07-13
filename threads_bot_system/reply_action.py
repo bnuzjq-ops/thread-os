@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from datetime import datetime, timezone
 
 from .reply_task import ReplyTask, ReplyTaskStatus
 
@@ -29,6 +30,8 @@ def mark_awaiting_review(
         status=ReplyTaskStatus.AWAITING_REVIEW,
         draft=task.draft if draft is None else draft,
         feishu_message_id=feishu_message_id,
+        card_sent_at=datetime.now(timezone.utc).isoformat(),
+        active_card_version=task.draft_version,
         last_error=None,
     )
 

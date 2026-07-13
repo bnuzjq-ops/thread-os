@@ -204,7 +204,9 @@ def execute_reply_dispatch(
 
     if action == "skip":
         updated = mark_skipped(task, "skip_requested")
-        return _persist_local_task_update(store, updated)
+        updated = _persist_local_task_update(store, updated)
+        _update_review_card(feishu_client, updated, "已跳过", "该任务已进入 skipped 终态，不会再次提醒。")
+        return updated
 
     if action == "rewrite":
         if deepseek_client is None:
@@ -224,8 +226,16 @@ def execute_reply_dispatch(
             packet = build_reply_review_packet(intake, draft)
             card = build_reply_card(packet)
             if card is not None:
-                message_id = feishu_client.send_review_card(card)
-                updated = store.save_feishu_message(reply_task_id, message_id)
+                if updated.feishu_message_id and hasattr(feishu_client, "update_review_card"):
+                    feishu_client.update_review_card(
+                        updated.feishu_message_id,
+                        card.title,
+                        card.body,
+                    )
+                    updated = store.save_feishu_message(reply_task_id, updated.feishu_message_id)
+                else:
+                    message_id = feishu_client.send_review_card(card)
+                    updated = store.save_feishu_message(reply_task_id, message_id)
         return updated
 
     if action != "send":
@@ -247,6 +257,8 @@ def execute_reply_dispatch(
             feishu_client.send_text_message("Dry-run 已完成：未调用 Threads 回复 API。")
         return completed
 
+    _update_review_card(feishu_client, claim.task, "发送中", "Threads 回复正在发送，请勿重复点击。")
+
     try:
         reply_id = threads_client.publish_reply(reply_to_id=claim.task.comment_id, text=claim.task.draft)
     except TimeoutError as exc:
@@ -263,6 +275,7 @@ def execute_reply_dispatch(
         raise
 
     completed = store.complete_send(reply_task_id, reply_id)
+    _update_review_card(feishu_client, completed, "已发送", f"Threads 回复已发送，reply_id: {reply_id}")
     if feishu_client is not None:
         feishu_client.send_text_message(f"Threads 回复已发送：{reply_id}")
     return completed
@@ -348,3 +361,16 @@ def _should_skip_monitor_refresh(task: ReplyTask) -> bool:
         ReplyTaskStatus.FAILED,
         ReplyTaskStatus.UNKNOWN,
     }
+
+
+def _update_review_card(
+    feishu_client: FeishuClient | None,
+    task: ReplyTask,
+    title: str,
+    body: str,
+) -> None:
+    if feishu_client is None or not task.feishu_message_id:
+        return
+    updater = getattr(feishu_client, "update_review_card", None)
+    if callable(updater):
+        updater(task.feishu_message_id, title, body)

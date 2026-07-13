@@ -45,6 +45,7 @@ class FakeThreadsClient:
 class FakeFeishuClient:
     def __init__(self) -> None:
         self.cards: list[object] = []
+        self.updated_cards: list[tuple[str, str, str]] = []
 
     def send_review_card(self, payload: object) -> str:
         self.cards.append(payload)
@@ -53,6 +54,9 @@ class FakeFeishuClient:
     def send_text_message(self, text: str) -> str:
         self.cards.append(text)
         return "msg-result"
+
+    def update_review_card(self, message_id: str, title: str, body: str) -> None:
+        self.updated_cards.append((message_id, title, body))
 
 
 class FakeDeepSeekClient:
@@ -182,6 +186,8 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertIsNotNone(task)
             self.assertEqual(task.status, ReplyTaskStatus.AWAITING_REVIEW)
             self.assertEqual(task.feishu_message_id, "msg-1")
+            self.assertIsNotNone(task.card_sent_at)
+            self.assertEqual(task.active_card_version, 1)
             self.assertEqual(task.draft, "Generated draft text")
             self.assertEqual(task.media_id, "media-1")
 
@@ -329,7 +335,7 @@ class ReplyRuntimeTests(unittest.TestCase):
 
             self.assertEqual(feishu_client.cards, ["Threads 回复已发送：reply-1"])
 
-    def test_execute_reply_dispatch_rewrite_generates_and_sends_new_card(self) -> None:
+    def test_execute_reply_dispatch_rewrite_updates_existing_card(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"
             store = JsonTaskStore.load(store_path)
@@ -355,7 +361,8 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertEqual(updated.draft, "Generated draft text")
             self.assertEqual(updated.draft_version, 2)
             self.assertEqual(updated.feishu_message_id, "msg-1")
-            self.assertEqual(len(feishu_client.cards), 1)
+            self.assertEqual(feishu_client.cards, [])
+            self.assertEqual(feishu_client.updated_cards[0][0], "msg-1")
 
     def test_execute_reply_dispatch_dry_run_never_calls_threads(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

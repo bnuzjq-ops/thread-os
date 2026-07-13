@@ -98,5 +98,26 @@ class FeishuApiTests(unittest.TestCase):
         self.assertEqual(json.loads(body["content"])["text"], "已发送 reply-1")
 
 
+    def test_update_review_card_reuses_message_id(self) -> None:
+        requests: list[object] = []
+
+        def fake_request(request: object) -> DummyResponse:
+            requests.append(request)
+            if "tenant_access_token" in request.full_url:
+                return DummyResponse(json.dumps({"tenant_access_token": "tenant-token"}))
+            return DummyResponse('{"code":0}')
+
+        client = FeishuClient(
+            app_id="app-id",
+            app_secret="app-secret",
+            chat_id="chat-id",
+            request_impl=fake_request,
+        )
+        client.update_review_card("om_1", "sending", "processing")
+
+        self.assertEqual(requests[1].get_method(), "PUT")
+        self.assertIn("/im/v1/messages/om_1", requests[1].full_url)
+
+
 if __name__ == "__main__":
     unittest.main()
