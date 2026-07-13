@@ -54,6 +54,11 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 
 ## Current Boundary
 
+## Latest Live Evidence
+
+- Feishu review card: PASS. GitHub Actions run `29223845054` reached success; task `reply:18080707790256878` is `awaiting_review` and has a saved Feishu message ID.
+- Feishu callback and GitHub dispatch: NOT_TESTED. No button action was sent, so no Threads reply was attempted.
+
 - Runtime state remains in `thread-os/state/`.
 - The content repository stores editorial snapshots only.
 - Publishing does not rewrite the Obsidian source Markdown.
