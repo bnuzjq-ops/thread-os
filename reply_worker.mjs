@@ -81,6 +81,10 @@ export function parseReplyActionValue(raw) {
 
   const [command, taskKind, ...rest] = parts;
   const commentId = rest.join(':');
+  const draftVersion =
+    raw && typeof raw === 'object' && !Array.isArray(raw) && Number.isInteger(raw.draft_version)
+      ? raw.draft_version
+      : null;
 
   if (!command || !taskKind || !commentId) {
     throw new Error(`Invalid reply action value: ${raw}`);
@@ -92,6 +96,7 @@ export function parseReplyActionValue(raw) {
     taskId: `${taskKind}:${commentId}`,
     taskKind,
     commentId,
+    draftVersion,
   };
 }
 
@@ -285,6 +290,9 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
     source: 'feishu_card_callback',
     task_kind: action.taskKind,
   };
+  if (action.draftVersion !== null) {
+    payloadForDispatch.draft_version = action.draftVersion;
+  }
   if (payload?.dry_run === true) {
     payloadForDispatch.dry_run = true;
   }

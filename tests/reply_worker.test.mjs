@@ -32,6 +32,7 @@ test('parseReplyActionValue splits the command and task id', () => {
     taskId: 'reply:comment-2',
     taskKind: 'reply',
     commentId: 'comment-2',
+    draftVersion: null,
   });
 });
 
@@ -40,6 +41,7 @@ test('parseReplyActionValue accepts Feishu card value objects', () => {
     parseReplyActionValue({
       action: 'send',
       reply_task_id: 'reply:comment-2',
+      draft_version: 3,
     }),
     {
       command: 'send',
@@ -47,6 +49,7 @@ test('parseReplyActionValue accepts Feishu card value objects', () => {
       taskId: 'reply:comment-2',
       taskKind: 'reply',
       commentId: 'comment-2',
+      draftVersion: 3,
     },
   );
 });
