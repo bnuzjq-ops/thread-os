@@ -37,7 +37,7 @@ class FeishuClient:
 
     def send_interactive_card(self, card: dict[str, object]) -> str:
         """Send an interactive card payload to the configured chat."""
-        return self._send_message("interactive", {"card": card})
+        return self._send_message("interactive", card)
 
     def _send_message(self, msg_type: str, content: dict[str, object]) -> str:
         access_token = self.get_tenant_access_token()
@@ -110,19 +110,29 @@ class FeishuClient:
                         "content": action.label,
                     },
                     "type": "primary" if action.value.startswith("send:") else "default",
-                    "value": {"action": command, "reply_task_id": reply_task_id},
+                    "width": "default",
+                    "size": "medium",
+                    "behaviors": [
+                        {
+                            "type": "callback",
+                            "value": {"action": command, "reply_task_id": reply_task_id},
+                        }
+                    ],
                 }
             )
 
         return {
+            "schema": "2.0",
+            "config": {"update_multi": True},
+            "body": {
+                "direction": "vertical",
+                "padding": "12px 12px 12px 12px",
+                "elements": [{"tag": "markdown", "content": payload.body}, *actions],
+            },
             "header": {
                 "template": "blue",
                 "title": {"tag": "plain_text", "content": payload.title},
             },
-            "elements": [
-                {"tag": "div", "text": {"tag": "lark_md", "content": payload.body}},
-                {"tag": "action", "actions": actions},
-            ],
         }
 
     def _request_json(self, request: Request) -> dict[str, object]:
