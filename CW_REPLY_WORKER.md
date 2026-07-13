@@ -12,6 +12,20 @@
 ## 你在 CW 后台需要填的东西
 
 - Worker 名称：`threads-reply-worker`
+
+## 独立调度器（待切换）
+
+`reply_scheduler_worker.mjs` 是独立的 GitHub monitor 触发器，配置文件为
+`wrangler.scheduler.toml`。当前没有启用它的 Cron，因为 `reply-monitor.yml`
+仍在运行 GitHub schedule；启用前必须先关闭 GitHub schedule，避免双调度。
+
+切换顺序：
+
+1. 部署 scheduler Worker，但先确认 Cron 未产生运行；
+2. 关闭 `.github/workflows/reply-monitor.yml` 的 `schedule`；
+3. 启用 scheduler Cron；
+4. 验证 5 次自然 Cron 触发的 GitHub `repository_dispatch`；
+5. 将证据写入验收表。
 - 路由或自定义域名：`jqxblue.cc/feishu/callback`
 - 事件转发名：默认 `threads_reply_action`
 

@@ -20,6 +20,9 @@ current remote `main` at commit `db17bc8`.
 | Live `skip` on a fresh task | NOT_TESTED | Historical skip runs are retained below but are not current-baseline evidence |
 | Live `status` on a fresh task | NOT_TESTED | No current-baseline run evidence |
 | Real reply final acceptance | BLOCKED | Requires a fresh unprocessed comment and controlled live send; no automatic retry of the failed task |
+| Independent scheduler implementation | PASS | `reply_scheduler_worker.mjs`; `node --test tests/reply_scheduler_worker.test.mjs` |
+| Independent scheduler natural Cron | NOT_TESTED | Must be enabled only after GitHub schedule is disabled; requires 5 consecutive natural Cron runs |
+| Scheduler cutover safety | PASS | `wrangler.scheduler.toml` is isolated; current GitHub schedule remains the only active scheduler |
 
 ## Publish Lane
 

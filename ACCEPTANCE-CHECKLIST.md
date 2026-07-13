@@ -6,7 +6,7 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 
 | Area | Status | Evidence or blocker |
 | --- | --- | --- |
-| Group A — Auto-trigger | PASS | schedule + workflow_dispatch + repository_dispatch in reply-monitor.yml; offset cron avoids round minutes; Cloudflare Cron removed; trigger_source logged |
+| Group A — Auto-trigger | NOT_TESTED | GitHub schedule is active; independent Cloudflare scheduler is implemented and tested but its Cron is not enabled yet |
 | Group B — JSON concurrency & idempotency | PASS | 12/12 code review pass; shared concurrency group; claim-once; stale-version reject; terminal states not retried |
 | Group C — Publish real acceptance | NOT_TESTED | Code review items are covered; C9 (3 continuous real posts) needs current-baseline human execution |
 | Group D — Comment monitor | PASS | 10/10 code review pass; pagination; dedup; self-reply filter; untrusted-input segregation |
