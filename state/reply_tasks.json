@@ -7,6 +7,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "理解您的感受，AI分析和传统命理的视角确实不同，感谢您分享这段体验。",
       "draft_version": 17,
       "draft_source": "",
@@ -22,7 +23,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17875855074653804": {
       "reply_task_id": "reply:17875855074653804",
@@ -30,6 +34,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "理解你的心情，他们确实很有爱🥲",
       "draft_version": 17,
       "draft_source": "",
@@ -45,7 +50,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17876221125619093": {
       "reply_task_id": "reply:17876221125619093",
@@ -53,6 +61,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢你的分享，金人的义气确实值得珍惜。人与人之间的相处，真心和诚意最重要。",
       "draft_version": 15,
       "draft_source": "",
@@ -68,7 +77,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17877005892681294": {
       "reply_task_id": "reply:17877005892681294",
@@ -76,6 +88,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感觉您有些疲惫呢。如果愿意多聊聊这对组合的具体互动细节，我可以试着帮您分析分析～",
       "draft_version": 17,
       "draft_source": "",
@@ -91,7 +104,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17882360505669633": {
       "reply_task_id": "reply:17882360505669633",
@@ -99,6 +115,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您是指癸酉日这个干支日期吗？我可以帮您查询更多相关信息。",
       "draft_version": 17,
       "draft_source": "",
@@ -114,7 +131,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17886523524591283": {
       "reply_task_id": "reply:17886523524591283",
@@ -122,6 +142,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "说得好，庚金确实外表冷硬但内心炽热，重情重义才是它的底色。",
       "draft_version": 17,
       "draft_source": "",
@@ -137,7 +158,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17888322795579429": {
       "reply_task_id": "reply:17888322795579429",
@@ -145,6 +169,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "說得很好，命理確實是幫助我們認識自己的出廠設定，順勢而為。感謝分享。",
       "draft_version": 17,
       "draft_source": "",
@@ -160,7 +185,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17888792460584592": {
       "reply_task_id": "reply:17888792460584592",
@@ -168,6 +196,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "能自得其乐是一种很棒的能力！",
       "draft_version": 17,
       "draft_source": "",
@@ -183,7 +212,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17890604058593897": {
       "reply_task_id": "reply:17890604058593897",
@@ -191,6 +223,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您说得对，年份和年柱确实很关键，不过还要结合其他因素具体分析哦。",
       "draft_version": 17,
       "draft_source": "",
@@ -206,7 +239,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17892381096379015": {
       "reply_task_id": "reply:17892381096379015",
@@ -214,6 +250,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "謝謝你的反饋，請問你有具體事例可以分享嗎？這樣我們可以更了解情況。",
       "draft_version": 17,
       "draft_source": "",
@@ -229,7 +266,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17894065266372865": {
       "reply_task_id": "reply:17894065266372865",
@@ -237,6 +277,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢你的分享，希望能帮到更多人。",
       "draft_version": 1,
       "draft_source": "",
@@ -252,7 +293,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17895832209487986": {
       "reply_task_id": "reply:17895832209487986",
@@ -260,6 +304,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您的付出值得被看见，感到心寒完全可以理解。不过每个人的成长和选择最终取决于自己，也许他的做法并不代表您的心意没有价值。",
       "draft_version": 17,
       "draft_source": "",
@@ -275,7 +320,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17897031093496840": {
       "reply_task_id": "reply:17897031093496840",
@@ -283,6 +331,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "😊 您的笑而不语让我有些好奇，愿闻其详~",
       "draft_version": 17,
       "draft_source": "",
@@ -298,7 +347,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17897282418541396": {
       "reply_task_id": "reply:17897282418541396",
@@ -306,6 +358,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "是的，在森林里每棵树都互相依靠，一起茁壮成长！",
       "draft_version": 17,
       "draft_source": "",
@@ -321,7 +374,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17901816474306652": {
       "reply_task_id": "reply:17901816474306652",
@@ -329,6 +385,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你说得对，辛金要的是被珍视的眼光，不是盲目的付出。",
       "draft_version": 17,
       "draft_source": "",
@@ -344,7 +401,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17903628885450871": {
       "reply_task_id": "reply:17903628885450871",
@@ -352,6 +412,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "听起来你很难过，别着急，慢慢说，是遇到什么事了吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -367,7 +428,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17909687178429996": {
       "reply_task_id": "reply:17909687178429996",
@@ -375,6 +439,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "听到了，今年水木旺确实容易身心疲惫。丑土能稍微稳定局面，建议多注意休息，祝早日好转。",
       "draft_version": 17,
       "draft_source": "",
@@ -390,7 +455,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17910273558432307": {
       "reply_task_id": "reply:17910273558432307",
@@ -398,6 +466,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢分享，说得很有道理。财重印轻确实容易忽略内在，需要提醒自己找到平衡。",
       "draft_version": 8,
       "draft_source": "",
@@ -413,7 +482,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17911242810241281": {
       "reply_task_id": "reply:17911242810241281",
@@ -421,6 +493,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，辛金遇双庚金，这日子怕不是天天被“金”克到怀疑人生🤣 辛苦了！",
       "draft_version": 16,
       "draft_source": "",
@@ -436,7 +509,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17917886526394904": {
       "reply_task_id": "reply:17917886526394904",
@@ -444,6 +520,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢分享！您说得很有道理，让AI先学习权威经典确实能避免它“和稀泥”。《子平真诠》这类著作作为理论基础，思路很棒。",
       "draft_version": 17,
       "draft_source": "",
@@ -459,7 +536,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17920386714390147": {
       "reply_task_id": "reply:17920386714390147",
@@ -467,6 +547,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "抱歉，我暂时没有关于“丙戌女”的详细信息。能否请您提供更多背景或说明具体问题？我会尽力帮您解答。",
       "draft_version": 17,
       "draft_source": "",
@@ -482,7 +563,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17925176016145531": {
       "reply_task_id": "reply:17925176016145531",
@@ -490,6 +574,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "抱歉，我对干支纪日的冲克了解有限，无法准确判断。建议您查阅相关历法资料或请教专业人士。",
       "draft_version": 17,
       "draft_source": "",
@@ -505,7 +590,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17926411710347404": {
       "reply_task_id": "reply:17926411710347404",
@@ -513,6 +601,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，感谢您的评论！为了准确处理您的领取请求，请提供更多具体信息（如活动名称或领取编号）。谢谢！",
       "draft_version": 17,
       "draft_source": "",
@@ -528,7 +617,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17929592511361155": {
       "reply_task_id": "reply:17929592511361155",
@@ -536,6 +628,7 @@
       "status": "awaiting_review",
       "media_id": "17891458377571720",
       "comment_text": "有什么可以介绍的吗",
+      "user_open_id": null,
       "draft": "你好！欢迎提问～你想了解哪方面的内容呢？比如产品、功能还是其他？告诉我具体方向，我帮你详细介绍。",
       "draft_version": 1,
       "draft_source": "",
@@ -551,7 +644,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17933704158097692": {
       "reply_task_id": "reply:17933704158097692",
@@ -559,6 +655,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢分享这个相处模式。等情绪稳定再沟通确实很有效，我也会这样试试看。",
       "draft_version": 17,
       "draft_source": "",
@@ -574,7 +671,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17936794170297620": {
       "reply_task_id": "reply:17936794170297620",
@@ -582,6 +682,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，说得对，小草也有乙木的属性呢😄",
       "draft_version": 17,
       "draft_source": "",
@@ -597,7 +698,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17958741456149797": {
       "reply_task_id": "reply:17958741456149797",
@@ -605,6 +709,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢您的留言。关于壬子日柱的话题很有趣，但为了给您更准确的回应，能否请您补充一下具体想讨论的方面（比如性格、运势或配对）？",
       "draft_version": 17,
       "draft_source": "",
@@ -620,7 +725,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17961163689132228": {
       "reply_task_id": "reply:17961163689132228",
@@ -628,6 +736,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "说得很对，位置和全局关系才是关键，不能单看一个子字就下结论。感谢补充！",
       "draft_version": 17,
       "draft_source": "",
@@ -643,7 +752,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17961337911139828": {
       "reply_task_id": "reply:17961337911139828",
@@ -651,6 +763,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "确实如此，能具体说说您遇到的是哪种情况吗？",
       "draft_version": 8,
       "draft_source": "",
@@ -666,7 +779,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17962616349137635": {
       "reply_task_id": "reply:17962616349137635",
@@ -674,6 +790,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢您的分享。不过我不太确定具体原因，建议您咨询中医或命理专家。",
       "draft_version": 17,
       "draft_source": "",
@@ -689,7 +806,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17963972112129195": {
       "reply_task_id": "reply:17963972112129195",
@@ -697,6 +817,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢提醒，保持距离确实很重要。",
       "draft_version": 17,
       "draft_source": "",
@@ -712,7 +833,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17973380934098783": {
       "reply_task_id": "reply:17973380934098783",
@@ -720,6 +844,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢您的分析。这些干支关系确实值得深思，我会再多体会一下。",
       "draft_version": 17,
       "draft_source": "",
@@ -735,7 +860,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17974468041117643": {
       "reply_task_id": "reply:17974468041117643",
@@ -743,6 +871,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "老师您好，您提到的子午冲确实存在，但我需要更多上下文才能准确回应。方便分享一下您具体指哪部分的讨论吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -758,7 +887,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17976237708105719": {
       "reply_task_id": "reply:17976237708105719",
@@ -766,6 +898,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "看到你的留言了，能感受到你的孤独。不过可以多说一些吗？是什么让你觉得最孤独呢？",
       "draft_version": 17,
       "draft_source": "",
@@ -781,7 +914,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17981017014010599": {
       "reply_task_id": "reply:17981017014010599",
@@ -789,6 +925,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您想领取什么呢？可以告诉我具体内容，我来帮您处理。",
       "draft_version": 17,
       "draft_source": "",
@@ -804,7 +941,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17991354158806071": {
       "reply_task_id": "reply:17991354158806071",
@@ -812,6 +952,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您想领取什么呢？请提供更多信息以便我为您处理。",
       "draft_version": 17,
       "draft_source": "",
@@ -827,7 +968,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17993471324809067": {
       "reply_task_id": "reply:17993471324809067",
@@ -835,6 +979,7 @@
       "status": "awaiting_review",
       "media_id": "18080341262265771",
       "comment_text": "谢谢大事",
+      "user_open_id": null,
       "draft": "不客气，很高兴能帮到您！😊",
       "draft_version": 1,
       "draft_source": "",
@@ -850,7 +995,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17998693235970961": {
       "reply_task_id": "reply:17998693235970961",
@@ -858,6 +1006,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "是啊，母女間的繞與纏，往往也是愛最深的連結。",
       "draft_version": 17,
       "draft_source": "",
@@ -873,7 +1022,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:17999824487959522": {
       "reply_task_id": "reply:17999824487959522",
@@ -881,6 +1033,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "确实，平衡才是关键，谢谢分享。",
       "draft_version": 11,
       "draft_source": "",
@@ -896,7 +1049,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18007031750937439": {
       "reply_task_id": "reply:18007031750937439",
@@ -904,6 +1060,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "抱歉，我不太确定“乙亥男士”具体指什么，能再具体说明一下吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -919,7 +1076,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18012257297713238": {
       "reply_task_id": "reply:18012257297713238",
@@ -927,6 +1087,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢夸奖，阅读愉快就好！",
       "draft_version": 17,
       "draft_source": "",
@@ -942,7 +1103,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18014390051710719": {
       "reply_task_id": "reply:18014390051710719",
@@ -950,6 +1114,7 @@
       "status": "sent",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你好！很高兴见到你～",
       "draft_version": 1,
       "draft_source": "",
@@ -965,7 +1130,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18014465333919912": {
       "reply_task_id": "reply:18014465333919912",
@@ -973,6 +1141,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢您的留言。甲木生乙木在命理中有多种解释，您能具体说说您的看法吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -988,7 +1157,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18022403765836483": {
       "reply_task_id": "reply:18022403765836483",
@@ -996,6 +1168,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "请问您想领取什么呢？能否提供更多信息？",
       "draft_version": 17,
       "draft_source": "",
@@ -1011,7 +1184,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18032470439811174": {
       "reply_task_id": "reply:18032470439811174",
@@ -1019,6 +1195,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "笑而不语，也是一种态度 😊",
       "draft_version": 17,
       "draft_source": "",
@@ -1034,7 +1211,37 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
+    },
+    "reply:18037519421814977": {
+      "reply_task_id": "reply:18037519421814977",
+      "comment_id": "18037519421814977",
+      "status": "awaiting_review",
+      "media_id": "18075447812305406",
+      "comment_text": "領取",
+      "user_open_id": null,
+      "draft": "您好，请问您想领取什么呢？可以告诉我具体内容吗？",
+      "draft_version": 1,
+      "draft_source": "",
+      "feishu_message_id": "om_x100b6a60464a98a0c43c379456eb5f2",
+      "card_message_id": "om_x100b6a60464a98a0c43c379456eb5f2",
+      "card_sent_at": "2026-07-13T19:46:16.890275+00:00",
+      "active_card_version": 1,
+      "reply_id": null,
+      "dry_run": false,
+      "claimed_at": null,
+      "lease_until": null,
+      "claimed_by": null,
+      "last_error": null,
+      "requires_manual_check": false,
+      "created_at": null,
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18038024189802502": {
       "reply_task_id": "reply:18038024189802502",
@@ -1042,6 +1249,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你好！很高兴看到庚金命的朋友举手🙌 请问有什么可以帮到你的呢？",
       "draft_version": 16,
       "draft_source": "",
@@ -1057,7 +1265,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18042480752648440": {
       "reply_task_id": "reply:18042480752648440",
@@ -1065,6 +1276,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢您的分享，这个观点很有意思。您提到的“辛金”是指五行命理中的辛金属性吗？如果能多聊聊您的理解，我们可以深入探讨哦！",
       "draft_version": 17,
       "draft_source": "",
@@ -1080,7 +1292,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18044797856602090": {
       "reply_task_id": "reply:18044797856602090",
@@ -1088,6 +1303,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "大魔王来了，欢迎欢迎！",
       "draft_version": 17,
       "draft_source": "",
@@ -1103,7 +1319,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18058561439774967": {
       "reply_task_id": "reply:18058561439774967",
@@ -1111,6 +1330,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "是的，问心无愧最重要。",
       "draft_version": 17,
       "draft_source": "",
@@ -1126,7 +1346,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18062745827711548": {
       "reply_task_id": "reply:18062745827711548",
@@ -1134,6 +1357,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "謝謝分享您的看法，AI只是輔助工具，專業命理師的經驗與判斷仍是無法取代的。",
       "draft_version": 17,
       "draft_source": "",
@@ -1149,7 +1373,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18065115542468946": {
       "reply_task_id": "reply:18065115542468946",
@@ -1157,6 +1384,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "謝謝你的提醒，我會再想想這個說法對人的影響。",
       "draft_version": 17,
       "draft_source": "",
@@ -1172,7 +1400,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18065116589717798": {
       "reply_task_id": "reply:18065116589717798",
@@ -1180,6 +1411,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "我也很好奇，你能多说说这两个己土的背景或问题吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -1195,7 +1427,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18067884539427763": {
       "reply_task_id": "reply:18067884539427763",
@@ -1203,6 +1438,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "明白你的看法，如果有具体疑问欢迎提出讨论。",
       "draft_version": 17,
       "draft_source": "",
@@ -1218,7 +1454,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18068745956453573": {
       "reply_task_id": "reply:18068745956453573",
@@ -1226,6 +1465,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，任水你好，那希望今天能让你惊喜一下！",
       "draft_version": 17,
       "draft_source": "",
@@ -1241,7 +1481,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18072703361378272": {
       "reply_task_id": "reply:18072703361378272",
@@ -1249,6 +1492,7 @@
       "status": "failed",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢您的认可！我们会继续努力分享更多有价值的内容。",
       "draft_version": 1,
       "draft_source": "",
@@ -1264,7 +1508,10 @@
       "last_error": "Threads API returned HTTP 400: {\"error\":{\"message\":\"The requested resource does not exist\",\"type\":\"OAuthException\",\"code\":24,\"error_subcode\":4279009,\"is_transient\":false,\"error_user_title\":\"Media Not Found\",\"error_user_msg\":\"The media with id 17907240150446902 cannot be found.\",\"fbtrace_id\":\"AQndW0uSE8q7wBUpZLej4Ey\"}}",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18075472649673910": {
       "reply_task_id": "reply:18075472649673910",
@@ -1272,6 +1519,7 @@
       "status": "awaiting_review",
       "media_id": "18080341262265771",
       "comment_text": "很有道理",
+      "user_open_id": null,
       "draft": "感谢认同！欢迎继续交流。",
       "draft_version": 1,
       "draft_source": "",
@@ -1287,7 +1535,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18075534812328795": {
       "reply_task_id": "reply:18075534812328795",
@@ -1295,6 +1546,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你说得對，合局的力量確實很強，印星被克時真的很難停下來。不完全是個人問題，是局勢推著走。保重。",
       "draft_version": 16,
       "draft_source": "",
@@ -1310,7 +1562,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18077614082290091": {
       "reply_task_id": "reply:18077614082290091",
@@ -1318,6 +1573,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "抱歉，关于乙亥女的具体信息不足，能否提供更多背景或问题细节？",
       "draft_version": 17,
       "draft_source": "",
@@ -1333,7 +1589,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18079213952240617": {
       "reply_task_id": "reply:18079213952240617",
@@ -1341,6 +1600,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，感谢您的留言。请问您具体想领取什么呢？方便提供更多信息，我会尽力协助您。",
       "draft_version": 17,
       "draft_source": "",
@@ -1356,7 +1616,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18080707790256878": {
       "reply_task_id": "reply:18080707790256878",
@@ -1364,6 +1627,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你好！感谢你的留言，请问有什么可以帮你的吗？",
       "draft_version": 6,
       "draft_source": "",
@@ -1379,7 +1643,10 @@
       "last_error": "skip_requested",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18082589303204566": {
       "reply_task_id": "reply:18082589303204566",
@@ -1387,6 +1654,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您指的是哪一位呢？可以多提供一些细节吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -1402,7 +1670,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18083348309664492": {
       "reply_task_id": "reply:18083348309664492",
@@ -1410,6 +1681,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "原来如此，每个人的感受可能不太一样呢😊",
       "draft_version": 17,
       "draft_source": "",
@@ -1425,7 +1697,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18084053327165836": {
       "reply_task_id": "reply:18084053327165836",
@@ -1433,6 +1708,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您的观察很有意思，身强身弱确实可能形成互补，具体还需结合双方八字整体格局来分析。建议找专业命理师详细参看。",
       "draft_version": 17,
       "draft_source": "",
@@ -1448,7 +1724,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18084311558557581": {
       "reply_task_id": "reply:18084311558557581",
@@ -1456,6 +1735,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "看到你哭了，是遇到什么不开心的事了吗？如果想聊聊，我随时都在。",
       "draft_version": 17,
       "draft_source": "",
@@ -1471,7 +1751,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18086935367116490": {
       "reply_task_id": "reply:18086935367116490",
@@ -1479,6 +1762,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "确实有可能呢，不过不同来源的农场文还是得具体判断。",
       "draft_version": 17,
       "draft_source": "",
@@ -1494,7 +1778,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18096375059248654": {
       "reply_task_id": "reply:18096375059248654",
@@ -1502,6 +1789,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢分享这个特殊的命造组合！伤官食神重重，确实很有特色。方便提供更多信息，比如出生年月日时或主要大运走势吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -1517,7 +1805,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18096911779984724": {
       "reply_task_id": "reply:18096911779984724",
@@ -1525,6 +1816,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "理解你的困扰，五行合婚涉及很多细节，仅凭日干很难全面分析。可以聊聊你们具体的相处情境吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -1540,7 +1832,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18098807732465334": {
       "reply_task_id": "reply:18098807732465334",
@@ -1548,6 +1843,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，壬水丙火一克一合，果然是欢喜冤家！你们这对是什么有趣的故事呀？",
       "draft_version": 17,
       "draft_source": "",
@@ -1563,7 +1859,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18099651929223928": {
       "reply_task_id": "reply:18099651929223928",
@@ -1571,6 +1870,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "确实，金比劫相处起来需要更多包容，理解你的感受。",
       "draft_version": 17,
       "draft_source": "",
@@ -1586,7 +1886,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18100719431271229": {
       "reply_task_id": "reply:18100719431271229",
@@ -1594,6 +1897,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，我暂时没完全理解您的意思。“乙酉”和“还两个”是指什么呢？麻烦您再详细说明一下情况，谢谢！",
       "draft_version": 17,
       "draft_source": "",
@@ -1609,7 +1913,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18101191184136779": {
       "reply_task_id": "reply:18101191184136779",
@@ -1617,6 +1924,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你说得太对了，今年子午冲的感觉特别明显，那份“停下来想一想”的冷静真的被冲散了。谢谢分享，你的描述让我也想看看自己的印星状态了。",
       "draft_version": 17,
       "draft_source": "",
@@ -1632,7 +1940,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18102082529463492": {
       "reply_task_id": "reply:18102082529463492",
@@ -1640,6 +1951,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "别着急，缘分需要时间，相信对的人会在对的时候出现。",
       "draft_version": 17,
       "draft_source": "",
@@ -1655,7 +1967,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18105145085027831": {
       "reply_task_id": "reply:18105145085027831",
@@ -1663,6 +1978,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "这个星座和八字组合确实挺有意思的，表面温和内心复杂。可以多聊聊吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -1678,7 +1994,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18105633128009222": {
       "reply_task_id": "reply:18105633128009222",
@@ -1686,6 +2005,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢你的反馈，我们重视诚信，能否具体聊聊你觉得有哪些问题？",
       "draft_version": 17,
       "draft_source": "",
@@ -1701,7 +2021,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18106413926002691": {
       "reply_task_id": "reply:18106413926002691",
@@ -1709,6 +2032,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您提供的“年卯月酉日辰時戌”似乎缺少天干部分，请问能补充完整的天干地支吗？这样我才能帮您查询对应的时间信息。",
       "draft_version": 17,
       "draft_source": "",
@@ -1724,7 +2048,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18108181946076517": {
       "reply_task_id": "reply:18108181946076517",
@@ -1732,6 +2059,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "确实，命理看趋势，但落地还是靠自己的能力和心态。机会来临时，准备好的人才能稳稳接住。",
       "draft_version": 13,
       "draft_source": "",
@@ -1747,7 +2075,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18112205986942358": {
       "reply_task_id": "reply:18112205986942358",
@@ -1755,6 +2086,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，您提到的“那兩個都己土配的”具体是指哪两个呢？如果能补充更多背景或例子，我可以帮您分析得更准确。",
       "draft_version": 17,
       "draft_source": "",
@@ -1770,7 +2102,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18115253932858829": {
       "reply_task_id": "reply:18115253932858829",
@@ -1778,6 +2113,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢你的评论～如果有什么想聊的，欢迎告诉我哦 😊",
       "draft_version": 17,
       "draft_source": "",
@@ -1793,7 +2129,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18121442827819427": {
       "reply_task_id": "reply:18121442827819427",
@@ -1801,6 +2140,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "有意思，你们这是辛金CP呀😂",
       "draft_version": 17,
       "draft_source": "",
@@ -1816,7 +2156,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18122047444671356": {
       "reply_task_id": "reply:18122047444671356",
@@ -1824,6 +2167,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您想领取什么？请提供更多信息以便我们为您处理。",
       "draft_version": 17,
       "draft_source": "",
@@ -1839,7 +2183,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18122117236754682": {
       "reply_task_id": "reply:18122117236754682",
@@ -1847,6 +2194,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，「寅午戌燒起來」每個人感受不同，可能跟流年財運或開銷有關。減肥難我也聽很多人說，一起加油吧！",
       "draft_version": 17,
       "draft_source": "",
@@ -1862,7 +2210,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18123795769658851": {
       "reply_task_id": "reply:18123795769658851",
@@ -1870,6 +2221,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，能具体说明“沒有一條”指的是什么吗？我需要更多信息才能为您提供准确的回复。",
       "draft_version": 16,
       "draft_source": "",
@@ -1885,7 +2237,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18126333688655251": {
       "reply_task_id": "reply:18126333688655251",
@@ -1893,6 +2248,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "这个需要结合具体八字来看，不能单凭日干判断哦。",
       "draft_version": 17,
       "draft_source": "",
@@ -1908,7 +2264,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18126762772710819": {
       "reply_task_id": "reply:18126762772710819",
@@ -1916,6 +2275,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢分享，学习了。",
       "draft_version": 16,
       "draft_source": "",
@@ -1931,7 +2291,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18127480396711227": {
       "reply_task_id": "reply:18127480396711227",
@@ -1939,6 +2302,7 @@
       "status": "awaiting_review",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢您的认可！",
       "draft_version": 1,
       "draft_source": "",
@@ -1954,7 +2318,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18130507255720311": {
       "reply_task_id": "reply:18130507255720311",
@@ -1962,6 +2329,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "多謝提醒，會小心啲！🫡",
       "draft_version": 17,
       "draft_source": "",
@@ -1977,7 +2345,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18134417266598136": {
       "reply_task_id": "reply:18134417266598136",
@@ -1985,6 +2356,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "你好，感谢你的指正。我这边没有看到完整的上下文，能否请你具体说说哪部分像AI文或与古书不符？这样我可以更准确地核对并改进。",
       "draft_version": 17,
       "draft_source": "",
@@ -2000,7 +2372,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18142365844544941": {
       "reply_task_id": "reply:18142365844544941",
@@ -2008,6 +2383,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "十年沉淀，一朝爆发，确实很难熬。如果觉得信息太过复杂，不妨把出生年月日时和具体困惑列出来，再找专业命理师深度核对一下。",
       "draft_version": 17,
       "draft_source": "",
@@ -2023,7 +2399,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18144849322515067": {
       "reply_task_id": "reply:18144849322515067",
@@ -2031,6 +2410,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "听你说睡眠充足还坚持瑜伽，真不错。继续保持，可以再观察一下饮食和心情的调整。",
       "draft_version": 17,
       "draft_source": "",
@@ -2046,7 +2426,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18144958234475325": {
       "reply_task_id": "reply:18144958234475325",
@@ -2054,6 +2437,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "这个说法有些矛盾，能否详细解释一下？",
       "draft_version": 17,
       "draft_source": "",
@@ -2069,7 +2453,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18172359871425712": {
       "reply_task_id": "reply:18172359871425712",
@@ -2077,6 +2464,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "辛金男通常細膩、有原則，適合精緻或技術型工作。您想了解哪方面？",
       "draft_version": 17,
       "draft_source": "",
@@ -2092,7 +2480,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18174361213419083": {
       "reply_task_id": "reply:18174361213419083",
@@ -2100,6 +2491,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "謝謝你的共鳴，能說到心裡真的很開心。",
       "draft_version": 17,
       "draft_source": "",
@@ -2115,7 +2507,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18179438698409512": {
       "reply_task_id": "reply:18179438698409512",
@@ -2123,6 +2518,7 @@
       "status": "awaiting_review",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您需要哪个链接？请具体说明，我会尽力提供。",
       "draft_version": 1,
       "draft_source": "",
@@ -2138,7 +2534,10 @@
       "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18198995746368740": {
       "reply_task_id": "reply:18198995746368740",
@@ -2146,6 +2545,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢留言。乙木孤单吗？可以多聊聊您的感受。",
       "draft_version": 17,
       "draft_source": "",
@@ -2161,7 +2561,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18205508914356902": {
       "reply_task_id": "reply:18205508914356902",
@@ -2169,6 +2572,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，感谢您的留言！请问您想领取什么呢？麻烦提供更多信息，谢谢！",
       "draft_version": 17,
       "draft_source": "",
@@ -2184,7 +2588,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18208796539353772": {
       "reply_task_id": "reply:18208796539353772",
@@ -2192,6 +2599,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "哈哈，别这么说，您太客气啦～水多也是一种缘分嘛！",
       "draft_version": 12,
       "draft_source": "",
@@ -2207,7 +2615,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18211960618340923": {
       "reply_task_id": "reply:18211960618340923",
@@ -2215,6 +2626,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "听到你的经历，真是辛苦了。成绩好却被打压，这很不公平，但请相信自己的价值！",
       "draft_version": 17,
       "draft_source": "",
@@ -2230,7 +2642,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18259505311305350": {
       "reply_task_id": "reply:18259505311305350",
@@ -2238,6 +2653,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "謝謝你的認同！本能確實不需要過多解釋～",
       "draft_version": 17,
       "draft_source": "",
@@ -2253,7 +2669,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18277262557288838": {
       "reply_task_id": "reply:18277262557288838",
@@ -2261,6 +2680,7 @@
       "status": "failed",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢您的关注，关于大家都想了解的内容，我们正在整理更多信息，后续会及时更新，请保持关注。",
       "draft_version": 1,
       "draft_source": "",
@@ -2276,7 +2696,10 @@
       "last_error": "Threads API returned HTTP 500: {\"error\":{\"message\":\"The parameter creation_id is required.\",\"type\":\"THApiException\",\"code\":100,\"fbtrace_id\":\"Aac9lmCxyJ1wIeRkaEksFVr\"}}",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18321576913260095": {
       "reply_task_id": "reply:18321576913260095",
@@ -2284,6 +2707,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您想领取什么呢？麻烦提供更多信息，我来帮您处理。",
       "draft_version": 17,
       "draft_source": "",
@@ -2299,7 +2723,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18346841779169759": {
       "reply_task_id": "reply:18346841779169759",
@@ -2307,6 +2734,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "理解，完全尊重您的想法。",
       "draft_version": 17,
       "draft_source": "",
@@ -2322,7 +2750,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18354726037245148": {
       "reply_task_id": "reply:18354726037245148",
@@ -2330,6 +2761,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢你的分享。关于你提到的情况，我无法核实其中的具体信息。建议通过适当渠道反馈个人纠纷或寻求帮助。",
       "draft_version": 17,
       "draft_source": "",
@@ -2345,7 +2777,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18359835025210508": {
       "reply_task_id": "reply:18359835025210508",
@@ -2353,6 +2788,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "谢谢分享，乙木确实需要印星水的滋养来依附成长。",
       "draft_version": 17,
       "draft_source": "",
@@ -2368,7 +2804,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18361530649209449": {
       "reply_task_id": "reply:18361530649209449",
@@ -2376,6 +2815,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "乙木身弱确实容易感觉疲惫，建议多注意休息，调养身心。",
       "draft_version": 17,
       "draft_source": "",
@@ -2391,7 +2831,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18368780500226648": {
       "reply_task_id": "reply:18368780500226648",
@@ -2399,6 +2842,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，感谢您的提问。不过目前我还缺少对话的上下文，不确定您具体指的是哪件事或哪个话题。能否请您再补充一下前面的内容？这样我才能更准确地为您回复。",
       "draft_version": 17,
       "draft_source": "",
@@ -2414,7 +2858,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18382768111167726": {
       "reply_task_id": "reply:18382768111167726",
@@ -2422,6 +2869,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "收到您的评论\"壬申\"。目前不清楚您指的是干支纪年还是其他含义，能否请您补充一下具体想讨论的内容？",
       "draft_version": 17,
       "draft_source": "",
@@ -2437,7 +2885,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18408603694151961": {
       "reply_task_id": "reply:18408603694151961",
@@ -2445,6 +2896,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您想领取什么？方便提供更多信息吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -2460,7 +2912,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18418608556145056": {
       "reply_task_id": "reply:18418608556145056",
@@ -2468,6 +2923,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "感谢分享，伏吟加忌神确实需要注意。能否提供您的具体八字方便进一步分析？",
       "draft_version": 17,
       "draft_source": "",
@@ -2483,7 +2939,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18430762489135675": {
       "reply_task_id": "reply:18430762489135675",
@@ -2491,6 +2950,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "看你的描述，这场桃花劫确实来得很突然又伤得深。子午冲动桃花，又逢劫财，人财两空的滋味不好受。如果你愿意，可以告诉我你的具体出生时辰，我帮你细看看今年的流年缘起和化解方向。",
       "draft_version": 17,
       "draft_source": "",
@@ -2506,7 +2966,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18470255071128435": {
       "reply_task_id": "reply:18470255071128435",
@@ -2514,6 +2977,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "抱歉，关于“乙木女”我没有详细信息，能具体描述一下你想了解哪方面吗？",
       "draft_version": 17,
       "draft_source": "",
@@ -2529,7 +2993,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18470969149106650": {
       "reply_task_id": "reply:18470969149106650",
@@ -2537,6 +3004,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "您好，请问您是想进一步了解庚金与甲木在八字中的相克或相配关系吗？可以多说一些具体情境，我来帮您分析。",
       "draft_version": 17,
       "draft_source": "",
@@ -2552,7 +3020,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     },
     "reply:18553477063068645": {
       "reply_task_id": "reply:18553477063068645",
@@ -2560,6 +3031,7 @@
       "status": "skipped",
       "media_id": "",
       "comment_text": "",
+      "user_open_id": null,
       "draft": "原来如此，这个观点很精辟——机会再多，也得命局有承接之力。谢谢分享！",
       "draft_version": 12,
       "draft_source": "",
@@ -2575,7 +3047,10 @@
       "last_error": "legacy task quarantined on 2026-07-13; do not resurface or retry",
       "requires_manual_check": false,
       "created_at": null,
-      "updated_at": null
+      "updated_at": null,
+      "notified_at": null,
+      "notify_message_id": null,
+      "notify_recipient_open_id": null
     }
   }
 }
