@@ -22,6 +22,7 @@ class OperatorSelection:
 class OperatorStateStore:
     path: Path
     selections: dict[str, OperatorSelection] = field(default_factory=dict)
+    processed_event_ids: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def load(cls, path: str | Path) -> "OperatorStateStore":
@@ -39,7 +40,13 @@ class OperatorStateStore:
             for user_id, record in records.items()
             if isinstance(record, dict)
         }
-        return cls(state_path, selections)
+        processed = raw.get("processed_event_ids", {}) if isinstance(raw, dict) else {}
+        processed_event_ids = {
+            str(event_id): str(timestamp)
+            for event_id, timestamp in processed.items()
+            if str(event_id).strip()
+        } if isinstance(processed, dict) else {}
+        return cls(state_path, selections, processed_event_ids)
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -53,6 +60,7 @@ class OperatorStateStore:
                 }
                 for user_id, selection in sorted(self.selections.items())
             },
+            "processed_event_ids": dict(sorted(self.processed_event_ids.items())),
         }
         self.path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -68,6 +76,14 @@ class OperatorStateStore:
         self.selections[user_open_id] = selection
         self.save()
         return selection
+
+    def was_event_processed(self, event_id: str) -> bool:
+        return bool(str(event_id).strip()) and str(event_id).strip() in self.processed_event_ids
+
+    def mark_event_processed(self, event_id: str, timestamp: str) -> None:
+        event_id = str(event_id).strip()
+        if event_id:
+            self.processed_event_ids[event_id] = timestamp
 
 
 def select_next_review_task(

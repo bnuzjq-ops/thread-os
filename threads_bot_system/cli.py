@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Mapping, Sequence
 
@@ -137,10 +138,21 @@ def _run_menu_event(payload: Mapping[str, object], store_path: Path, operator_st
     event_key = str(payload.get("event_key", "")).strip()
     user_open_id = str(payload.get("user_open_id", "")).strip()
     trace_id = str(payload.get("trace_id", "")).strip() or "missing"
+    event_id = str(payload.get("event_id", "")).strip()
     if not user_open_id:
         raise ValueError("Menu event is missing user_open_id")
 
     feishu_client = _build_feishu_client(os.environ)
+    operator_state = OperatorStateStore.load(operator_state_path)
+    if operator_state.was_event_processed(event_id):
+        message_id = feishu_client.send_text_message_to_open_id(
+            user_open_id,
+            f"该菜单事件已处理，不会重复执行。\ntrace_id: {trace_id}",
+        )
+        print(json.dumps({"event_key": event_key, "trace_id": trace_id, "message_id": message_id}, ensure_ascii=False))
+        return 0
+    operator_state.mark_event_processed(event_id, datetime.now(timezone.utc).isoformat())
+    operator_state.save()
     if event_key in {"action_send", "action_rewrite", "action_skip"}:
         store = JsonTaskStore.load(store_path)
         operator_state = OperatorStateStore.load(operator_state_path)
