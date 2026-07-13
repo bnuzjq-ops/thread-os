@@ -44,7 +44,8 @@ jobs:
         if: always()
         env:
           TRACE_ID: ${{ github.event.client_payload.trace_id }}
-        run: echo "- Trace ID: ${TRACE_ID:-missing}" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "- Trace ID: ${TRACE_ID:-missing}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit reply task state
         if: always()
