@@ -30,3 +30,4 @@ temp/
 .env
 .env.*
 !.env.example
+out.txt
