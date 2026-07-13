@@ -95,3 +95,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 - Real reply end-to-end acceptance: **BLOCKED**, not PASS or FAIL. It still
   requires a new comment, a Feishu `send` click, a successful dispatch, a
   Threads `reply_id`, and the final Feishu receipt.
+- Automatic monitor trigger: **PASS (configuration)**. `reply-monitor.yml`
+  schedules scans every five minutes; GitHub may still add platform-side
+  scheduling delay, but manual workflow dispatch is no longer required for
+  normal operation.
