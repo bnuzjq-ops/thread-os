@@ -478,5 +478,28 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertEqual(updated.status, ReplyTaskStatus.UNKNOWN)
 
 
+    def test_execute_reply_dispatch_status_only_updates_existing_card(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            store = JsonTaskStore.load(store_path)
+            task = mark_awaiting_review(mark_drafted(new_reply_task("comment-status"), "draft"), "msg-1")
+            store.upsert(task)
+            store.save()
+            feishu_client = FakeFeishuClient()
+            threads_client = FakeThreadsClient([])
+
+            updated = execute_reply_dispatch(
+                {"action": "status", "reply_task_id": task.reply_task_id},
+                threads_client,
+                store_path,
+                feishu_client=feishu_client,
+            )
+
+            self.assertEqual(updated.status, ReplyTaskStatus.AWAITING_REVIEW)
+            self.assertEqual(threads_client.published, [])
+            self.assertEqual(feishu_client.cards, [])
+            self.assertEqual(feishu_client.updated_cards[0][0], "msg-1")
+
+
 if __name__ == "__main__":
     unittest.main()
