@@ -28,6 +28,7 @@ jobs:
       - name: Execute reply dispatch
         env:
           CLIENT_PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          TRACE_ID: ${{ github.event.client_payload.trace_id }}
           REPLY_DRY_RUN: ${{ github.event.client_payload.dry_run == true && '1' || '0' }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
@@ -36,6 +37,12 @@ jobs:
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
           FEISHU_CHAT_ID: ${{ secrets.FEISHU_CHAT_ID }}
         run: python -m threads_bot_system dispatch
+
+      - name: Record callback trace
+        if: always()
+        env:
+          TRACE_ID: ${{ github.event.client_payload.trace_id }}
+        run: echo "- Trace ID: ${TRACE_ID:-missing}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit reply task state
         if: always()
