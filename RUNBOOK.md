@@ -65,4 +65,30 @@ python -m threads_bot_system publish --help
 
 `publish --source path/to/post.md` 会创建或复用一个 JSON 发布任务。明确 API 错误进入 `failed`，结果不确定的超时进入 `unknown`，两者都不会被自动重试。回复链路同样遵循此规则，并且发送前必须经过飞书人工确认。
 
+## Publish feed export
+
+Export an approved Obsidian draft explicitly; do not synchronize the whole vault:
+
+```powershell
+& .\scripts\export-threads-post.ps1 `
+  -Source 'C:\jq\OBS\Threads\20_Drafts\example.md' `
+  -ContentId 'stable-content-id'
+```
+
+The source must contain `platform: threads` and `editorial_status: ready`. The exporter writes only `posts/queue/<content_id>.md` to `bnuzjq-ops/threads-publish-feed`.
+
+Scheduled runs use `scheduled_time` as timezone-aware ISO 8601, compare in UTC, select the earliest due source, and publish at most one item. Sources without `scheduled_time` are manual-only.
+
+After publishing, inspect `state/publish_tasks.json`. A successful task has `status: published`, `post_id`/`platform_post_id`, and normally `permalink`. A permalink lookup failure must not trigger another publish.
+
+For `failed` or `unknown`, inspect `error_type`, `error_phase`, `external_action`, `retry_allowed`, and `recovery_action`. `unknown` always requires checking Threads by ID before any manual action; it is never automatically retried.
+
+If `state/publish_tasks.json` or `state/reply_tasks.json` is invalid JSON, stop the workflow and preserve the file for diagnosis. Do not delete it or rerun a publish. Restore from the last known-good Git commit, then inspect Threads by platform ID before any manual recovery.
+
+If Git push fails, download the run's `*-state-recovery-*` artifact before recovery. Treat it as the runner's latest state snapshot; inspect external platform results before manually recording or retrying anything.
+
+Reply dry-run sets `dry_run: true` in the dispatch payload. It records a `dry-run:<task_id>` result and sends a Feishu test receipt without calling the Threads reply API.
+
+The code-level reply checks are covered by `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py`, `tests/test_feishu_api.py`, and `tests/reply_worker.test.mjs`. These tests do not prove a live Feishu callback or a real Threads reply.
+
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。

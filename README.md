@@ -42,3 +42,15 @@
 JSON MVP 已有发布和人工审核回复链路的本地测试。运行 `python -m unittest discover -s tests` 可执行当前测试。通过只代表本地 mock 验证，不代表真实 Threads、飞书、DeepSeek、GitHub Actions 或 Worker 链路成功。
 
 发布输入契约是带有 `content_id`、`platform: threads`、`status: ready` frontmatter 和非空正文的 Markdown。执行仓库读取输入，Obsidian 内容仓库保持独立且本轮不修改。
+
+## GitHub Actions 敏感配置位置
+
+以下配置只记录名称和位置，不记录任何 Token 值：
+
+- 仓库：`bnuzjq-ops/thread-os`
+- 页面：`Settings` → `Secrets and variables` → `Actions`
+- 非敏感变量：`CONTENT_REPO`，值为 `bnuzjq-ops/threads-publish-feed`
+- 敏感 Secret：`CONTENT_REPO_TOKEN`，应为仅授权 `bnuzjq-ops/threads-publish-feed` 的 fine-grained Token
+- Token 权限：`Contents: Read-only`、`Metadata: Read-only`
+- Token 值不得写入本地项目、Markdown、记忆、日志或提交记录
+- 如果 Token 被粘贴到聊天或其他公开位置，必须立即撤销并重新生成
