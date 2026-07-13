@@ -172,7 +172,12 @@ class ThreadsApiClient:
         return ThreadsReplyPage(comments=comments, next_after=next_after)
 
     def publish_reply(self, reply_to_id: str, text: str) -> str:
-        payload = self._publish_text(text=text, reply_to_id=reply_to_id)
+        creation = self._create_text_container(text, reply_to_id=reply_to_id)
+        creation_id = self._optional_text(creation.get("id"))
+        if not creation_id:
+            raise ThreadsApiError("Threads reply create response did not include a creation id")
+
+        payload = self._publish_container(creation_id)
         reply_id = self._optional_text(payload.get("id"))
         if reply_id:
             return reply_id
@@ -183,7 +188,7 @@ class ThreadsApiClient:
             if reply_id:
                 return reply_id
 
-        raise ThreadsApiError("Threads publish response did not include a reply id")
+        raise ThreadsApiError("Threads reply publish response did not include a reply id")
 
     def publish_post(self, text: str) -> str:
         creation = self._create_text_container(text)
@@ -210,13 +215,19 @@ class ThreadsApiClient:
         payload = self._request_json("GET", url)
         return self._optional_text(payload.get("permalink"))
 
-    def _create_text_container(self, text: str) -> dict[str, object]:
+    def _create_text_container(
+        self,
+        text: str,
+        reply_to_id: str | None = None,
+    ) -> dict[str, object]:
         url = f"{self.base_url}/{self.user_id}/threads"
         payload = {
             "access_token": self.access_token,
             "media_type": "TEXT",
             "text": text,
         }
+        if reply_to_id is not None:
+            payload["reply_to_id"] = reply_to_id
         return self._request_json(
             "POST",
             url,
@@ -230,23 +241,6 @@ class ThreadsApiClient:
             "access_token": self.access_token,
             "creation_id": creation_id,
         }
-        return self._request_json(
-            "POST",
-            url,
-            data=urlencode(payload).encode("utf-8"),
-            content_type="application/x-www-form-urlencoded",
-        )
-
-    def _publish_text(self, text: str, reply_to_id: str | None = None) -> dict[str, object]:
-        url = f"{self.base_url}/{self.user_id}/threads_publish"
-        payload: dict[str, str] = {
-            "access_token": self.access_token,
-            "media_type": "TEXT",
-            "text": text,
-        }
-        if reply_to_id is not None:
-            payload["reply_to_id"] = reply_to_id
-
         return self._request_json(
             "POST",
             url,

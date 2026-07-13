@@ -146,6 +146,8 @@ class ThreadsApiTests(unittest.TestCase):
 
         def fake_request(request: object) -> DummyResponse:
             requests.append(request)
+            if request.full_url.endswith("/threads"):
+                return DummyResponse(json.dumps({"id": "creation-1"}))
             return DummyResponse(json.dumps({"id": "reply-1"}))
 
         client = ThreadsApiClient(
@@ -157,10 +159,13 @@ class ThreadsApiTests(unittest.TestCase):
         reply_id = client.publish_reply(reply_to_id="comment-1", text="谢谢你的提问")
 
         self.assertEqual(reply_id, "reply-1")
+        self.assertEqual(len(requests), 2)
         self.assertEqual(requests[0].get_method(), "POST")
         body = requests[0].data.decode("utf-8")
         self.assertIn("reply_to_id=comment-1", body)
         self.assertIn("text=%E8%B0%A2%E8%B0%A2%E4%BD%A0%E7%9A%84%E6%8F%90%E9%97%AE", body)
+        publish_body = requests[1].data.decode("utf-8")
+        self.assertIn("creation_id=creation-1", publish_body)
 
     def test_publish_post_returns_response_id(self) -> None:
         requests: list[object] = []
