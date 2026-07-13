@@ -31,7 +31,7 @@
 
 - Remote `main` and local development branch are both `db17bc8`; worktree is clean.
 - Python tests: 85 passed. Worker tests: 8 passed.
-- Worker health is HTTP 200, but deployed version `2af1ef1c-24ec-4b56-9f4c-e31771399257` has no git SHA metadata, so code-to-deployment identity is `NOT_TESTED`.
+- Worker health is HTTP 200. Current deployment is Cloudflare version `3417252a-4860-4673-bc6a-69d3801fef43`, deployed from clean commit `198dcee`; Cloudflare provides no git SHA metadata.
 - `rewrite` now persists comment text, calls DeepSeek again, increments `draft_version`, and sends a new review card in code; live verification is still `NOT_TESTED`.
 - The last live `send` failed with Threads `Media Not Found`; do not retry that terminal task.
 - A fresh comment is required to verify the current `send`, `rewrite`, `skip`, and `status` paths.

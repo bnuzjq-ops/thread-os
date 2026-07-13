@@ -30,7 +30,7 @@ Read, in order:
 
 - Current remote `main`: `db17bc8`; local worktree was clean at baseline.
 - Current code tests: Python 85 passed; Worker 8 passed.
-- Current Worker deployment is Cloudflare version `2af1ef1c-24ec-4b56-9f4c-e31771399257`, but Cloudflare reports no git SHA, so deployment identity remains `NOT_TESTED`.
+- Current Worker deployment is Cloudflare version `3417252a-4860-4673-bc6a-69d3801fef43`, deployed from clean commit `198dcee`; Cloudflare reports no git SHA metadata.
 - `rewrite` has been implemented to regenerate a draft and send a new card; it needs a fresh live card for verification.
 - The previous live `send` failed with `Media Not Found`; the old task must not be retried.
 
