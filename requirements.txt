@@ -1,0 +1,7 @@
+# Threads 自动化系统 — Python 依赖
+#
+# 当前所有 Python 代码仅使用 Python 标准库
+# （urllib、json、dataclasses、unittest、typing 等），
+# 无需安装任何第三方依赖。
+#
+# Python 最低版本要求：3.12
