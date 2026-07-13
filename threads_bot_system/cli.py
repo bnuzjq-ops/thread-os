@@ -12,7 +12,7 @@ from typing import Mapping, Sequence
 from .contract import render_project_summary
 from .deepseek_api import DeepSeekClient
 from .feishu_api import FeishuClient
-from .operator_state import OperatorStateStore, select_next_review_task
+from .operator_state import OperatorStateStore, active_task_for, select_next_review_task
 from .publish_runtime import run_publish
 from .publish_source import load_publish_source, select_due_source
 from .publish_store import JsonPublishStore
@@ -141,7 +141,47 @@ def _run_menu_event(payload: Mapping[str, object], store_path: Path, operator_st
         raise ValueError("Menu event is missing user_open_id")
 
     feishu_client = _build_feishu_client(os.environ)
-    if event_key == "system_health":
+    if event_key in {"action_send", "action_rewrite", "action_skip"}:
+        store = JsonTaskStore.load(store_path)
+        operator_state = OperatorStateStore.load(operator_state_path)
+        task = active_task_for(store.tasks, user_open_id, operator_state)
+        if task is None:
+            text = f"当前没有可操作的任务，请先点击“下一条待审核”。\ntrace_id: {trace_id}"
+        else:
+            action = {
+                "action_send": "send",
+                "action_rewrite": "rewrite",
+                "action_skip": "skip",
+            }[event_key]
+            dispatch_payload = {
+                "action": action,
+                "reply_task_id": task.reply_task_id,
+                "draft_version": task.draft_version,
+                "trace_id": trace_id,
+                "event_key": event_key,
+                "user_open_id": user_open_id,
+            }
+            threads_client = _build_threads_client(os.environ) if action == "send" else None
+            deepseek_client = _build_deepseek_client(os.environ)
+            updated = execute_reply_dispatch(
+                dispatch_payload,
+                threads_client,
+                store_path,
+                feishu_client=None,
+                deepseek_client=deepseek_client,
+                dry_run=_env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"},
+            )
+            if action == "rewrite":
+                text = (
+                    f"任务 {updated.reply_task_id} 已重写。\n"
+                    f"草稿 v{updated.draft_version}：{updated.draft}\n"
+                    f"状态：{updated.status.value}\ntrace_id: {trace_id}"
+                )
+            elif action == "send" and updated.reply_id:
+                text = f"任务已发送。\nreply_id: {updated.reply_id}\ntrace_id: {trace_id}"
+            else:
+                text = f"任务 {updated.reply_task_id} 当前状态：{updated.status.value}\ntrace_id: {trace_id}"
+    elif event_key == "system_health":
         store = JsonTaskStore.load(store_path)
         counts = {status.value: 0 for status in ReplyTaskStatus}
         for task in store.tasks.values():
