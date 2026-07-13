@@ -23,6 +23,7 @@ coverage/
 
 # Logs and local runtime files
 *.log
+out.txt
 tmp/
 temp/
 
