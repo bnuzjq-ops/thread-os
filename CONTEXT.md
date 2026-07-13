@@ -29,8 +29,8 @@
 
 ## Current Baseline Override (2026-07-13)
 
-- Remote `main` is `23cc198`; the local verification branch contains no uncommitted changes.
-- Python tests: 88 passed. Worker and scheduler tests: 10 passed.
+- Remote `main` is `5e5f944`; the local verification branch contains no uncommitted changes.
+- Python tests: 91 passed. Worker and scheduler tests: 10 passed.
 - Worker health is HTTP 200. Current callback deployment is Cloudflare version `4f90ee89-8c39-4d8b-95c1-ac72ca92829c`, deployed from the trace and stale-card-protection callback code; Cloudflare provides no git SHA metadata.
 - `rewrite` persists comment text, calls DeepSeek again, increments `draft_version`, and currently sends a second review card; original-card update is still a known FAIL.
 - Monitor state writeback fix is proven by natural run `29250464850` and remote state commit `255613a`.
