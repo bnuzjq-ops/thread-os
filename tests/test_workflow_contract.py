@@ -25,9 +25,10 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("REPLY_DRY_RUN", text)
         self.assertIn("CLIENT_PAYLOAD_JSON", text)
 
-    def test_reply_monitor_is_scheduled_every_five_minutes(self) -> None:
+    def test_reply_monitor_uses_repository_dispatch_after_scheduler_cutover(self) -> None:
         text = (WORKFLOW_ROOT / "reply-monitor.yml").read_text(encoding="utf-8")
-        self.assertIn('cron: "3-58/5 * * * *"', text)
+        self.assertIn("threads_reply_monitor", text)
+        self.assertNotIn("schedule:", text)
 
     def test_state_writers_upload_recovery_artifacts_on_failure(self) -> None:
         for name in ("publish.yml", "reply-monitor.yml", "reply-dispatch.yml"):
