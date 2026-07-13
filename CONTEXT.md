@@ -50,6 +50,13 @@
 
 ## Continuation Rules
 
+## Latest-Baseline Execution Principle
+
+- Always use the latest valid remote `main` and the currently deployed platform version as the implementation baseline.
+- Older local branches, squash predecessors, and historical patches are reference only and must not block forward progress.
+- Do not wait for manual review to continue non-blocked implementation, testing, documentation, or runtime diagnosis.
+- When a real external action is required, continue every safe adjacent task and record the external item as `NOT_TESTED` or `BLOCKED` rather than pausing the overall objective.
+
 1. Read `FINAL-GOAL.md`, `ACCEPTANCE-CHECKLIST.md`, `docs/ACCEPTANCE_STATUS.md`, and `RUNBOOK.md`.
 2. Keep `PASS`, `NOT_TESTED`, and `BLOCKED` evidence-based.
 3. Never treat mock or dry-run output as real Threads success.

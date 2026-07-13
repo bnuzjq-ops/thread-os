@@ -49,3 +49,10 @@ Read, in order:
 - Real Feishu review card: verified by run `29223845054`.
 - Feishu `skip` -> Worker -> GitHub dispatch: verified by runs `29226259880`, `29226261576`, `29226273680`.
 - Do not reuse the terminal `skipped` task for `send`; wait for a fresh comment/task.
+# Execution Principle
+
+Use the latest valid remote `main` and deployed platform version as the source
+of truth. Do not wait for manual review or external test input before
+continuing non-blocked code, test, documentation, and diagnosis work. Record
+external dependencies as `NOT_TESTED` or `BLOCKED` without pausing the rest of
+the objective.
