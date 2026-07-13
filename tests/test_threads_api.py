@@ -167,6 +167,25 @@ class ThreadsApiTests(unittest.TestCase):
         publish_body = requests[1].data.decode("utf-8")
         self.assertIn("creation_id=creation-1", publish_body)
 
+    def test_reply_creation_without_creation_id_does_not_publish(self) -> None:
+        requests: list[object] = []
+
+        def fake_request(request: object) -> DummyResponse:
+            requests.append(request)
+            return DummyResponse(json.dumps({"status": "accepted"}))
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="token-1",
+            request_impl=fake_request,
+        )
+
+        with self.assertRaisesRegex(ThreadsApiError, "reply create response did not include"):
+            client.publish_reply(reply_to_id="comment-1", text="Hello")
+
+        self.assertEqual(len(requests), 1)
+        self.assertTrue(requests[0].full_url.endswith("/threads"))
+
     def test_publish_post_returns_response_id(self) -> None:
         requests: list[object] = []
 
