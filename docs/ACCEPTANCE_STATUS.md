@@ -79,3 +79,17 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 - The content repository stores editorial snapshots only.
 - Publishing does not rewrite the Obsidian source Markdown.
 - `unknown` and `published` tasks are not automatically retried.
+
+## Live Reply Recheck (2026-07-13)
+
+- Reply API two-step contract: **PASS**. Commit `9a25524` creates a text
+  container with `reply_to_id`, then publishes it with `creation_id`; the
+  focused and full Python test suites passed (82 tests).
+- Reply Monitor after the fix: **PASS**. Workflow run `29227004783` ran the
+  code from `9a25524` successfully and found no new comments.
+- Real Threads reply: **BLOCKED** (`no_new_real_comment`). The previous
+  failed task used the pre-fix implementation and remains terminal; it is not
+  retried automatically.解除条件：出现一条新的、尚未处理的真实评论。
+- Real reply end-to-end acceptance: **BLOCKED**, not PASS or FAIL. It still
+  requires a new comment, a Feishu `send` click, a successful dispatch, a
+  Threads `reply_id`, and the final Feishu receipt.
