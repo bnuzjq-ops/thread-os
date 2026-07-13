@@ -42,20 +42,20 @@ function createTraceId() {
   return randomUUID.call(globalThis.crypto);
 }
 
-async function sha256Hex(text) {
+async function sha1Hex(text) {
   const subtle = globalThis.crypto?.subtle;
   if (!subtle) {
     throw new Error('Web Crypto is unavailable');
   }
 
-  const digest = await subtle.digest('SHA-256', new TextEncoder().encode(text));
+  const digest = await subtle.digest('SHA-1', new TextEncoder().encode(text));
   return Array.from(new Uint8Array(digest), (byte) =>
     byte.toString(16).padStart(2, '0'),
   ).join('');
 }
 
 export async function computeFeishuSignature({ timestamp, nonce, token, body }) {
-  return sha256Hex(`${timestamp}${nonce}${token}${body}`);
+  return sha1Hex(`${timestamp}${nonce}${token}${body}`);
 }
 
 export function parseReplyActionValue(raw) {

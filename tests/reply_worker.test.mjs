@@ -15,7 +15,7 @@ test('computeFeishuSignature matches the Feishu callback scheme', async () => {
   const body = '{"action":{"value":"send:reply:comment-2"}}';
 
   const expected = crypto
-    .createHash('sha256')
+    .createHash('sha1')
     .update(`${timestamp}${nonce}${token}${body}`, 'utf8')
     .digest('hex');
 
