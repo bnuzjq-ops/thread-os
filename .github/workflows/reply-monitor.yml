@@ -7,7 +7,7 @@ on:
         description: "Create review tasks that cannot call the real Threads reply API"
         required: false
         default: false
-      type: boolean
+        type: boolean
   repository_dispatch:
     types:
       - threads_reply_monitor
