@@ -14,6 +14,12 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertIn('git fetch origin "${BRANCH_NAME}"', text)
             self.assertIn('git rebase "origin/${BRANCH_NAME}"', text)
 
+    def test_reply_state_writers_preserve_changes_before_rebase(self) -> None:
+        for name in ("reply-monitor.yml", "reply-dispatch.yml"):
+            text = (WORKFLOW_ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("git stash push --include-untracked", text)
+            self.assertIn("git stash pop", text)
+
     def test_publish_workflow_uses_queue_and_content_secret(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
         self.assertIn("repository: ${{ vars.CONTENT_REPO }}", text)
