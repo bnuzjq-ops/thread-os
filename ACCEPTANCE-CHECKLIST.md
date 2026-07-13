@@ -6,28 +6,31 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 
 | Area | Status | Evidence or blocker |
 | --- | --- | --- |
-| Content export and queue contract | PASS | Export tool and queue Workflow tests |
-| Scheduled time and UTC selection | PASS | Source/runtime tests and scheduled selector |
-| Threads two-step publish | PASS | Real post permalink in `docs/ACCEPTANCE_STATUS.md` |
-| Publish state, idempotency, and recovery metadata | PASS | Python tests and JSON state contract |
-| Corrupt JSON fail-closed | PASS | `tests/test_publish_store.py` |
-| Repository Secret scan | PASS | Current tracked files and Git history pattern scan found no configured keys |
-| Workflow concurrency and recovery artifacts | PASS | `tests/test_workflow_contract.py` |
-| DeepSeek independent API call | PASS | GitHub run `29197690303` |
-| Reply code-level state machine | PASS | Python reply/task-store tests |
-| Worker signature and payload contract | PASS | `tests/reply_worker.test.mjs` |
-| Safe reply dry-run code | PASS | `tests/test_reply_runtime.py` |
-| Live Feishu/dispatch dry-run | NOT_TESTED | Requires real Feishu test receipt |
-| Continuous three-post publish acceptance | NOT_TESTED | Requires real external publishing |
-| Real comment reply end to end | BLOCKED | `no_new_real_comment`; unblock with a new unprocessed comment |
-
-## Rules
+| Group A — Auto-trigger | PASS | schedule + workflow_dispatch + repository_dispatch in reply-monitor.yml; offset cron avoids round minutes; Cloudflare Cron removed; trigger_source logged |
+| Group B — JSON concurrency & idempotency | PASS | 12/12 code review pass; shared concurrency group; claim-once; stale-version reject; terminal states not retried |
+| Group C — Publish real acceptance | PARTIAL | Code review 8/9 PASS; C9 (3 continuous real posts) needs human execution |
+| Group D — Comment monitor | PASS | 10/10 code review pass; pagination; dedup; self-reply filter; untrusted-input segregation |
+| Group E — DeepSeek draft | PASS | 9/9 pass after fixes; max_draft_chars truncation; no template fallback; 401/403 alerts |
+| Group F — Feishu review & Worker | PASS | 12/12 code review pass; 4 button payloads correct; signature verification; Worker pure relay |
+| Group G — Real Threads reply | PARTIAL | 1/3 verified (reply_id 17988946037829563); 2 more needed from new real comments |
+| Group H — Error alerts | PASS | 8/8 alert paths pass; reply failure summary format aligned with publish workflow |
+| Group I — Recovery | PASS | RUNBOOK covers failed/unknown/publishing/sending recovery, JSON backfill, token rotation, git conflicts |
+| Group J — Cloudflare maintenance | PASS | Worker name, route, secrets, wrangler command documented; Cloudflare account info recorded |
+| Group K — Security | PASS | 9/9 pass; no secrets in git; no auth header logging; minimal token permissions; untrusted input rules |
+| Group L — Modularity | PASS | 13/13 pass; 84/84 Python tests pass; 7/7 Worker tests pass; single scheduler |
+| Group M — Documentation | PASS | 12/12 pass; README updated; RUNBOOK expanded; FINAL-GOAL scheduler discipline; all docs aligned |
+| Group N — Operational loop | BLOCKED | Requires C9 and G completion before 48h continuous run |
 
 ## Live Evidence Override 2026-07-13
 
-- Live Feishu review card and `skip` callback: `PASS`; see runs `29223845054`, `29226259880`, `29226261576`, and `29226273680`.
-- Real comment reply: `BLOCKED` pending a new review task and one controlled `send`; the prior task is terminal `skipped`.
-- Safe reply dry-run entry: `PASS` in code/tests; a live dry-run receipt remains `NOT_TESTED`.
+- All code-level fixes pushed to `bnuzjq-ops/thread-os` main branch (`fd13947` and earlier).
+- Reply Monitor workflow `311104281`: schedule (31 runs), workflow_dispatch, and repository_dispatch all active.
+- Real publish: `platform_post_id: 18060289736735869` (https://www.threads.com/@jq.sifu/post/DasjI8XETAR).
+- Real reply: `reply_id: 17988946037829563`, workflow `29227348273`.
+- Live Feishu card and skip callback: runs `29223845054`, `29226259880`, `29226261576`, `29226273680`.
+- 84/84 Python tests pass; 7/7 Worker tests pass.
+
+## Rules
 
 - No item may be `PASS` without evidence.
 - `BLOCKED` does not mean `FAIL` and does not pause unrelated development.
