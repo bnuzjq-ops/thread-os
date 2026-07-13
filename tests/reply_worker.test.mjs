@@ -140,8 +140,9 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
 
 test('handleFeishuCallback accepts the current card callback body token', async () => {
   const body = JSON.stringify({
-    token: 'verification-token',
-    action: { value: { action: 'skip', reply_task_id: 'reply:comment-2' } },
+    schema: '2.0',
+    header: { token: 'verification-token', event_type: 'card.action.trigger' },
+    event: { action: { value: { action: 'skip', reply_task_id: 'reply:comment-2' } } },
   });
   const requests = [];
   const response = await handleFeishuCallback(

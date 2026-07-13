@@ -121,6 +121,11 @@ function extractMessageId(payload) {
   );
 }
 
+function extractVerificationToken(payload) {
+  const candidates = [payload?.header?.token, payload?.token, payload?.event?.token];
+  return candidates.find((candidate) => typeof candidate === 'string' && candidate.trim())?.trim() ?? '';
+}
+
 function readHeader(headers, name) {
   return headers.get(name) ?? headers.get(name.toLowerCase()) ?? '';
 }
@@ -140,7 +145,7 @@ async function verifyFeishuSignature(request, bodyText, verificationToken, paylo
   }
 
   if (!timestamp || !nonce || !signature) {
-    if (payload && typeof payload.token === 'string' && payload.token.trim() === normalizedToken) {
+    if (extractVerificationToken(payload) === normalizedToken) {
       return { ok: true, mode: 'body-token' };
     }
     return { ok: false, status: 401, error: 'Missing Feishu signature headers' };
