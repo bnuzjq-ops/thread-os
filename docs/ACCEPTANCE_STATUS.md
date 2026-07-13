@@ -5,14 +5,14 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 ## Current Baseline Override (2026-07-13)
 
 This section supersedes older run references below when they conflict with the
-current remote `main` at commit `9dd35c0`.
+current remote `main` at commit `23cc198`.
 
 | Current item | Status | Evidence |
 | --- | --- | --- |
-| Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 86 tests passed |
+| Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 88 tests passed |
 | Worker implementation tests | PASS | `node --test tests/reply_worker.test.mjs`: 8 tests passed |
 | Worker health endpoint | PASS | `https://jqxblue.cc/health` returned HTTP 200 and `ok` |
-| Worker deployed version matches current callback code | PASS | Callback trace code is in current `main` commit `9dd35c0`; Cloudflare version `2fdee24c-a42c-4d6a-8d03-f6da038bc136` is live and retains four existing bindings |
+| Worker deployed version matches current callback code | PASS | Callback trace code is in current `main` history through `23cc198`; Cloudflare version `2fdee24c-a42c-4d6a-8d03-f6da038bc136` is live and retains four existing bindings |
 | Callback diagnostic logging and trace | PASS | Worker creates a per-click `trace_id`, includes it in logs and GitHub dispatch payload, and reply-dispatch writes it to the run summary; focused Worker tests pass |
 | Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
 | Rewrite regenerates a draft on the same task | PASS | Same task and `draft_version + 1` are covered by focused runtime tests; live card update remains unverified |
