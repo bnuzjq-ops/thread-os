@@ -276,6 +276,11 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
         ? payload.header.event_type
         : 'missing',
       has_menu_event_key: typeof payload?.event?.event_key === 'string',
+      body_token_present: Boolean(extractVerificationToken(payload)),
+      body_token_matches_config: Boolean(
+        extractVerificationToken(payload) &&
+        extractVerificationToken(payload) === String(env.FEISHU_VERIFICATION_TOKEN ?? '').trim(),
+      ),
     });
     return jsonResponse({ error: verification.error }, verification.status);
   }
