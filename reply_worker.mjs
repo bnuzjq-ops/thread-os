@@ -197,6 +197,28 @@ async function dispatchToGithub({ fetchImpl, repo, pat, eventType, payload }) {
   }
 }
 
+export async function dispatchReplyMonitor({ fetchImpl, repo, pat }) {
+  const normalizedRepo = String(repo ?? '').trim();
+  const normalizedPat = String(pat ?? '').trim();
+  if (!normalizedRepo) {
+    throw new Error('Missing GITHUB_REPO');
+  }
+  if (!normalizedPat) {
+    throw new Error('Missing GITHUB_PAT');
+  }
+
+  await dispatchToGithub({
+    fetchImpl: fetchImpl ?? globalThis.fetch.bind(globalThis),
+    repo: normalizedRepo,
+    pat: normalizedPat,
+    eventType: 'threads_reply_monitor',
+    payload: {
+      source: 'cloudflare_cron',
+      dry_run: false,
+    },
+  });
+}
+
 export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   const url = new URL(request.url);
   const pathname = normalizePathname(url.pathname);
@@ -292,5 +314,15 @@ export default {
       fetch: globalThis.fetch,
       ctx,
     });
+  },
+  scheduled(controller, env, ctx) {
+    const work = dispatchReplyMonitor({
+      repo: env.GITHUB_REPO,
+      pat: env.GITHUB_PAT,
+    });
+    if (ctx?.waitUntil) {
+      ctx.waitUntil(work);
+    }
+    return work;
   },
 };

@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import {
   computeFeishuSignature,
+  dispatchReplyMonitor,
   handleFeishuCallback,
   parseReplyActionValue,
 } from '../reply_worker.mjs';
@@ -49,6 +50,28 @@ test('parseReplyActionValue accepts Feishu card value objects', () => {
       commentId: 'comment-2',
     },
   );
+});
+
+test('dispatchReplyMonitor sends the scheduled monitor event to GitHub', async () => {
+  const requests = [];
+  await dispatchReplyMonitor({
+    repo: 'bnuzjq-ops/thread-os',
+    pat: 'github-pat',
+    fetchImpl: async (url, init) => {
+      requests.push({ url, init });
+      return new Response(null, { status: 204 });
+    },
+  });
+
+  assert.equal(requests.length, 1);
+  assert.equal(
+    requests[0].url,
+    'https://api.github.com/repos/bnuzjq-ops/thread-os/dispatches',
+  );
+  assert.deepEqual(JSON.parse(requests[0].init.body), {
+    event_type: 'threads_reply_monitor',
+    client_payload: { source: 'cloudflare_cron', dry_run: false },
+  });
 });
 
 test('handleFeishuCallback dispatches a valid card action to GitHub', async () => {
