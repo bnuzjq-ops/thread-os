@@ -307,6 +307,30 @@ class ReplyRuntimeTests(unittest.TestCase):
 
             self.assertEqual(feishu_client.cards, ["Threads 回复已发送：reply-1"])
 
+    def test_execute_reply_dispatch_dry_run_never_calls_threads(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            store = JsonTaskStore.load(store_path)
+            task = mark_awaiting_review(mark_drafted(new_reply_task("comment-dry"), "draft"), "msg-1")
+            store.upsert(task)
+            store.save()
+            feishu_client = FakeFeishuClient()
+            threads_client = FakeThreadsClient([])
+
+            updated = execute_reply_dispatch(
+                {"action": "send", "reply_task_id": task.reply_task_id},
+                threads_client,
+                store_path,
+                feishu_client=feishu_client,
+                dry_run=True,
+            )
+
+            self.assertEqual(updated.status, ReplyTaskStatus.SENT)
+            self.assertTrue(updated.dry_run)
+            self.assertEqual(updated.reply_id, "dry-run:reply:comment-dry")
+            self.assertEqual(threads_client.published, [])
+            self.assertIn("Dry-run", feishu_client.cards[-1])
+
     def test_execute_reply_dispatch_stops_when_state_api_unavailable(self) -> None:
         task = mark_drafted(new_reply_task("comment-3"), "Generated draft text")
 

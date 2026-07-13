@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from threads_bot_system.publish_runtime import PublishRunError, run_publish
@@ -8,9 +9,10 @@ from threads_bot_system.publish_task import PublishTaskStatus
 
 
 class FakeThreadsClient:
-    def __init__(self, *, fail: bool = False, timeout: bool = False) -> None:
+    def __init__(self, *, fail: bool = False, timeout: bool = False, permalink_fail: bool = False) -> None:
         self.fail = fail
         self.timeout = timeout
+        self.permalink_fail = permalink_fail
         self.published_texts: list[str] = []
 
     def publish_post(self, text: str) -> str:
@@ -20,6 +22,11 @@ class FakeThreadsClient:
             raise RuntimeError("publish failed")
         self.published_texts.append(text)
         return f"post-{len(self.published_texts)}"
+
+    def get_post_permalink(self, post_id: str) -> str:
+        if self.permalink_fail:
+            raise RuntimeError("permalink unavailable")
+        return f"https://www.threads.com/post/{post_id}"
 
 
 class PublishRuntimeTests(unittest.TestCase):
@@ -41,6 +48,36 @@ class PublishRuntimeTests(unittest.TestCase):
             self.assertIsNotNone(updated)
             self.assertEqual(updated.status, PublishTaskStatus.PUBLISHED)
             self.assertEqual(updated.post_id, "post-1")
+            self.assertEqual(updated.permalink, "https://www.threads.com/post/post-1")
+            self.assertIsNotNone(updated.claimed_at)
+            self.assertIsNotNone(updated.updated_at)
+
+    def test_run_publish_skips_future_scheduled_task(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            store = JsonPublishStore.load(path)
+            future = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+            task = store.create_task("future", "Not yet", future).task
+
+            report = run_publish(store, FakeThreadsClient())
+
+            self.assertEqual(report.attempted, 0)
+            self.assertEqual(report.posted, 0)
+            self.assertEqual(JsonPublishStore.load(path).get_task(task.publish_task_id).status, PublishTaskStatus.READY)
+
+    def test_permalink_failure_keeps_published_state_without_retry(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            store = JsonPublishStore.load(path)
+            task = store.create_task("permalink-failure", "Hello Threads").task
+
+            report = run_publish(store, FakeThreadsClient(permalink_fail=True))
+            updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
+
+            self.assertEqual(report.posted, 1)
+            self.assertEqual(updated.status, PublishTaskStatus.PUBLISHED)
+            self.assertEqual(updated.post_id, "post-1")
+            self.assertIn("permalink lookup failed", updated.last_error)
 
     def test_run_publish_marks_timeout_unknown(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -53,6 +90,10 @@ class PublishRuntimeTests(unittest.TestCase):
 
             updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
             self.assertEqual(updated.status, PublishTaskStatus.UNKNOWN)
+            self.assertEqual(updated.error_type, "unknown_result")
+            self.assertEqual(updated.error_phase, "threads_publish")
+            self.assertTrue(updated.external_action)
+            self.assertFalse(updated.retry_allowed)
 
     def test_run_publish_raises_when_every_attempt_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -69,6 +110,9 @@ class PublishRuntimeTests(unittest.TestCase):
             updated = JsonPublishStore.load(path).get_task(task.publish_task_id)
             self.assertIsNotNone(updated)
             self.assertEqual(updated.status, PublishTaskStatus.FAILED)
+            self.assertEqual(updated.error_phase, "threads_publish")
+            self.assertFalse(updated.external_action)
+            self.assertFalse(updated.retry_allowed)
 
 
 if __name__ == "__main__":
