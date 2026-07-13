@@ -54,7 +54,7 @@ class TaskStore(Protocol):
     def claim_send(self, task_id: str, draft_version: int) -> TaskClaimResult:
         """Atomically claim send authority for a task."""
 
-    def complete_send(self, task_id: str, reply_id: str) -> ReplyTask:
+    def complete_send(self, task_id: str, reply_id: str, dry_run: bool = False) -> ReplyTask:
         """Mark a task as sent."""
 
     def fail_task(self, task_id: str, error: str) -> ReplyTask:
@@ -172,9 +172,9 @@ class JsonTaskStore:
         self.save()
         return TaskClaimResult(ok=True, claimed=True, reason=None, task=updated)
 
-    def complete_send(self, task_id: str, reply_id: str) -> ReplyTask:
+    def complete_send(self, task_id: str, reply_id: str, dry_run: bool = False) -> ReplyTask:
         task = self._require_task(task_id)
-        updated = mark_sent(task, reply_id)
+        updated = mark_sent(task, reply_id, dry_run=dry_run)
         self.upsert(updated)
         self.save()
         return updated

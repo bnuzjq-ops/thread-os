@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
@@ -88,7 +89,12 @@ class JsonPublishStore:
     def upsert(self, task: PublishTask) -> None:
         self.tasks[task.publish_task_id] = task
 
-    def create_task(self, source_key: str, text: str) -> PublishCreateResult:
+    def create_task(
+        self,
+        source_key: str,
+        text: str,
+        scheduled_time: str | None = None,
+    ) -> PublishCreateResult:
         task_id = publish_task_id_for(source_key)
         existing = self.get(task_id)
         if existing is not None:
@@ -99,7 +105,7 @@ class JsonPublishStore:
                 task=existing,
             )
 
-        task = new_publish_task(source_key, text)
+        task = new_publish_task(source_key, text, scheduled_time=scheduled_time)
         self.upsert(task)
         self.save()
         return PublishCreateResult(
@@ -122,33 +128,86 @@ class JsonPublishStore:
                 task=task,
             )
 
-        updated = replace(task, status=PublishTaskStatus.PUBLISHING, last_error=None)
+        now = _now()
+        updated = replace(
+            task,
+            status=PublishTaskStatus.PUBLISHING,
+            claimed_at=now,
+            updated_at=now,
+            last_error=None,
+            error_type=None,
+            error_phase=None,
+            external_action=False,
+            retry_allowed=False,
+            recovery_action=None,
+        )
         self.upsert(updated)
         self.save()
         return PublishClaimResult(ok=True, claimed=True, reason=None, task=updated)
 
-    def complete_publish(self, task_id: str, post_id: str) -> PublishTask:
+    def complete_publish(
+        self,
+        task_id: str,
+        post_id: str,
+        permalink: str | None = None,
+        metadata_error: str | None = None,
+    ) -> PublishTask:
         task = self._require_task(task_id)
         updated = replace(
             task,
             status=PublishTaskStatus.PUBLISHED,
             post_id=post_id,
-            last_error=None,
+            permalink=permalink,
+            last_error=metadata_error,
+            error_type="external_api_error" if metadata_error else None,
+            error_phase="permalink_lookup" if metadata_error else None,
+            external_action=True,
+            retry_allowed=False,
+            recovery_action="Query the post ID manually; do not republish.",
+            updated_at=_now(),
         )
         self.upsert(updated)
         self.save()
         return updated
 
-    def fail_task(self, task_id: str, error: str) -> PublishTask:
+    def fail_task(
+        self,
+        task_id: str,
+        error: str,
+        error_type: str = "external_api_error",
+        error_phase: str = "threads_publish",
+        external_action: bool = False,
+        recovery_action: str = "Inspect the error and correct the configuration before a manual retry.",
+    ) -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.FAILED, last_error=error)
+        updated = replace(
+            task,
+            status=PublishTaskStatus.FAILED,
+            last_error=error,
+            error_type=error_type,
+            updated_at=_now(),
+            error_phase=error_phase,
+            external_action=external_action,
+            retry_allowed=False,
+            recovery_action=recovery_action,
+        )
         self.upsert(updated)
         self.save()
         return updated
 
-    def mark_unknown(self, task_id: str, error: str) -> PublishTask:
+    def mark_unknown(self, task_id: str, error: str, phase: str = "threads_publish") -> PublishTask:
         task = self._require_task(task_id)
-        updated = replace(task, status=PublishTaskStatus.UNKNOWN, last_error=error)
+        updated = replace(
+            task,
+            status=PublishTaskStatus.UNKNOWN,
+            last_error=error,
+            error_type="unknown_result",
+            error_phase=phase,
+            external_action=True,
+            retry_allowed=False,
+            recovery_action="Check Threads by post ID before any manual recovery.",
+            updated_at=_now(),
+        )
         self.upsert(updated)
         self.save()
         return updated
@@ -158,6 +217,10 @@ class JsonPublishStore:
         if task is None:
             raise KeyError(f"Publish task not found: {task_id}")
         return task
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 # Backward-compatible alias for the JSON implementation.

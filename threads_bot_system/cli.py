@@ -13,7 +13,7 @@ from .contract import render_project_summary
 from .deepseek_api import DeepSeekClient
 from .feishu_api import FeishuClient
 from .publish_runtime import run_publish
-from .publish_source import load_publish_source
+from .publish_source import load_publish_source, select_due_source
 from .publish_store import JsonPublishStore
 from .reply_runtime import execute_reply_dispatch, run_reply_monitor
 from .reply_state import task_to_record
@@ -40,6 +40,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_monitor(Path(args.store_path), list(args.media_id), Path(args.cursor_path))
         if command == "publish":
             return _run_publish(Path(args.store_path), args.source)
+        if command == "select-scheduled-source":
+            selected = select_due_source(args.root)
+            if selected is not None:
+                print(selected)
+            return 0
         parser.error(f"Unsupported command: {command}")
     except Exception as exc:
         print(f"Error: {exc}", file=sys.stderr)
@@ -88,6 +93,9 @@ def _build_parser() -> argparse.ArgumentParser:
         default=_env("THREADS_PUBLISH_STORE_PATH", str(DEFAULT_PUBLISH_STATE_PATH)),
         help="Path to the publish task store",
     )
+
+    select = subparsers.add_parser("select-scheduled-source")
+    select.add_argument("root", help="Queue directory containing publish snapshots")
     publish.add_argument(
         "--source",
         help="Markdown source to add to the publish task store before publishing",
@@ -100,7 +108,13 @@ def _run_dispatch(store_path: Path) -> int:
     payload = _load_client_payload(os.environ)
     threads_client = _build_threads_client(os.environ)
     feishu_client = _build_feishu_client(os.environ)
-    task = execute_reply_dispatch(payload, threads_client, store_path, feishu_client=feishu_client)
+    task = execute_reply_dispatch(
+        payload,
+        threads_client,
+        store_path,
+        feishu_client=feishu_client,
+        dry_run=_env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"},
+    )
     print(json.dumps(task_to_record(task), ensure_ascii=False, indent=2))
     return 0
 
@@ -145,7 +159,7 @@ def _run_publish(store_path: Path, source_path: str | None = None) -> int:
     store = JsonPublishStore.load(store_path)
     if source_path:
         source = load_publish_source(source_path)
-        store.create_task(source.content_id, source.text)
+        store.create_task(source.content_id, source.text, source.scheduled_time)
     report = run_publish(store, threads_client)
     print(
         json.dumps(
