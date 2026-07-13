@@ -70,7 +70,7 @@ class FeishuApiTests(unittest.TestCase):
         self.assertEqual(content["card"]["schema"], "2.0")
         self.assertEqual(content["card"]["header"]["title"]["content"], "回复审核 · comment-1")
         self.assertEqual(
-            content["card"]["body"]["elements"][1]["actions"][0]["behaviors"][0]["value"],
+            content["card"]["body"]["elements"][1]["behaviors"][0]["value"],
             {"action": "send", "reply_task_id": "reply:comment-1"},
         )
 

@@ -132,10 +132,7 @@ class FeishuClient:
             "body": {
                 "direction": "vertical",
                 "padding": "12px 12px 12px 12px",
-                "elements": [
-                    {"tag": "markdown", "content": payload.body},
-                    {"tag": "action", "actions": actions},
-                ],
+                "elements": [{"tag": "markdown", "content": payload.body}, *actions],
             },
             "header": {
                 "template": "blue",
