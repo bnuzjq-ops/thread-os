@@ -47,11 +47,12 @@ def reply_task_id_for(comment_id: str) -> str:
     return f"reply:{comment_id}"
 
 
-def new_reply_task(comment_id: str, media_id: str = "") -> ReplyTask:
+def new_reply_task(comment_id: str, media_id: str = "", dry_run: bool = False) -> ReplyTask:
     """Create a fresh reply task record."""
     return ReplyTask(
         reply_task_id=reply_task_id_for(comment_id),
         comment_id=comment_id,
         status=ReplyTaskStatus.DETECTED,
         media_id=media_id,
+        dry_run=dry_run,
     )

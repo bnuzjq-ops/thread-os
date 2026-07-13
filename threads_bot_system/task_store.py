@@ -39,7 +39,9 @@ class TaskClaimResult:
 class TaskStore(Protocol):
     """Uniform storage interface for reply tasks."""
 
-    def create_task(self, comment_id: str, media_id: str = "") -> TaskCreateResult:
+    def create_task(
+        self, comment_id: str, media_id: str = "", dry_run: bool = False
+    ) -> TaskCreateResult:
         """Create a task once per comment id."""
 
     def get_task(self, task_id: str) -> ReplyTask | None:
@@ -119,7 +121,9 @@ class JsonTaskStore:
     def upsert(self, task: ReplyTask) -> None:
         self.tasks[task.reply_task_id] = task
 
-    def create_task(self, comment_id: str, media_id: str = "") -> TaskCreateResult:
+    def create_task(
+        self, comment_id: str, media_id: str = "", dry_run: bool = False
+    ) -> TaskCreateResult:
         task_id = reply_task_id_for(comment_id)
         existing = self.get(task_id)
         if existing is not None:
@@ -130,7 +134,7 @@ class JsonTaskStore:
                 task=existing,
             )
 
-        task = new_reply_task(comment_id, media_id=media_id)
+        task = new_reply_task(comment_id, media_id=media_id, dry_run=dry_run)
         self.upsert(task)
         self.save()
         return TaskCreateResult(

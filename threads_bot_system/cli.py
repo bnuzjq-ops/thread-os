@@ -130,13 +130,18 @@ def _run_monitor(store_path: Path, media_ids: list[str], cursor_path: Path) -> i
 
     feishu_client = _build_feishu_client(os.environ)
     deepseek_client = _build_deepseek_client(os.environ)
+    monitor_kwargs = {
+        "deepseek_client": deepseek_client,
+        "cursor_path": cursor_path,
+    }
+    if _env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"}:
+        monitor_kwargs["dry_run"] = True
     report = run_reply_monitor(
         resolved_media_ids,
         threads_client,
         feishu_client,
         store_path,
-        deepseek_client=deepseek_client,
-        cursor_path=cursor_path,
+        **monitor_kwargs,
     )
 
     print(

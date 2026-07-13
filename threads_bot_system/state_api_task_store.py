@@ -25,13 +25,16 @@ class StateApiTaskStore:
     api_token: str
     request_impl: Callable[[Request], object] = urlopen
 
-    def create_task(self, comment_id: str, media_id: str = "") -> TaskCreateResult:
+    def create_task(
+        self, comment_id: str, media_id: str = "", dry_run: bool = False
+    ) -> TaskCreateResult:
         payload = self._request_json(
             "POST",
             "/v1/reply-tasks",
             {
                 "comment_id": comment_id,
                 "media_id": media_id,
+                "dry_run": dry_run,
             },
         )
         return TaskCreateResult(

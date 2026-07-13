@@ -184,6 +184,27 @@ class ReplyRuntimeTests(unittest.TestCase):
             self.assertEqual(task.feishu_message_id, "msg-1")
             self.assertEqual(task.draft, "Generated draft text")
 
+    def test_run_reply_monitor_marks_new_tasks_as_dry_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            threads_client = FakeThreadsClient(
+                [ThreadsComment(comment_id="comment-dry", text="How should we reply?")]
+            )
+            feishu_client = FakeFeishuClient()
+            report = run_reply_monitor(
+                ["media-1"],
+                threads_client,
+                feishu_client,
+                store_path,
+                deepseek_client=FakeDeepSeekClient(),
+                dry_run=True,
+            )
+
+            self.assertEqual(report.review_count, 1)
+            task = JsonTaskStore.load(store_path).get("reply:comment-dry")
+            self.assertIsNotNone(task)
+            self.assertTrue(task.dry_run)
+
     def test_run_reply_monitor_backfills_when_store_is_empty(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"

@@ -88,6 +88,7 @@ def run_reply_monitor(
     store_path: TaskStore | str | Path,
     deepseek_client: DeepSeekClient | None = None,
     cursor_path: str | Path | None = None,
+    dry_run: bool = False,
 ) -> ReplyMonitorReport:
     """Fetch comments, build review cards, and persist reply tasks."""
     media_id_list = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
@@ -120,7 +121,10 @@ def run_reply_monitor(
         if intake.task is None:
             continue
 
-        created = store.create_task(intake.comment_id, intake.media_id)
+        if dry_run:
+            created = store.create_task(intake.comment_id, intake.media_id, dry_run=True)
+        else:
+            created = store.create_task(intake.comment_id, intake.media_id)
         if _should_skip_monitor_refresh(created.task):
             continue
 
@@ -172,6 +176,10 @@ def execute_reply_dispatch(
         if action in {"skip", "rewrite", "status"}:
             return _missing_reply_task(reply_task_id, action)
         raise KeyError(f"Reply task not found: {reply_task_id}")
+
+    # The persisted task flag is authoritative so a dry-run cannot be bypassed
+    # by omitting or altering the callback payload flag.
+    dry_run = dry_run or task.dry_run
 
     if action == "status":
         return task

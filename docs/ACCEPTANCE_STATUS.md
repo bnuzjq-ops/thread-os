@@ -62,6 +62,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 - Real Threads reply: BLOCKED. The task has no `reply_id`;解除条件是完成 Worker Secret 配置后点击一次 `send`，并观察 `reply-dispatch`、Threads 回复和状态回写。
 - Local verification: PASS. Python tests: 81; Worker tests: 6.
 - Latest live callback verification: PASS. Runs `29226259880`, `29226261576`, and `29226273680` completed successfully; the task reached `skipped` with `last_error=skip_requested`, proving Feishu -> Worker -> GitHub dispatch -> reply state handling. No Threads reply was attempted.
+- Safe reply dry-run entry: PASS (code). `reply-monitor.yml` now accepts a manual `dry_run` input, persists the flag on new tasks, and dispatch enforces the persisted flag before any Threads call; tests cover the path. Live dry-run receipt remains NOT_TESTED.
 
 ## Latest Live Evidence
 
