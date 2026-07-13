@@ -48,9 +48,9 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 | Feishu HTTP error diagnostics | PASS | `tests/test_feishu_api.py`; HTTP error responses preserve the Feishu JSON body for configuration/permission diagnosis |
 | Worker signature and callback contract | PASS | `tests/reply_worker.test.mjs` |
 | State Worker atomic claim contract | PASS | `worker/state-service/test/index.test.mjs` |
-| Feishu review card | NOT TESTED | No production card acceptance |
-| Feishu callback and GitHub dispatch | NOT TESTED | No production button click acceptance |
-| Real Threads reply | NOT TESTED | No end-to-end reply ID/permalink |
+| Feishu review card | PASS | Live review card run `29223845054`; persisted `feishu_message_id` |
+| Feishu callback and GitHub dispatch | PASS (skip path) | Live runs `29226259880`, `29226261576`, `29226273680` |
+| Real Threads reply | BLOCKED | New real comment and controlled `send` are still required |
 
 ## Current Boundary
 
@@ -60,7 +60,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 - DeepSeek independent draft: PASS. The same task contains a generated draft and has not been sent to Threads.
 - Feishu callback and GitHub dispatch: PASS for `skip`. The live callback now reaches GitHub dispatch; the earlier `200671` was caused by stale/missing Worker configuration and is retained only as historical evidence.
 - Real Threads reply: BLOCKED. The task has no `reply_id`;解除条件是完成 Worker Secret 配置后点击一次 `send`，并观察 `reply-dispatch`、Threads 回复和状态回写。
-- Local verification: PASS. Python tests: 81; Worker tests: 6.
+- Local verification: PASS. Python tests: 83; Worker tests: 6.
 - Latest live callback verification: PASS. Runs `29226259880`, `29226261576`, and `29226273680` completed successfully; the task reached `skipped` with `last_error=skip_requested`, proving Feishu -> Worker -> GitHub dispatch -> reply state handling. No Threads reply was attempted.
 - Safe reply dry-run entry: PASS (code). `reply-monitor.yml` now accepts a manual `dry_run` input, persists the flag on new tasks, and dispatch enforces the persisted flag before any Threads call; tests cover the path. Live dry-run receipt remains NOT_TESTED.
 
