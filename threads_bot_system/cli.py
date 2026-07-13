@@ -136,12 +136,14 @@ def _run_monitor(store_path: Path, media_ids: list[str], cursor_path: Path) -> i
     }
     if _env("REPLY_DRY_RUN", "0", env=os.environ).lower() in {"1", "true", "yes"}:
         monitor_kwargs["dry_run"] = True
+    trigger_source = _env("REPLY_TRIGGER_SOURCE", "manual", env=os.environ).strip()
     report = run_reply_monitor(
         resolved_media_ids,
         threads_client,
         feishu_client,
         store_path,
         **monitor_kwargs,
+        trigger_source=trigger_source,
     )
 
     print(
@@ -150,6 +152,7 @@ def _run_monitor(store_path: Path, media_ids: list[str], cursor_path: Path) -> i
                 "comments": len(report.comments),
                 "like_only_count": report.like_only_count,
                 "review_count": report.review_count,
+                "trigger_source": report.trigger_source,
                 "store_path": str(store_path),
             },
             ensure_ascii=False,

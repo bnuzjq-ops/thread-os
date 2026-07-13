@@ -89,6 +89,7 @@ def run_reply_monitor(
     deepseek_client: DeepSeekClient | None = None,
     cursor_path: str | Path | None = None,
     dry_run: bool = False,
+    trigger_source: str = "",
 ) -> ReplyMonitorReport:
     """Fetch comments, build review cards, and persist reply tasks."""
     media_id_list = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
@@ -115,7 +116,7 @@ def run_reply_monitor(
     }
     comments = [comment for comment in comments if comment.comment_id not in replied_comment_ids]
 
-    report = scan_comments(comments)
+    report = scan_comments(comments, trigger_source=trigger_source)
     store = _resolve_task_store(store_path)
     for intake in report.intakes:
         if intake.task is None:

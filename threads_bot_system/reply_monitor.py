@@ -25,6 +25,10 @@ class ReplyMonitorReport:
 
     comments: list[CommentSnapshot]
     intakes: list[ReplyIntake]
+    trigger_source: str = ""
+
+    @property
+    def like_only_count(self) -> int:
 
     @property
     def like_only_count(self) -> int:
@@ -39,11 +43,11 @@ class ReplyMonitorReport:
         return [intake.task for intake in self.intakes if intake.task is not None]
 
 
-def scan_comments(comments: Iterable[CommentSnapshot]) -> ReplyMonitorReport:
+def scan_comments(comments: Iterable[CommentSnapshot], *, trigger_source: str = "") -> ReplyMonitorReport:
     """Run the first-pass reply intake over a batch of comments."""
     comment_list = list(comments)
     intakes = [
         prepare_reply_intake(comment.comment_id, comment.text, comment.media_id)
         for comment in comment_list
     ]
-    return ReplyMonitorReport(comments=comment_list, intakes=intakes)
+    return ReplyMonitorReport(comments=comment_list, intakes=intakes, trigger_source=trigger_source)

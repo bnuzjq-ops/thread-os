@@ -19,6 +19,16 @@ The system must run repeatable publish and semi-automatic reply cycles without d
 - Reply code path: local tests and safe dry-run logic implemented.
 - Real reply end to end: `BLOCKED` by `no_new_real_comment`.
 
+## Scheduler Discipline
+
+- GitHub Actions `schedule` is the single official V1 auto-trigger.
+- Cloudflare Cron SHALL NOT be enabled while GitHub Schedule is active.
+- If Cloudflare Cron becomes necessary:
+  1. GitHub Schedule MUST be removed from `reply-monitor.yml` first.
+  2. The change MUST be documented in `ACCEPTANCE-CHECKLIST.md`.
+  3. Only one scheduler may be active at any time.
+- Two concurrent schedulers is a FAIL condition for the system.
+
 ## Current Evidence Override (2026-07-13)
 
 The external blocker is no longer comment discovery for the existing test task. Feishu card delivery and the live `skip` callback path are verified. Real `send` and live dry-run require a fresh comment/task because the existing task is terminal `skipped`.
