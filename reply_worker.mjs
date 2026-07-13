@@ -5,6 +5,10 @@ const FEISHU_SUCCESS_TOAST = {
   },
 };
 
+function feishuErrorToast(content) {
+  return { toast: { type: 'error', content } };
+}
+
 function normalizePathname(pathname) {
   if (!pathname || pathname === '/') {
     return '/';
@@ -243,11 +247,13 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   const eventType = String(env.GITHUB_DISPATCH_EVENT ?? 'threads_reply_action').trim();
 
   if (!repo) {
-    return jsonResponse({ error: 'Missing GITHUB_REPO' }, 500);
+    console.error('configuration_error: missing GITHUB_REPO');
+    return jsonResponse(feishuErrorToast('后台配置错误：缺少 GitHub 仓库配置'));
   }
 
   if (!pat) {
-    return jsonResponse({ error: 'Missing GITHUB_PAT' }, 500);
+    console.error('configuration_error: missing GITHUB_PAT');
+    return jsonResponse(feishuErrorToast('后台配置错误：缺少 GitHub 授权'));
   }
 
   const payloadForDispatch = {
@@ -273,13 +279,8 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
       payload: payloadForDispatch,
     });
   } catch (error) {
-    return jsonResponse(
-      {
-        error: 'github dispatch failed',
-        detail: error instanceof Error ? error.message : String(error),
-      },
-      502,
-    );
+    console.error('github_dispatch_error: dispatch failed');
+    return jsonResponse(feishuErrorToast('GitHub 任务转发失败，请检查 Worker 配置'));
   }
 
   return jsonResponse(FEISHU_SUCCESS_TOAST);

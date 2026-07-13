@@ -209,3 +209,21 @@ test('handleFeishuCallback returns a challenge response when Feishu verifies the
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { challenge: 'challenge-token' });
 });
+
+test('configuration failures still return a valid Feishu response', async () => {
+  const body = JSON.stringify({
+    schema: '2.0',
+    header: { token: 'verification-token' },
+    event: { action: { value: { action: 'skip', reply_task_id: 'reply:comment-2' } } },
+  });
+  const response = await handleFeishuCallback(
+    new Request('https://jqxblue.cc/feishu/callback', { method: 'POST', body }),
+    { FEISHU_VERIFICATION_TOKEN: 'verification-token' },
+    { fetch: async () => { throw new Error('dispatch should not run'); } },
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), {
+    toast: { type: 'error', content: '后台配置错误：缺少 GitHub 仓库配置' },
+  });
+});
