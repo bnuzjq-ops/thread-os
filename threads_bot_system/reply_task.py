@@ -11,6 +11,7 @@ class ReplyTaskStatus(str, Enum):
 
     DETECTED = "detected"
     DRAFTED = "drafted"
+    REWRITING = "rewriting"
     AWAITING_REVIEW = "awaiting_review"
     SENDING = "sending"
     SENT = "sent"
@@ -28,6 +29,7 @@ class ReplyTask:
     status: ReplyTaskStatus
     media_id: str = ""
     comment_text: str = ""
+    user_open_id: str | None = None
     draft: str = ""
     draft_version: int = 0
     draft_source: str = ""
@@ -43,6 +45,9 @@ class ReplyTask:
     requires_manual_check: bool = False
     created_at: str | None = None
     updated_at: str | None = None
+    notified_at: str | None = None
+    notify_message_id: str | None = None
+    notify_recipient_open_id: str | None = None
 
 
 def reply_task_id_for(comment_id: str) -> str:

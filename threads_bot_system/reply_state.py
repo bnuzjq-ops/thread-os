@@ -15,6 +15,7 @@ def task_to_record(task: ReplyTask) -> dict[str, object]:
         "status": task.status.value,
         "media_id": task.media_id,
         "comment_text": task.comment_text,
+        "user_open_id": task.user_open_id,
         "draft": task.draft,
         "draft_version": task.draft_version,
         "draft_source": task.draft_source,
@@ -31,6 +32,9 @@ def task_to_record(task: ReplyTask) -> dict[str, object]:
         "requires_manual_check": task.requires_manual_check,
         "created_at": task.created_at,
         "updated_at": task.updated_at,
+        "notified_at": task.notified_at,
+        "notify_message_id": task.notify_message_id,
+        "notify_recipient_open_id": task.notify_recipient_open_id,
     }
 
 
@@ -42,6 +46,7 @@ def task_from_record(record: Mapping[str, object]) -> ReplyTask:
         status=_parse_status(record.get("status")),
         media_id=str(record.get("media_id", "")),
         comment_text=str(record.get("comment_text", "")),
+        user_open_id=_optional_text(record.get("user_open_id")),
         draft=str(record.get("draft", "")),
         draft_version=int(record.get("draft_version", 0)),
         draft_source=str(record.get("draft_source", "")),
@@ -59,6 +64,9 @@ def task_from_record(record: Mapping[str, object]) -> ReplyTask:
         requires_manual_check=_optional_bool(record.get("requires_manual_check")),
         created_at=_optional_text(record.get("created_at")),
         updated_at=_optional_text(record.get("updated_at")),
+        notified_at=_optional_text(record.get("notified_at")),
+        notify_message_id=_optional_text(record.get("notify_message_id")),
+        notify_recipient_open_id=_optional_text(record.get("notify_recipient_open_id")),
     )
 
 

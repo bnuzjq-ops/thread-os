@@ -35,6 +35,18 @@ class FeishuClient:
         """Send a plain-text result notification to the configured chat."""
         return self._send_message("text", {"text": text})
 
+    def send_text_message_to_open_id(self, open_id: str, text: str) -> str:
+        """Send a plain-text message to one bot user via private chat."""
+        recipient = str(open_id).strip()
+        if not recipient:
+            raise FeishuApiError("Feishu open_id must not be empty")
+        return self._send_message(
+            "text",
+            {"text": text},
+            receive_id=recipient,
+            receive_id_type="open_id",
+        )
+
     def send_interactive_card(self, card: dict[str, object]) -> str:
         """Send an interactive card payload to the configured chat."""
         return self._send_message("interactive", card)
@@ -79,12 +91,22 @@ class FeishuClient:
         )
         self._request_json(request)
 
-    def _send_message(self, msg_type: str, content: dict[str, object]) -> str:
+    def _send_message(
+        self,
+        msg_type: str,
+        content: dict[str, object],
+        *,
+        receive_id: str | None = None,
+        receive_id_type: str = "chat_id",
+    ) -> str:
         access_token = self.get_tenant_access_token()
-        url = f"{self.base_url}/im/v1/messages?receive_id_type=chat_id"
+        target = receive_id if receive_id is not None else self.chat_id
+        if not str(target).strip():
+            raise FeishuApiError("Feishu recipient must not be empty")
+        url = f"{self.base_url}/im/v1/messages?receive_id_type={receive_id_type}"
         body = json.dumps(
             {
-                "receive_id": self.chat_id,
+                "receive_id": target,
                 "msg_type": msg_type,
                 "content": json.dumps(content, ensure_ascii=False),
             },

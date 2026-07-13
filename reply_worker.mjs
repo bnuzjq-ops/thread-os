@@ -143,6 +143,26 @@ function extractVerificationToken(payload) {
   return candidates.find((candidate) => typeof candidate === 'string' && candidate.trim())?.trim() ?? '';
 }
 
+function extractMenuEvent(payload) {
+  const eventType = payload?.header?.event_type;
+  if (eventType !== 'application.bot.menu_v6') {
+    return null;
+  }
+  const eventKey = payload?.event?.event_key;
+  const openId = payload?.event?.operator?.operator_id?.open_id;
+  if (typeof eventKey !== 'string' || !eventKey.trim()) {
+    throw new Error('Missing Feishu menu event_key');
+  }
+  if (typeof openId !== 'string' || !openId.trim()) {
+    throw new Error('Missing Feishu menu operator open_id');
+  }
+  return {
+    eventKey: eventKey.trim(),
+    openId: openId.trim(),
+    eventId: typeof payload?.header?.event_id === 'string' ? payload.header.event_id.trim() : '',
+  };
+}
+
 function readHeader(headers, name) {
   return headers.get(name) ?? headers.get(name.toLowerCase()) ?? '';
 }
@@ -258,13 +278,6 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
     return jsonResponse({ challenge: payload.challenge });
   }
 
-  const actionValue = extractActionValue(payload);
-  if (!actionValue) {
-    logCallback({status: 400, type: 'missing_action'});
-    return jsonResponse({ error: 'missing action value' }, 400);
-  }
-
-  const action = parseReplyActionValue(actionValue);
   const traceId = createTraceId();
   const repo = String(env.GITHUB_REPO ?? '').trim();
   const pat = String(env.GITHUB_PAT ?? '').trim();
@@ -280,6 +293,58 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
     return jsonResponse(feishuErrorToast('后台配置错误：缺少 GitHub 授权'));
   }
 
+  const menuEvent = extractMenuEvent(payload);
+  if (menuEvent) {
+    const allowedMenuEvents = new Set([
+      'review_next',
+      'system_health',
+      'action_send',
+      'action_rewrite',
+      'action_skip',
+    ]);
+    if (!allowedMenuEvents.has(menuEvent.eventKey)) {
+      logCallback({status: 400, type: 'unsupported_menu_event', event_key: menuEvent.eventKey});
+      return jsonResponse({ error: 'unsupported menu event' }, 400);
+    }
+    const payloadForDispatch = {
+      trace_id: traceId,
+      event_key: menuEvent.eventKey,
+      user_open_id: menuEvent.openId,
+      event_id: menuEvent.eventId,
+      source: 'feishu_menu_event',
+    };
+    const fetchImpl = runtime.fetch ?? globalThis.fetch.bind(globalThis);
+    const dispatchPromise = dispatchToGithub({
+      fetchImpl,
+      repo,
+      pat,
+      eventType,
+      payload: payloadForDispatch,
+    });
+    if (runtime.ctx?.waitUntil) {
+      runtime.ctx.waitUntil(dispatchPromise.catch(() => {
+        console.error('github_dispatch_error: menu dispatch failed');
+        logCallback({event_key: menuEvent.eventKey, trace_id: traceId, dispatch: 'failed'});
+      }));
+      logCallback({status: 200, event_key: menuEvent.eventKey, trace_id: traceId, dispatch: 'background'});
+      return jsonResponse(FEISHU_SUCCESS_TOAST);
+    }
+    try {
+      await dispatchPromise;
+      logCallback({status: 200, event_key: menuEvent.eventKey, trace_id: traceId, dispatch: 'accepted'});
+    } catch {
+      logCallback({status: 200, event_key: menuEvent.eventKey, trace_id: traceId, dispatch: 'failed'});
+    }
+    return jsonResponse(FEISHU_SUCCESS_TOAST);
+  }
+
+  const actionValue = extractActionValue(payload);
+  if (!actionValue) {
+    logCallback({status: 400, type: 'missing_action'});
+    return jsonResponse({ error: 'missing action value' }, 400);
+  }
+
+  const action = parseReplyActionValue(actionValue);
   const payloadForDispatch = {
     trace_id: traceId,
     action: action.command,

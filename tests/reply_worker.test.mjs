@@ -147,6 +147,41 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
   assert.equal(typeof logs.at(-1).response_ms, 'number');
 });
 
+test('handleFeishuCallback dispatches a bot menu event to GitHub', async () => {
+  const body = JSON.stringify({
+    schema: '2.0',
+    header: { token: 'verification-token', event_type: 'application.bot.menu_v6', event_id: 'evt-1' },
+    event: {
+      event_key: 'review_next',
+      operator: { operator_id: { open_id: 'ou_operator' } },
+    },
+  });
+  const requests = [];
+  const response = await handleFeishuCallback(
+    new Request('https://jqxblue.cc/feishu/callback', { method: 'POST', body }),
+    {
+      FEISHU_VERIFICATION_TOKEN: 'verification-token',
+      GITHUB_DISPATCH_EVENT: 'threads_reply_action',
+      GITHUB_PAT: 'github-pat',
+      GITHUB_REPO: 'bnuzjq-ops/thread-os',
+    },
+    {
+      fetch: async (url, init) => {
+        requests.push({ url, init });
+        return new Response(null, { status: 204 });
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  const dispatched = JSON.parse(requests[0].init.body).client_payload;
+  assert.equal(dispatched.event_key, 'review_next');
+  assert.equal(dispatched.user_open_id, 'ou_operator');
+  assert.equal(dispatched.event_id, 'evt-1');
+  assert.equal(dispatched.source, 'feishu_menu_event');
+  assert.equal(typeof dispatched.trace_id, 'string');
+});
+
 test('handleFeishuCallback returns before GitHub dispatch completes', async () => {
   const body = JSON.stringify({
     schema: '2.0',
