@@ -29,10 +29,11 @@
 
 ## Current Baseline Override (2026-07-13)
 
-- Remote `main` and local development branch are both `db17bc8`; worktree is clean.
-- Python tests: 85 passed. Worker tests: 8 passed.
-- Worker health is HTTP 200. Current deployment is Cloudflare version `3417252a-4860-4673-bc6a-69d3801fef43`, deployed from clean commit `198dcee`; Cloudflare provides no git SHA metadata.
-- `rewrite` now persists comment text, calls DeepSeek again, increments `draft_version`, and sends a new review card in code; live verification is still `NOT_TESTED`.
+- Remote `main` is `9dd35c0`; the local audit branch contains no uncommitted changes.
+- Python tests: 86 passed. Worker tests: 8 passed.
+- Worker health is HTTP 200. Current callback deployment is Cloudflare version `2fdee24c-a42c-4d6a-8d03-f6da038bc136`, deployed from the trace-enabled callback code; Cloudflare provides no git SHA metadata.
+- `rewrite` persists comment text, calls DeepSeek again, increments `draft_version`, and currently sends a second review card; original-card update is still a known FAIL.
+- Monitor state writeback fix is proven by natural run `29250464850` and remote state commit `255613a`.
 - The last live `send` failed with Threads `Media Not Found`; do not retry that terminal task.
 - A fresh comment is required to verify the current `send`, `rewrite`, `skip`, and `status` paths.
 

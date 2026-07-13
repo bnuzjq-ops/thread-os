@@ -5,17 +5,19 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 ## Current Baseline Override (2026-07-13)
 
 This section supersedes older run references below when they conflict with the
-current remote `main` at commit `51bba75`.
+current remote `main` at commit `9dd35c0`.
 
 | Current item | Status | Evidence |
 | --- | --- | --- |
-| Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 85 tests passed |
+| Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 86 tests passed |
 | Worker implementation tests | PASS | `node --test tests/reply_worker.test.mjs`: 8 tests passed |
 | Worker health endpoint | PASS | `https://jqxblue.cc/health` returned HTTP 200 and `ok` |
-| Worker deployed version matches current callback code | PASS | Current callback code commit `5d0605a`; Cloudflare version `206c1437-eddd-4495-af7b-96c467399d88` is 100% live and retains four `secret_text` bindings |
-| Callback diagnostic logging | PASS | Worker logs action, task ID, dispatch outcome, verification result and response time without comment text or credentials; focused Worker tests pass |
+| Worker deployed version matches current callback code | PASS | Callback trace code is in current `main` commit `9dd35c0`; Cloudflare version `2fdee24c-a42c-4d6a-8d03-f6da038bc136` is live and retains four existing bindings |
+| Callback diagnostic logging and trace | PASS | Worker creates a per-click `trace_id`, includes it in logs and GitHub dispatch payload, and reply-dispatch writes it to the run summary; focused Worker tests pass |
 | Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
-| Rewrite regenerates a draft and creates a new review card | PASS | Added task comment persistence, DeepSeek rewrite path, draft-version increment, and focused runtime test |
+| Rewrite regenerates a draft on the same task | PASS | Same task and `draft_version + 1` are covered by focused runtime tests; live card update remains unverified |
+| Rewrite updates the original card instead of sending a second card | FAIL | `reply_runtime.py` still calls `send_review_card()` during rewrite; Feishu card update API is not implemented |
+| Card sent timestamp and active card version persistence | FAIL | State currently persists only `feishu_message_id`; `card_sent_at` and `active_card_version` are absent |
 | Live `send` on a fresh task | NOT_TESTED | Previous live send failed with Threads `Media Not Found`; requires a new comment/task after current `main` is active |
 | Live `rewrite` on a fresh task | NOT_TESTED | Current code fix is not yet exercised by a new Feishu card |
 | Live `skip` on a fresh task | NOT_TESTED | Historical skip runs are retained below but are not current-baseline evidence |
@@ -24,6 +26,7 @@ current remote `main` at commit `51bba75`.
 | Independent scheduler implementation | PASS | `reply_scheduler_worker.mjs`; `node --test tests/reply_scheduler_worker.test.mjs` |
 | Independent scheduler natural Cron | PASS | GitHub schedule is disabled; 5 consecutive natural Cron runs succeeded: `29244166499`, `29244459243`, `29244744391`, `29245046890`, `29245354438` |
 | Scheduler cutover safety | PASS | `wrangler.scheduler.toml` is isolated; current GitHub schedule remains the only active scheduler |
+| Reply monitor state writeback after remote rebase | PASS | Natural Cron run `29250464850` used merged commit `e0ba683`, completed successfully, and committed state as `255613a`; prior failures were `cannot rebase: You have unstaged changes` |
 
 ## Publish Lane
 
