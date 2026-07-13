@@ -12,7 +12,7 @@ current remote `main` at commit `23cc198`.
 | Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 88 tests passed |
 | Worker implementation tests | PASS | `node --test tests/reply_worker.test.mjs`: 8 tests passed |
 | Worker health endpoint | PASS | `https://jqxblue.cc/health` returned HTTP 200 and `ok` |
-| Worker deployed version matches current callback code | PASS | Callback trace code is in current `main` history through `23cc198`; Cloudflare version `2fdee24c-a42c-4d6a-8d03-f6da038bc136` is live and retains four existing bindings |
+| Worker deployed version matches current callback code | PASS | Current callback code is in `main` history through `2e97adf`; Cloudflare version `4f90ee89-8c39-4d8b-95c1-ac72ca92829c` is live and retains four existing bindings |
 | Callback diagnostic logging and trace | PASS | Worker creates a per-click `trace_id`, includes it in logs and GitHub dispatch payload, and reply-dispatch writes it to the run summary; focused Worker tests pass |
 | Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
 | Rewrite regenerates a draft on the same task | PASS | Same task and `draft_version + 1` are covered by focused runtime tests; live card update remains unverified |
