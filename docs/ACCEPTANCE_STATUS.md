@@ -21,7 +21,7 @@ current remote `main` at commit `51bba75`.
 | Live `status` on a fresh task | NOT_TESTED | No current-baseline run evidence |
 | Real reply final acceptance | BLOCKED | Requires a fresh unprocessed comment and controlled live send; no automatic retry of the failed task |
 | Independent scheduler implementation | PASS | `reply_scheduler_worker.mjs`; `node --test tests/reply_scheduler_worker.test.mjs` |
-| Independent scheduler natural Cron | NOT_TESTED | GitHub schedule is now disabled; requires 5 consecutive natural Cron runs |
+| Independent scheduler natural Cron | NOT_TESTED | GitHub schedule is disabled; 4 consecutive natural Cron runs succeeded: `29244166499`, `29244459243`, `29244744391`, `29245046890`; one more is required by the V1 standard |
 | Scheduler cutover safety | PASS | `wrangler.scheduler.toml` is isolated; current GitHub schedule remains the only active scheduler |
 
 ## Publish Lane
