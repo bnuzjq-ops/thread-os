@@ -270,14 +270,25 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   }
 
   const fetchImpl = runtime.fetch ?? globalThis.fetch.bind(globalThis);
+  const dispatchPromise = dispatchToGithub({
+    fetchImpl,
+    repo,
+    pat,
+    eventType,
+    payload: payloadForDispatch,
+  });
+
+  if (runtime.ctx?.waitUntil) {
+    runtime.ctx.waitUntil(
+      dispatchPromise.catch(() => {
+        console.error('github_dispatch_error: dispatch failed');
+      }),
+    );
+    return jsonResponse(FEISHU_SUCCESS_TOAST);
+  }
+
   try {
-    await dispatchToGithub({
-      fetchImpl,
-      repo,
-      pat,
-      eventType,
-      payload: payloadForDispatch,
-    });
+    await dispatchPromise;
   } catch (error) {
     console.error('github_dispatch_error: dispatch failed');
     return jsonResponse(feishuErrorToast('GitHub 任务转发失败，请检查 Worker 配置'));
