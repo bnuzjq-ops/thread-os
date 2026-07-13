@@ -12,7 +12,8 @@ current remote `main` at commit `51bba75`.
 | Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 85 tests passed |
 | Worker implementation tests | PASS | `node --test tests/reply_worker.test.mjs`: 8 tests passed |
 | Worker health endpoint | PASS | `https://jqxblue.cc/health` returned HTTP 200 and `ok` |
-| Worker deployed version matches current callback code | PASS | Deployed from clean callback code at `198dcee`; current `reply_worker.mjs` is unchanged since that deployment; Cloudflare version `3417252a-4860-4673-bc6a-69d3801fef43` is 100% live |
+| Worker deployed version matches current callback code | PASS | Current callback code commit `5d0605a`; Cloudflare version `206c1437-eddd-4495-af7b-96c467399d88` is 100% live and retains four `secret_text` bindings |
+| Callback diagnostic logging | PASS | Worker logs action, task ID, dispatch outcome, verification result and response time without comment text or credentials; focused Worker tests pass |
 | Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
 | Rewrite regenerates a draft and creates a new review card | PASS | Added task comment persistence, DeepSeek rewrite path, draft-version increment, and focused runtime test |
 | Live `send` on a fresh task | NOT_TESTED | Previous live send failed with Threads `Media Not Found`; requires a new comment/task after current `main` is active |
