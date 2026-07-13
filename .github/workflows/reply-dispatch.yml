@@ -1,6 +1,6 @@
 name: Reply Dispatch
 
-on:
+"on":
   repository_dispatch:
     types:
       - threads_reply_action
