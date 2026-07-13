@@ -235,8 +235,7 @@ def execute_reply_dispatch(
                 if updated.feishu_message_id and hasattr(feishu_client, "update_review_card"):
                     feishu_client.update_review_card(
                         updated.feishu_message_id,
-                        card.title,
-                        card.body,
+                        card,
                     )
                     updated = store.save_feishu_message(reply_task_id, updated.feishu_message_id)
                 else:

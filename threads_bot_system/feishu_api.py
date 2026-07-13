@@ -39,22 +39,30 @@ class FeishuClient:
         """Send an interactive card payload to the configured chat."""
         return self._send_message("interactive", card)
 
-    def update_review_card(self, message_id: str, title: str, body: str) -> None:
+    def update_review_card(
+        self,
+        message_id: str,
+        title_or_payload: str | ReplyCardPayload,
+        body: str | None = None,
+    ) -> None:
         """Replace the existing review card without creating another message."""
         access_token = self.get_tenant_access_token()
         url = f"{self.base_url}/im/v1/messages/{message_id}"
-        content = {
-            "schema": "2.0",
-            "body": {
-                "direction": "vertical",
-                "padding": "12px 12px 12px 12px",
-                "elements": [{"tag": "markdown", "content": body}],
-            },
-            "header": {
-                "template": "blue",
-                "title": {"tag": "plain_text", "content": title},
-            },
-        }
+        if isinstance(title_or_payload, ReplyCardPayload):
+            content = self._build_interactive_card(title_or_payload)
+        else:
+            content = {
+                "schema": "2.0",
+                "body": {
+                    "direction": "vertical",
+                    "padding": "12px 12px 12px 12px",
+                    "elements": [{"tag": "markdown", "content": body or ""}],
+                },
+                "header": {
+                    "template": "blue",
+                    "title": {"tag": "plain_text", "content": title_or_payload},
+                },
+            }
         body_bytes = json.dumps(
             {"content": json.dumps(content, ensure_ascii=False), "msg_type": "interactive"},
             ensure_ascii=False,

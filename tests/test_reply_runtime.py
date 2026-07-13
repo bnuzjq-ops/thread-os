@@ -55,8 +55,8 @@ class FakeFeishuClient:
         self.cards.append(text)
         return "msg-result"
 
-    def update_review_card(self, message_id: str, title: str, body: str) -> None:
-        self.updated_cards.append((message_id, title, body))
+    def update_review_card(self, message_id: str, title: object, body: str | None = None) -> None:
+        self.updated_cards.append((message_id, str(title), body or ""))
 
 
 class FakeDeepSeekClient:
