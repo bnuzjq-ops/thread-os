@@ -11,6 +11,8 @@ on:
   repository_dispatch:
     types:
       - threads_reply_monitor
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
