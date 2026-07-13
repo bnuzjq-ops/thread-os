@@ -25,8 +25,7 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_reply_monitor_is_scheduled_every_five_minutes(self) -> None:
         text = (WORKFLOW_ROOT / "reply-monitor.yml").read_text(encoding="utf-8")
-        self.assertIn("repository_dispatch:", text)
-        self.assertIn("threads_reply_monitor", text)
+        self.assertIn('cron: "3,8,13,18,23,28,33,38,43,48,53,58 * * * *"', text)
 
     def test_state_writers_upload_recovery_artifacts_on_failure(self) -> None:
         for name in ("publish.yml", "reply-monitor.yml", "reply-dispatch.yml"):
