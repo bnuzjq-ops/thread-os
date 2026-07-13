@@ -125,9 +125,8 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
   );
 
   const dispatchBody = JSON.parse(requests[0].init.body);
-  assert.deepEqual(dispatchBody, {
-    event_type: 'threads_reply_action',
-    client_payload: {
+  const {trace_id: traceId, ...payloadWithoutTrace} = dispatchBody.client_payload;
+  assert.deepEqual(payloadWithoutTrace, {
       action: 'send',
       action_value: 'send:reply:comment-2',
       comment_id: 'comment-2',
@@ -135,8 +134,9 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
       reply_task_id: 'reply:comment-2',
       source: 'feishu_card_callback',
       task_kind: 'reply',
-    },
   });
+  assert.equal(typeof traceId, 'string');
+  assert.ok(traceId.length > 0);
   assert.equal(logs.at(-1).event, 'feishu_callback');
   assert.equal(logs.at(-1).action, 'send');
   assert.equal(logs.at(-1).task_id, 'reply:comment-2');

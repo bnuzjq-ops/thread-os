@@ -34,6 +34,14 @@ function textResponse(body, status = 200) {
   });
 }
 
+function createTraceId() {
+  const randomUUID = globalThis.crypto?.randomUUID;
+  if (typeof randomUUID !== 'function') {
+    throw new Error('Web Crypto randomUUID is unavailable');
+  }
+  return randomUUID.call(globalThis.crypto);
+}
+
 async function sha256Hex(text) {
   const subtle = globalThis.crypto?.subtle;
   if (!subtle) {
@@ -252,6 +260,7 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   }
 
   const action = parseReplyActionValue(actionValue);
+  const traceId = createTraceId();
   const repo = String(env.GITHUB_REPO ?? '').trim();
   const pat = String(env.GITHUB_PAT ?? '').trim();
   const eventType = String(env.GITHUB_DISPATCH_EVENT ?? 'threads_reply_action').trim();
@@ -267,6 +276,7 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   }
 
   const payloadForDispatch = {
+    trace_id: traceId,
     action: action.command,
     action_value: action.raw,
     comment_id: action.commentId,
@@ -291,16 +301,17 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   if (runtime.ctx?.waitUntil) {
     runtime.ctx.waitUntil(
       dispatchPromise.then(() => {
-        logCallback({action: action.command, task_id: action.taskId, dispatch: 'accepted'});
+        logCallback({action: action.command, task_id: action.taskId, trace_id: traceId, dispatch: 'accepted'});
       }).catch(() => {
         console.error('github_dispatch_error: dispatch failed');
-        logCallback({action: action.command, task_id: action.taskId, dispatch: 'failed'});
+        logCallback({action: action.command, task_id: action.taskId, trace_id: traceId, dispatch: 'failed'});
       }),
     );
     logCallback({
       status: 200,
       action: action.command,
       task_id: action.taskId,
+      trace_id: traceId,
       dispatch: 'background',
     });
     return jsonResponse(FEISHU_SUCCESS_TOAST);
@@ -308,10 +319,10 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
 
   try {
     await dispatchPromise;
-    logCallback({status: 200, action: action.command, task_id: action.taskId, dispatch: 'accepted'});
+    logCallback({status: 200, action: action.command, task_id: action.taskId, trace_id: traceId, dispatch: 'accepted'});
   } catch (error) {
     console.error('github_dispatch_error: dispatch failed');
-    logCallback({status: 200, action: action.command, task_id: action.taskId, dispatch: 'failed'});
+    logCallback({status: 200, action: action.command, task_id: action.taskId, trace_id: traceId, dispatch: 'failed'});
     return jsonResponse(feishuErrorToast('GitHub 任务转发失败，请检查 Worker 配置'));
   }
 
