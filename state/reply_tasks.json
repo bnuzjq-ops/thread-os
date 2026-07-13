@@ -992,7 +992,7 @@
     "reply:18072703361378272": {
       "reply_task_id": "reply:18072703361378272",
       "comment_id": "18072703361378272",
-      "status": "awaiting_review",
+      "status": "failed",
       "media_id": "",
       "draft": "谢谢您的认可！我们会继续努力分享更多有价值的内容。",
       "draft_version": 1,
@@ -1003,7 +1003,7 @@
       "claimed_at": null,
       "lease_until": null,
       "claimed_by": null,
-      "last_error": null,
+      "last_error": "Threads API returned HTTP 400: {\"error\":{\"message\":\"The requested resource does not exist\",\"type\":\"OAuthException\",\"code\":24,\"error_subcode\":4279009,\"is_transient\":false,\"error_user_title\":\"Media Not Found\",\"error_user_msg\":\"The media with id 17907240150446902 cannot be found.\",\"fbtrace_id\":\"AQndW0uSE8q7wBUpZLej4Ey\"}}",
       "requires_manual_check": false,
       "created_at": null,
       "updated_at": null
