@@ -42,10 +42,13 @@ class DeepSeekClient:
     system_prompt: str = _DEFAULT_SYSTEM_PROMPT
     temperature: float = 0.3
     max_tokens: int = 256
+    max_draft_chars: int = 500
 
     def generate_reply_draft(self, intake: ReplyIntake) -> ReplyDraft:
         """Generate a human-reviewable reply draft for a comment intake."""
         text = self.generate_reply_text(intake)
+        if len(text) > self.max_draft_chars:
+            text = text[: self.max_draft_chars]
         return ReplyDraft(comment_id=intake.comment_id, text=text, version=1)
 
     def generate_reply_text(self, intake: ReplyIntake) -> str:

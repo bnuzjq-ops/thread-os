@@ -92,6 +92,8 @@ def run_reply_monitor(
     trigger_source: str = "",
 ) -> ReplyMonitorReport:
     """Fetch comments, build review cards, and persist reply tasks."""
+    if deepseek_client is None:
+        raise RuntimeError("DeepSeek client is required for reply monitor")
     media_id_list = [str(media_id).strip() for media_id in media_ids if str(media_id).strip()]
     comments: list[CommentSnapshot] = []
     for media_id in media_id_list:
@@ -257,7 +259,7 @@ def _build_reply_draft(
     if deepseek_client is not None:
         return deepseek_client.generate_reply_draft(intake)
 
-    return build_reply_draft(intake)
+    raise RuntimeError("DeepSeek client is not available; cannot generate draft")
 
 
 def _required_text(value: object, label: str) -> str:

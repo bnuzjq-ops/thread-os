@@ -29,9 +29,6 @@ class ReplyMonitorReport:
 
     @property
     def like_only_count(self) -> int:
-
-    @property
-    def like_only_count(self) -> int:
         return sum(1 for intake in self.intakes if intake.plan.should_like)
 
     @property
