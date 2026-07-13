@@ -5,7 +5,7 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 ## Current Baseline Override (2026-07-13)
 
 This section supersedes older run references below when they conflict with the
-current remote `main` at commit `218b936`.
+current remote `main` at commit `ac18fb5`.
 
 | Current item | Status | Evidence |
 | --- | --- | --- |
