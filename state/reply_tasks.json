@@ -1030,7 +1030,7 @@
     "reply:18080707790256878": {
       "reply_task_id": "reply:18080707790256878",
       "comment_id": "18080707790256878",
-      "status": "failed",
+      "status": "detected",
       "media_id": "",
       "draft": "你好！很高兴认识你，有什么可以帮助你的吗？",
       "draft_version": 5,
@@ -1041,7 +1041,7 @@
       "claimed_at": null,
       "lease_until": null,
       "claimed_by": null,
-      "last_error": "Feishu API returned HTTP 400: {\"code\":230099,\"msg\":\"Failed to create card content, ext=ErrCode: 200621; ErrMsg: parse card json err, please check whether the card json is correct; \",\"error\":{\"log_id\":\"202607131220440F3DB81DB08813809A70\",\"troubleshooter\":\"排查建议查看(Troubleshooting suggestions): https://open.feishu.cn/search?from=openapi&log_id=202607131220440F3DB81DB08813809A70&code=230099&method_id=6936075528891154460\"}}",
+      "last_error": null,
       "requires_manual_check": false,
       "created_at": null,
       "updated_at": null
