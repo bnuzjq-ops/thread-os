@@ -30,6 +30,7 @@ class WorkflowContractTests(unittest.TestCase):
         text = (WORKFLOW_ROOT / "reply-dispatch.yml").read_text(encoding="utf-8")
         self.assertIn("REPLY_DRY_RUN", text)
         self.assertIn("CLIENT_PAYLOAD_JSON", text)
+        self.assertIn("if: github.event_name == 'repository_dispatch'", text)
 
     def test_reply_monitor_uses_repository_dispatch_after_scheduler_cutover(self) -> None:
         text = (WORKFLOW_ROOT / "reply-monitor.yml").read_text(encoding="utf-8")
