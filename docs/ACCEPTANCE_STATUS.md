@@ -58,9 +58,10 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 
 - Feishu review card: PASS. Run `29223845054` created a real review card; task `reply:18080707790256878` is `awaiting_review` with a saved `feishu_message_id`.
 - DeepSeek independent draft: PASS. The same task contains a generated draft and has not been sent to Threads.
-- Feishu callback and GitHub dispatch: BLOCKED. The deployed Worker currently has no configured Secrets (`FEISHU_VERIFICATION_TOKEN` and `GITHUB_PAT` are absent), so button callbacks return `HTTP 500` and Feishu reports `200671`.
+- Feishu callback and GitHub dispatch: PASS for `skip`. The live callback now reaches GitHub dispatch; the earlier `200671` was caused by stale/missing Worker configuration and is retained only as historical evidence.
 - Real Threads reply: BLOCKED. The task has no `reply_id`;解除条件是完成 Worker Secret 配置后点击一次 `send`，并观察 `reply-dispatch`、Threads 回复和状态回写。
 - Local verification: PASS. Python tests: 81; Worker tests: 6.
+- Latest live callback verification: PASS. Runs `29226259880`, `29226261576`, and `29226273680` completed successfully; the task reached `skipped` with `last_error=skip_requested`, proving Feishu -> Worker -> GitHub dispatch -> reply state handling. No Threads reply was attempted.
 
 ## Latest Live Evidence
 
