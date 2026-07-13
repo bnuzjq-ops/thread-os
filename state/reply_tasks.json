@@ -1030,7 +1030,7 @@
     "reply:18080707790256878": {
       "reply_task_id": "reply:18080707790256878",
       "comment_id": "18080707790256878",
-      "status": "awaiting_review",
+      "status": "skipped",
       "media_id": "",
       "draft": "你好！感谢你的留言，请问有什么可以帮你的吗？",
       "draft_version": 6,
@@ -1041,7 +1041,7 @@
       "claimed_at": null,
       "lease_until": null,
       "claimed_by": null,
-      "last_error": null,
+      "last_error": "skip_requested",
       "requires_manual_check": false,
       "created_at": null,
       "updated_at": null
