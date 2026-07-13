@@ -56,6 +56,65 @@
 - 不要重复试错同一条路径
 - 保留错误输出和复现步骤
 
+### publishing 长期卡住
+
+任务卡在 `publishing` 状态说明 `claim_publish()` 执行了但 `complete_publish()` 未完成（进程崩溃、网络中断等）。恢复步骤：
+
+1. 检查 Threads 页面是否实际产生了新帖子
+2. **如果有新帖**：记下 Threads post ID，手动编辑 `state/publish_tasks.json`，将该任务状态改为 `published`，填入 `platform_post_id`，并更新 `updated_at` 时间戳
+3. **如果没有新帖**：手动将状态改回 `ready`，next run 会重新选取
+4. 千万**不要**手动重发——如果 Threads 已经有内容但你没找到，会产生重复帖
+
+### sending 长期卡住
+
+任务卡在 `sending` 状态：`claim_send()` 执行了但 `complete_send()` 未完成。恢复步骤：
+
+1. 检查 Threads 帖子的回复区，确认是否已出现该条回复
+2. **如果已回复**：记下 Threads reply_id，手动编辑 `state/reply_tasks.json`，将该任务状态改为 `sent`，填入 `reply_id`，更新时间戳
+3. **如果没有回复**：将状态改回 `awaiting_review`，飞书审核卡片仍然有效，可重新点击 send
+4. **如果无法确定**：标记为 `unknown`，等对账确认
+
+### Threads 成功但 JSON 未更新（补记）
+
+如果 Threads 侧已经有了帖子或回复，但 JSON 中的状态未同步：
+
+1. 从对应 workflow run 下载 `*-state-recovery-*` artifact（保留 7 天）
+2. 打开 artifact 中的 `state/publish_tasks.json` 或 `state/reply_tasks.json`，找到对应任务记录
+3. **发布补记**：将 `status` 改为 `published`，填入 `platform_post_id` 和 Threads 链接
+4. **回复补记**：将 `status` 改为 `sent`，填入 `reply_id`
+5. 手动 commit 更新后的 JSON 到仓库
+6. 不要删除原始 recovery artifact——它记录了补记之前的状态
+
+### Token 更新
+
+Token 更新不会导致重复发布或回复，因为状态机通过以下机制保证幂等：
+
+- `published` 状态的任务不会被重新选取（`_select_tasks()` 只选 `ready`）
+- `sent` 状态的任务在 dispatch 入口直接返回（`execute_reply_dispatch()` 显式短路）
+- `claim_send()` 要求状态为 `awaiting_review` 且 `draft_version` 匹配
+- `claim_publish()` 要求状态为 `ready`
+
+更新 Token 的步骤：
+
+1. 在 GitHub Settings → Secrets 中更新对应 Secret
+2. 如果是 Threads Token（`THREADS_ACCESS_TOKEN`）：观察下一个 schedule run，确认 `comments` 正常返回
+3. 如果是 GitHub PAT（`GITHUB_PAT`）：触发一次 `workflow_dispatch` 验证
+4. JSON 状态**不需要**任何修改
+
+### Git 冲突处理
+
+如果 workflow 的 commit push 与手动 commit 产生冲突：
+
+1. 冲突只可能发生在 `state/*.json` 文件上
+2. 解决步骤：
+   a. `git pull origin main` 获取最新状态
+   b. 查看冲突文件：两个版本中哪个 `updated_at` 更新的保留，另一个是旧状态
+   c. 对于 `state/reply_tasks.json`：合并两个版本的 `tasks` 字典，保留 `updated_at` 更晚的每个任务版本
+   d. 对于 `state/publish_tasks.json`：同上
+   e. 对于 `state/reply_monitor_cursor.json`：保留时间戳更新的版本
+3. 解决后 `git add` + `git commit` + `git push`
+4. 如果无法自行判断：下载对应 workflow run 的 recovery artifact 作为参考
+
 ## JSON MVP 验证
 
 ```text

@@ -26,7 +26,8 @@
 - 已建立 Git 历史
 - 已有 Python 核心、单元测试和 Feishu 回调桥源码
 - 已接入 DeepSeek 草稿生成入口、GitHub dispatch 执行入口和回复任务状态文件
-- 本地 JSON 闭环已通过，仍未完成外部平台配置和首次真实联调
+- 发布链路已真实验证：Threads post `18060289736735869` ([permalink](https://www.threads.com/@jq.sifu/post/DasjI8XETAR))
+- 回复链路已真实验证：reply_id `17988946037829563`，workflow `29227348273`
 
 ## 下一步
 

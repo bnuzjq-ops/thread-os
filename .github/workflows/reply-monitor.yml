@@ -79,7 +79,14 @@ jobs:
           state = json.loads(Path("state/reply_tasks.json").read_text(encoding="utf-8"))
           for task in state.get("tasks", {}).values():
               if task.get("status") in {"failed", "unknown"}:
-                  print(f"- Task: `{task.get('reply_task_id')}`; comment: `{task.get('comment_id')}`; status: `{task.get('status')}`; error: {task.get('last_error')}")
+                  print(f"- Task: `{task.get('reply_task_id')}`")
+                  print(f"  - Comment: `{task.get('comment_id')}`")
+                  print(f"  - Status: `{task.get('status')}`")
+                  print(f"  - Phase: {task.get('error_phase', 'unknown')}")
+                  print(f"  - Error: {task.get('last_error')}")
+                  print(f"  - External action: {task.get('external_action', False)}")
+                  print(f"  - Retry allowed: {task.get('retry_allowed', False)}")
+                  print(f"  - Recovery: {task.get('recovery_action', 'manual')}")
           PY
           fi
 
