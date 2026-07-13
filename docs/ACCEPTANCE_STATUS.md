@@ -71,8 +71,8 @@ current remote `main` at commit `51bba75`.
 | Worker signature and callback contract | PASS | `tests/reply_worker.test.mjs` |
 | State Worker atomic claim contract | PASS | `worker/state-service/test/index.test.mjs` |
 | Feishu review card | PASS | Live review card run `29223845054`; persisted `feishu_message_id` |
-| Feishu callback and GitHub dispatch | PASS (skip path) | Live runs `29226259880`, `29226261576`, `29226273680` |
-| Real Threads reply | NOT_TESTED (3-reply gate) | One controlled real reply is verified; three are required for final acceptance |
+| Feishu callback and GitHub dispatch | PASS | Live skip path runs `29226259880`, `29226261576`, `29226273680`; current-baseline four-button verification remains listed above |
+| Real Threads reply | NOT_TESTED | One controlled real reply is verified; three are required for final acceptance |
 
 ## Current Boundary
 
@@ -84,7 +84,7 @@ current remote `main` at commit `51bba75`.
 - Real Threads reply: BLOCKED. The task has no `reply_id`;解除条件是完成 Worker Secret 配置后点击一次 `send`，并观察 `reply-dispatch`、Threads 回复和状态回写。
 - Local verification: PASS. Python tests: 83; Worker tests: 6.
 - Latest live callback verification: PASS. Runs `29226259880`, `29226261576`, and `29226273680` completed successfully; the task reached `skipped` with `last_error=skip_requested`, proving Feishu -> Worker -> GitHub dispatch -> reply state handling. No Threads reply was attempted.
-- Safe reply dry-run entry: PASS (code). `reply-monitor.yml` now accepts a manual `dry_run` input, persists the flag on new tasks, and dispatch enforces the persisted flag before any Threads call; tests cover the path. Live dry-run receipt remains NOT_TESTED.
+- Safe reply dry-run entry: PASS. `reply-monitor.yml` accepts a manual `dry_run` input, persists the flag on new tasks, and dispatch enforces the persisted flag before any Threads call; tests cover the path. Live dry-run receipt remains NOT_TESTED.
 
 ## Latest Live Evidence
 
