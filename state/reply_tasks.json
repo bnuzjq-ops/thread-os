@@ -989,6 +989,25 @@
       "created_at": null,
       "updated_at": null
     },
+    "reply:18072703361378272": {
+      "reply_task_id": "reply:18072703361378272",
+      "comment_id": "18072703361378272",
+      "status": "awaiting_review",
+      "media_id": "",
+      "draft": "谢谢您的认可！我们会继续努力分享更多有价值的内容。",
+      "draft_version": 1,
+      "draft_source": "",
+      "feishu_message_id": "om_x100b6a7fc7dcb4acdfdac9e90f3c2bd",
+      "reply_id": null,
+      "dry_run": false,
+      "claimed_at": null,
+      "lease_until": null,
+      "claimed_by": null,
+      "last_error": null,
+      "requires_manual_check": false,
+      "created_at": null,
+      "updated_at": null
+    },
     "reply:18075534812328795": {
       "reply_task_id": "reply:18075534812328795",
       "comment_id": "18075534812328795",
