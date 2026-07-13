@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: threads-publish-state
+  group: thread-os-state-write
   cancel-in-progress: false
 
 jobs:
@@ -38,64 +38,30 @@ jobs:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
           PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
           PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
         run: |
           set -euo pipefail
-          mapfile -d '' sources < <(
-            grep -rlZ --include='*.md' \
-              -e '^platform:[[:space:]]*threads[[:space:]]*$' \
-              -e '^status:[[:space:]]*ready[[:space:]]*$' \
-              content-repo
-          )
-          for source in "${sources[@]}"; do
-            if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
-               grep -q '^status:[[:space:]]*ready[[:space:]]*$' "$source"; then
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            source="$(python -m threads_bot_system select-scheduled-source content-repo/posts/queue)"
+            if [ -n "$source" ]; then
               python -m threads_bot_system publish --source "$source"
+            else
+              echo "No scheduled source is due."
             fi
-          done
-
-      - name: Verify published Threads posts
-        env:
-          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          from urllib.parse import urlencode
-          from urllib.request import urlopen
-
-          state_path = os.environ["THREADS_PUBLISH_STORE_PATH"]
-          state = json.load(open(state_path, encoding="utf-8"))
-          tasks = state.get("tasks", {})
-          published = [
-              task for task in tasks.values()
-              if task.get("status") == "published" and task.get("post_id")
-          ]
-          if not published:
-              print("No published post IDs to verify.")
-              raise SystemExit(0)
-
-          for task in published:
-              post_id = task["post_id"]
-              query = urlencode({
-                  "fields": "id,username,permalink,text",
-                  "access_token": os.environ["THREADS_ACCESS_TOKEN"],
-              })
-              url = f"https://graph.threads.net/v1.0/{post_id}?{query}"
-              with urlopen(url, timeout=30) as response:
-                  payload = json.load(response)
-              print(json.dumps({
-                  "content_id": task.get("source_key"),
-                  "post_id": payload.get("id"),
-                  "username": payload.get("username"),
-                  "permalink": payload.get("permalink"),
-                  "text": payload.get("text"),
-              }, ensure_ascii=False))
-          PY
+          else
+            for source in content-repo/posts/queue/*.md; do
+              [ -f "$source" ] || continue
+              if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
+                 grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source"; then
+                python -m threads_bot_system publish --source "$source"
+              fi
+            done
+          fi
 
       - name: Commit publish task state
+        if: always()
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
@@ -108,3 +74,33 @@ jobs:
           git add state/publish_tasks.json
           git commit -m "Update publish task state"
           git push origin "HEAD:${BRANCH_NAME}"
+
+      - name: Publish failure summary
+        if: failure()
+        run: |
+          {
+            echo "## Threads publish failure"
+            echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "- Event: ${GITHUB_EVENT_NAME}"
+            echo "- State file: state/publish_tasks.json"
+            echo "- Automatic retry: disabled; inspect the task's error_type and last_error before manual recovery."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -f state/publish_tasks.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          state = json.loads(Path("state/publish_tasks.json").read_text(encoding="utf-8"))
+          for task in state.get("tasks", {}).values():
+              if task.get("status") in {"failed", "unknown"}:
+                  print(f"- Task: `{task.get('publish_task_id')}`; phase: `{task.get('error_phase')}`; type: `{task.get('error_type')}`; external action: `{task.get('external_action')}`; retry allowed: `{task.get('retry_allowed')}`; recovery: {task.get('recovery_action')}")
+          PY
+          fi
+
+      - name: Upload publish state recovery artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-state-recovery-${{ github.run_id }}
+          path: state/publish_tasks.json
+          if-no-files-found: warn
+          retention-days: 7

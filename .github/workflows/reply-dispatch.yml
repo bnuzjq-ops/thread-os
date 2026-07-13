@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: threads-reply-state
+  group: thread-os-state-write
   cancel-in-progress: false
 
 jobs:
@@ -28,6 +28,7 @@ jobs:
       - name: Execute reply dispatch
         env:
           CLIENT_PAYLOAD_JSON: ${{ toJson(github.event.client_payload) }}
+          REPLY_DRY_RUN: ${{ github.event.client_payload.dry_run == true && '1' || '0' }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_STORE_PATH: state/reply_tasks.json
@@ -37,6 +38,7 @@ jobs:
         run: python -m threads_bot_system dispatch
 
       - name: Commit reply task state
+        if: always()
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
@@ -49,3 +51,32 @@ jobs:
           git add state/reply_tasks.json
           git commit -m "Update reply task state"
           git push origin "HEAD:${BRANCH_NAME}"
+
+      - name: Reply dispatch failure summary
+        if: failure()
+        run: |
+          {
+            echo "## Threads reply dispatch failure"
+            echo "- Workflow run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "- State file: state/reply_tasks.json"
+            echo "- Automatic retry: disabled; verify the task status before manual recovery."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -f state/reply_tasks.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          state = json.loads(Path("state/reply_tasks.json").read_text(encoding="utf-8"))
+          for task in state.get("tasks", {}).values():
+              if task.get("status") in {"failed", "unknown"}:
+                  print(f"- Task: `{task.get('reply_task_id')}`; comment: `{task.get('comment_id')}`; status: `{task.get('status')}`; error: {task.get('last_error')}")
+          PY
+          fi
+
+      - name: Upload reply state recovery artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reply-dispatch-state-recovery-${{ github.run_id }}
+          path: state/reply_tasks.json
+          if-no-files-found: warn
+          retention-days: 7

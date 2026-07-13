@@ -1,0 +1,39 @@
+name: Verify DeepSeek Draft
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Call DeepSeek without external posting
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL }}
+          DEEPSEEK_BASE_URL: ${{ vars.DEEPSEEK_BASE_URL }}
+        run: |
+          python - <<'PY'
+          import os
+          from threads_bot_system.deepseek_api import DeepSeekClient
+          from threads_bot_system.reply_flow import prepare_reply_intake
+
+          client = DeepSeekClient(
+              api_key=os.environ["DEEPSEEK_API_KEY"],
+              model=os.environ.get("DEEPSEEK_MODEL") or "deepseek-v4-flash",
+              base_url=os.environ.get("DEEPSEEK_BASE_URL") or "https://api.deepseek.com",
+          )
+          intake = prepare_reply_intake("deepseek-independent-smoke", "请用一句话说明这条测试评论。")
+          draft = client.generate_reply_draft(intake)
+          if not draft.text.strip():
+              raise SystemExit("DeepSeek returned an empty draft")
+          print({"model": client.model, "draft_length": len(draft.text), "external_post": False})
+          PY
