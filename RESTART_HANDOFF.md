@@ -26,6 +26,14 @@ Read, in order:
 
 ## Remaining External Actions
 
+## Current Baseline Override (2026-07-13)
+
+- Current remote `main`: `db17bc8`; local worktree was clean at baseline.
+- Current code tests: Python 85 passed; Worker 8 passed.
+- Current Worker deployment is Cloudflare version `2af1ef1c-24ec-4b56-9f4c-e31771399257`, but Cloudflare reports no git SHA, so deployment identity remains `NOT_TESTED`.
+- `rewrite` has been implemented to regenerate a draft and send a new card; it needs a fresh live card for verification.
+- The previous live `send` failed with `Media Not Found`; the old task must not be retried.
+
 - Live Feishu/dispatch dry-run needs explicit approval because it sends a real Feishu receipt.
 - Three-post real publish acceptance needs explicit approval because it creates real Threads posts.
 - Real reply acceptance is blocked until a new unprocessed comment exists.

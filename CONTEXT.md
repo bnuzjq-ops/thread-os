@@ -27,6 +27,15 @@
 
 ## Current Acceptance Boundary
 
+## Current Baseline Override (2026-07-13)
+
+- Remote `main` and local development branch are both `db17bc8`; worktree is clean.
+- Python tests: 85 passed. Worker tests: 8 passed.
+- Worker health is HTTP 200, but deployed version `2af1ef1c-24ec-4b56-9f4c-e31771399257` has no git SHA metadata, so code-to-deployment identity is `NOT_TESTED`.
+- `rewrite` now persists comment text, calls DeepSeek again, increments `draft_version`, and sends a new review card in code; live verification is still `NOT_TESTED`.
+- The last live `send` failed with Threads `Media Not Found`; do not retry that terminal task.
+- A fresh comment is required to verify the current `send`, `rewrite`, `skip`, and `status` paths.
+
 - Live Feishu/dispatch dry-run: `NOT_TESTED`; it sends a real Feishu test receipt.
 - Continuous three-post real acceptance: `NOT_TESTED`; it requires real Threads publishing.
 - Real reply end to end: `BLOCKED` by `no_new_real_comment`.

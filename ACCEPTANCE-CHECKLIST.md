@@ -8,7 +8,7 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 | --- | --- | --- |
 | Group A — Auto-trigger | PASS | schedule + workflow_dispatch + repository_dispatch in reply-monitor.yml; offset cron avoids round minutes; Cloudflare Cron removed; trigger_source logged |
 | Group B — JSON concurrency & idempotency | PASS | 12/12 code review pass; shared concurrency group; claim-once; stale-version reject; terminal states not retried |
-| Group C — Publish real acceptance | PARTIAL | Code review 8/9 PASS; C9 (3 continuous real posts) needs human execution |
+| Group C — Publish real acceptance | NOT_TESTED | Code review items are covered; C9 (3 continuous real posts) needs current-baseline human execution |
 | Group D — Comment monitor | PASS | 10/10 code review pass; pagination; dedup; self-reply filter; untrusted-input segregation |
 | Group E — DeepSeek draft | PASS | 9/9 pass after fixes; max_draft_chars truncation; no template fallback; 401/403 alerts |
 | Group F — Feishu review & Worker | PASS | 12/12 code review pass; 4 button payloads correct; signature verification; Worker pure relay |

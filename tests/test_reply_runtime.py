@@ -329,6 +329,34 @@ class ReplyRuntimeTests(unittest.TestCase):
 
             self.assertEqual(feishu_client.cards, ["Threads 回复已发送：reply-1"])
 
+    def test_execute_reply_dispatch_rewrite_generates_and_sends_new_card(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "reply_tasks.json"
+            store = JsonTaskStore.load(store_path)
+            task = new_reply_task(
+                "comment-rewrite",
+                media_id="media-1",
+                comment_text="Please explain this choice",
+            )
+            task = mark_awaiting_review(mark_drafted(task, "old draft"), "msg-1")
+            store.upsert(task)
+            store.save()
+            feishu_client = FakeFeishuClient()
+
+            updated = execute_reply_dispatch(
+                {"action": "rewrite", "reply_task_id": task.reply_task_id},
+                FakeThreadsClient([]),
+                store_path,
+                feishu_client=feishu_client,
+                deepseek_client=FakeDeepSeekClient(),
+            )
+
+            self.assertEqual(updated.status, ReplyTaskStatus.AWAITING_REVIEW)
+            self.assertEqual(updated.draft, "Generated draft text")
+            self.assertEqual(updated.draft_version, 2)
+            self.assertEqual(updated.feishu_message_id, "msg-1")
+            self.assertEqual(len(feishu_client.cards), 1)
+
     def test_execute_reply_dispatch_dry_run_never_calls_threads(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"

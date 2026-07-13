@@ -2,6 +2,25 @@
 
 This document records verified evidence only. `PASS` requires a runtime or test artifact.
 
+## Current Baseline Override (2026-07-13)
+
+This section supersedes older run references below when they conflict with the
+current remote `main` at commit `db17bc8`.
+
+| Current item | Status | Evidence |
+| --- | --- | --- |
+| Python implementation tests | PASS | `python -m unittest discover -s tests -q`: 85 tests passed |
+| Worker implementation tests | PASS | `node --test tests/reply_worker.test.mjs`: 8 tests passed |
+| Worker health endpoint | PASS | `https://jqxblue.cc/health` returned HTTP 200 and `ok` |
+| Worker deployed version matches current git SHA | NOT_TESTED | Cloudflare reports version `2af1ef1c-24ec-4b56-9f4c-e31771399257` with `Source: Unknown`; no git SHA evidence |
+| Feishu callback response contract | PASS | `reply_worker.mjs` returns the acceptance toast and dispatches via `waitUntil`; live four-button verification remains NOT_TESTED |
+| Rewrite regenerates a draft and creates a new review card | PASS | Added task comment persistence, DeepSeek rewrite path, draft-version increment, and focused runtime test |
+| Live `send` on a fresh task | NOT_TESTED | Previous live send failed with Threads `Media Not Found`; requires a new comment/task after current `main` is active |
+| Live `rewrite` on a fresh task | NOT_TESTED | Current code fix is not yet exercised by a new Feishu card |
+| Live `skip` on a fresh task | NOT_TESTED | Historical skip runs are retained below but are not current-baseline evidence |
+| Live `status` on a fresh task | NOT_TESTED | No current-baseline run evidence |
+| Real reply final acceptance | BLOCKED | Requires a fresh unprocessed comment and controlled live send; no automatic retry of the failed task |
+
 ## Publish Lane
 
 | Item | Status | Evidence |

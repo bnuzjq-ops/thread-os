@@ -27,6 +27,7 @@ class ReplyTask:
     comment_id: str
     status: ReplyTaskStatus
     media_id: str = ""
+    comment_text: str = ""
     draft: str = ""
     draft_version: int = 0
     draft_source: str = ""
@@ -47,12 +48,18 @@ def reply_task_id_for(comment_id: str) -> str:
     return f"reply:{comment_id}"
 
 
-def new_reply_task(comment_id: str, media_id: str = "", dry_run: bool = False) -> ReplyTask:
+def new_reply_task(
+    comment_id: str,
+    media_id: str = "",
+    dry_run: bool = False,
+    comment_text: str = "",
+) -> ReplyTask:
     """Create a fresh reply task record."""
     return ReplyTask(
         reply_task_id=reply_task_id_for(comment_id),
         comment_id=comment_id,
         status=ReplyTaskStatus.DETECTED,
         media_id=media_id,
+        comment_text=comment_text,
         dry_run=dry_run,
     )

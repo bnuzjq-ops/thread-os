@@ -130,9 +130,18 @@ def run_reply_monitor(
             continue
 
         if dry_run:
-            created = store.create_task(intake.comment_id, intake.media_id, dry_run=True)
+            created = store.create_task(
+                intake.comment_id,
+                intake.media_id,
+                dry_run=True,
+                comment_text=intake.text,
+            )
         else:
-            created = store.create_task(intake.comment_id, intake.media_id)
+            created = store.create_task(
+                intake.comment_id,
+                intake.media_id,
+                comment_text=intake.text,
+            )
         if _should_skip_monitor_refresh(created.task):
             continue
 
@@ -172,6 +181,7 @@ def execute_reply_dispatch(
     threads_client: ThreadsApiClient,
     store_path: TaskStore | str | Path,
     feishu_client: FeishuClient | None = None,
+    deepseek_client: DeepSeekClient | None = None,
     dry_run: bool = False,
 ) -> ReplyTask:
     """Execute a repository_dispatch payload produced by the Feishu callback worker."""
@@ -197,8 +207,26 @@ def execute_reply_dispatch(
         return _persist_local_task_update(store, updated)
 
     if action == "rewrite":
+        if deepseek_client is None:
+            raise RuntimeError("DeepSeek client is required for rewrite")
+        if not task.comment_text.strip():
+            raise ValueError(f"Reply task {reply_task_id} has no stored comment text")
+        intake = prepare_reply_intake(
+            task.comment_id,
+            task.comment_text,
+            media_id=task.media_id,
+        )
+        draft = deepseek_client.generate_reply_draft(intake)
         updated = mark_rewrite_requested(task, "rewrite_requested")
-        return _persist_local_task_update(store, updated)
+        updated = mark_drafted(updated, draft.text)
+        updated = _persist_local_task_update(store, updated)
+        if feishu_client is not None:
+            packet = build_reply_review_packet(intake, draft)
+            card = build_reply_card(packet)
+            if card is not None:
+                message_id = feishu_client.send_review_card(card)
+                updated = store.save_feishu_message(reply_task_id, message_id)
+        return updated
 
     if action != "send":
         raise ValueError(f"Unsupported reply action: {action}")
