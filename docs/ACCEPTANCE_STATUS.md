@@ -24,7 +24,7 @@ current remote `main` at commit `b0c7060`.
 | Live `status` on a fresh task | NOT_TESTED | No current-baseline run evidence |
 | Real reply final acceptance | BLOCKED | Requires a fresh unprocessed comment and controlled live send; no automatic retry of the failed task |
 | Independent scheduler implementation | PASS | `reply_scheduler_worker.mjs`; `node --test tests/reply_scheduler_worker.test.mjs` |
-| Independent scheduler natural Cron | PASS | GitHub schedule is disabled; latest consecutive natural Cron runs succeeded: `29250771956`, `29251090394`, `29251406346`, `29251736636`, `29252075706` |
+| Independent scheduler natural Cron | PASS | GitHub schedule is disabled; scheduler deployment `69a00160-4f8d-4770-a950-7b9ffe6a9441` is configured for `*/5 * * * *`; latest consecutive repository-dispatch runs succeeded: `29250771956`, `29251090394`, `29251406346`, `29251736636`, `29252075706`, `29252411427`, `29252755865` |
 | Scheduler cutover safety | PASS | `wrangler.scheduler.toml` is isolated; current GitHub schedule remains the only active scheduler |
 | Reply monitor state writeback after remote rebase | PASS | Natural Cron run `29250464850` used merged commit `e0ba683`, completed successfully, and committed state as `255613a`; latest monitor run `29252755865` on `b0c7060` also completed successfully |
 
