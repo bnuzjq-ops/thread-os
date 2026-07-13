@@ -1,5 +1,22 @@
 # Acceptance Status
 
+## Menu Exit Override (2026-07-13)
+
+This section supersedes older card-route claims for the current menu relink goal.
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Remote baseline aligned | PASS | `e59559a`, local `HEAD...origin/main` is `0 0`, clean worktree |
+| Worker forwards `application.bot.menu_v6` | PASS | `reply_worker.mjs`, focused Worker test, existing Worker deployment |
+| GitHub dispatch event type | PASS | Worker sends `threads_reply_action`; workflow listens for the same type |
+| Reply Dispatch YAML validity | PASS | `js-yaml` parse; invalid trace step fixed at `da60ddd` |
+| CLI safe menu handlers | PASS | `system_health` and `review_next` implemented; Python suite `98 passed` |
+| Menu event idempotency | PASS | `operator_state.json` stores processed `event_id`; duplicate events do not re-execute |
+| Live `system_health` menu exit | NOT_TESTED | Requires one real Feishu menu click and matching GitHub run/private receipt |
+| Live `review_next` menu exit | NOT_TESTED | Requires successful `system_health` baseline first |
+| Live `rewrite` menu exit | NOT_TESTED | Requires an active `awaiting_review` task |
+| Live `send` and Threads reply | BLOCKED_REAL_ACTION | Requires user-controlled real send and a fresh active review task |
+
 This document records verified evidence only. `PASS` requires a runtime or test artifact.
 
 ## Current Baseline Override (2026-07-13)

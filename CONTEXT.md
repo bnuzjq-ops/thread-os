@@ -1,5 +1,18 @@
 # Current Context
 
+## Menu Exit Override (2026-07-13)
+
+- Current remote `main` is `e59559a`; local branch is aligned with `origin/main` and the worktree is clean.
+- The current Feishu menu route is `application.bot.menu_v6` -> `threads-reply-worker` -> `repository_dispatch` (`threads_reply_action`) -> `Reply Dispatch` -> CLI.
+- Worker menu forwarding is deployed in the existing Worker; no second Worker was created.
+- `Reply Dispatch` YAML was fixed at `da60ddd`; the previous `push` workflow-file failures had no jobs and were caused by invalid YAML, not a menu event.
+- CLI menu handlers now cover `system_health`, `review_next`, `action_rewrite`, `action_skip`, and `action_send`.
+- `operator_state.json` persists per-user active task selection and processed menu `event_id` values for idempotency.
+- Local evidence: Python tests `98 passed`; Worker tests `9 passed`; reply-dispatch YAML parses successfully.
+- Online menu end-to-end evidence is still `NOT_TESTED`: no new `application.bot.menu_v6` GitHub run has been observed.
+- Required first external verification: click Feishu `审核 -> 系统状态`; this is read-only and must return an ordinary private message.
+- Do not treat Worker `/health` or a green code test as proof of the menu exit chain.
+
 ## Repository Boundaries
 
 - `C:\jq\OBS\Threads`: local Obsidian content production.
