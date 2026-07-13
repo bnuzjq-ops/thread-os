@@ -269,7 +269,14 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   );
 
   if (!verification.ok) {
-    logCallback({status: verification.status, verification: 'rejected'});
+    logCallback({
+      status: verification.status,
+      verification: 'rejected',
+      event_type: typeof payload?.header?.event_type === 'string'
+        ? payload.header.event_type
+        : 'missing',
+      has_menu_event_key: typeof payload?.event?.event_key === 'string',
+    });
     return jsonResponse({ error: verification.error }, verification.status);
   }
 
