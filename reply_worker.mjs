@@ -198,6 +198,13 @@ async function dispatchToGithub({ fetchImpl, repo, pat, eventType, payload }) {
 }
 
 export async function handleFeishuCallback(request, env = {}, runtime = {}) {
+  const startedAt = Date.now();
+  const log = runtime.log ?? ((entry) => console.info(JSON.stringify(entry)));
+  const logCallback = (entry) => log({
+    event: 'feishu_callback',
+    ...entry,
+    response_ms: Date.now() - startedAt,
+  });
   const url = new URL(request.url);
   const pathname = normalizePathname(url.pathname);
 
@@ -229,15 +236,18 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   );
 
   if (!verification.ok) {
+    logCallback({status: verification.status, verification: 'rejected'});
     return jsonResponse({ error: verification.error }, verification.status);
   }
 
   if (payload?.challenge) {
+    logCallback({status: 200, type: 'challenge'});
     return jsonResponse({ challenge: payload.challenge });
   }
 
   const actionValue = extractActionValue(payload);
   if (!actionValue) {
+    logCallback({status: 400, type: 'missing_action'});
     return jsonResponse({ error: 'missing action value' }, 400);
   }
 
@@ -280,17 +290,28 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
 
   if (runtime.ctx?.waitUntil) {
     runtime.ctx.waitUntil(
-      dispatchPromise.catch(() => {
+      dispatchPromise.then(() => {
+        logCallback({action: action.command, task_id: action.taskId, dispatch: 'accepted'});
+      }).catch(() => {
         console.error('github_dispatch_error: dispatch failed');
+        logCallback({action: action.command, task_id: action.taskId, dispatch: 'failed'});
       }),
     );
+    logCallback({
+      status: 200,
+      action: action.command,
+      task_id: action.taskId,
+      dispatch: 'background',
+    });
     return jsonResponse(FEISHU_SUCCESS_TOAST);
   }
 
   try {
     await dispatchPromise;
+    logCallback({status: 200, action: action.command, task_id: action.taskId, dispatch: 'accepted'});
   } catch (error) {
     console.error('github_dispatch_error: dispatch failed');
+    logCallback({status: 200, action: action.command, task_id: action.taskId, dispatch: 'failed'});
     return jsonResponse(feishuErrorToast('GitHub 任务转发失败，请检查 Worker 配置'));
   }
 

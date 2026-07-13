@@ -75,6 +75,7 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
   });
 
   const requests = [];
+  const logs = [];
   const fetchImpl = async (url, init) => {
     requests.push({ url, init });
     return new Response(null, { status: 204 });
@@ -97,7 +98,7 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
       GITHUB_PAT: 'github-pat',
       GITHUB_REPO: 'bnuzjq-ops/thread-os',
     },
-    { fetch: fetchImpl },
+    { fetch: fetchImpl, log: (entry) => logs.push(entry) },
   );
 
   assert.equal(response.status, 200);
@@ -136,6 +137,11 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
       task_kind: 'reply',
     },
   });
+  assert.equal(logs.at(-1).event, 'feishu_callback');
+  assert.equal(logs.at(-1).action, 'send');
+  assert.equal(logs.at(-1).task_id, 'reply:comment-2');
+  assert.equal(logs.at(-1).dispatch, 'accepted');
+  assert.equal(typeof logs.at(-1).response_ms, 'number');
 });
 
 test('handleFeishuCallback returns before GitHub dispatch completes', async () => {
