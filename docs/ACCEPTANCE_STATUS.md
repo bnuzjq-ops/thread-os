@@ -54,6 +54,14 @@ This document records verified evidence only. `PASS` requires a runtime or test 
 
 ## Current Boundary
 
+## Live Audit 2026-07-13
+
+- Feishu review card: PASS. Run `29223845054` created a real review card; task `reply:18080707790256878` is `awaiting_review` with a saved `feishu_message_id`.
+- DeepSeek independent draft: PASS. The same task contains a generated draft and has not been sent to Threads.
+- Feishu callback and GitHub dispatch: BLOCKED. The deployed Worker currently has no configured Secrets (`FEISHU_VERIFICATION_TOKEN` and `GITHUB_PAT` are absent), so button callbacks return `HTTP 500` and Feishu reports `200671`.
+- Real Threads reply: BLOCKED. The task has no `reply_id`;解除条件是完成 Worker Secret 配置后点击一次 `send`，并观察 `reply-dispatch`、Threads 回复和状态回写。
+- Local verification: PASS. Python tests: 81; Worker tests: 6.
+
 ## Latest Live Evidence
 
 - Feishu review card: PASS. GitHub Actions run `29223845054` reached success; task `reply:18080707790256878` is `awaiting_review` and has a saved Feishu message ID.
