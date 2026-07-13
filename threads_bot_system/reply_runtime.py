@@ -200,6 +200,12 @@ def execute_reply_dispatch(
     dry_run = dry_run or task.dry_run
 
     if action == "status":
+        _update_review_card(
+            feishu_client,
+            task,
+            "任务状态",
+            f"status: `{task.status.value}`\\ndraft_version: `{task.draft_version}`",
+        )
         return task
 
     if action == "skip":
