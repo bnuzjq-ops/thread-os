@@ -22,9 +22,13 @@ class ReplyCardPayload:
     title: str
     body: str
     actions: list[ReplyCardAction]
+    draft_version: int | None = None
 
 
-def build_reply_card(packet: ReplyReviewPacket | None) -> ReplyCardPayload | None:
+def build_reply_card(
+    packet: ReplyReviewPacket | None,
+    draft_version: int | None = None,
+) -> ReplyCardPayload | None:
     """Build a card payload from a review packet."""
     if packet is None:
         return None
@@ -35,4 +39,9 @@ def build_reply_card(packet: ReplyReviewPacket | None) -> ReplyCardPayload | Non
         ReplyCardAction(label="跳过", value=f"skip:{packet.task_id}"),
         ReplyCardAction(label="状态", value=f"status:{packet.task_id}"),
     ]
-    return ReplyCardPayload(title=packet.title, body=packet.body, actions=actions)
+    return ReplyCardPayload(
+        title=packet.title,
+        body=packet.body,
+        actions=actions,
+        draft_version=draft_version,
+    )

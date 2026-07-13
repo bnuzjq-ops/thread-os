@@ -142,6 +142,12 @@ class FeishuClient:
         actions: list[dict[str, object]] = []
         for action in payload.actions:
             command, reply_task_id = action.value.split(":", 1)
+            callback_value: dict[str, object] = {
+                "action": command,
+                "reply_task_id": reply_task_id,
+            }
+            if payload.draft_version is not None:
+                callback_value["draft_version"] = payload.draft_version
             actions.append(
                 {
                     "tag": "button",
@@ -155,7 +161,7 @@ class FeishuClient:
                     "behaviors": [
                         {
                             "type": "callback",
-                            "value": {"action": command, "reply_task_id": reply_task_id},
+                            "value": callback_value,
                         }
                     ],
                 }

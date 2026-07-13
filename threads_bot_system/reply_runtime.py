@@ -157,7 +157,7 @@ def run_reply_monitor(
             continue
 
         drafted = store.save_draft(created.task.reply_task_id, draft.text)
-        card = build_reply_card(packet)
+        card = build_reply_card(packet, drafted.draft_version)
         if card is None:
             continue
 
@@ -199,6 +199,10 @@ def execute_reply_dispatch(
     # by omitting or altering the callback payload flag.
     dry_run = dry_run or task.dry_run
 
+    requested_version = _optional_int(client_payload.get("draft_version"))
+    if requested_version is not None and requested_version != task.draft_version:
+        return task
+
     if action == "status":
         _update_review_card(
             feishu_client,
@@ -230,7 +234,7 @@ def execute_reply_dispatch(
         updated = _persist_local_task_update(store, updated)
         if feishu_client is not None:
             packet = build_reply_review_packet(intake, draft)
-            card = build_reply_card(packet)
+            card = build_reply_card(packet, updated.draft_version)
             if card is not None:
                 if updated.feishu_message_id and hasattr(feishu_client, "update_review_card"):
                     feishu_client.update_review_card(
@@ -252,7 +256,7 @@ def execute_reply_dispatch(
     if not task.draft.strip():
         raise ValueError(f"Reply task {reply_task_id} does not have a draft")
 
-    claim = store.claim_send(reply_task_id, task.draft_version)
+    claim = store.claim_send(reply_task_id, requested_version or task.draft_version)
     if not claim.ok or not claim.claimed or claim.task is None:
         return claim.task or task
 
@@ -331,6 +335,12 @@ def _required_text(value: object, label: str) -> str:
     if not text:
         raise ValueError(f"Missing {label}")
     return text
+
+
+def _optional_int(value: object) -> int | None:
+    if value is None or value == "":
+        return None
+    return int(value)
 
 
 def _missing_reply_task(reply_task_id: str, action: str) -> ReplyTask:
