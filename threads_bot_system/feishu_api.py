@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from typing import Callable
+from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -147,6 +148,9 @@ class FeishuClient:
             response = self.request_impl(request)
             raw_body = response.read()
             status = getattr(response, "status", 200)
+        except HTTPError as exc:
+            raw_body = exc.read()
+            status = exc.code
         except Exception as exc:  # pragma: no cover - wrapped by caller
             raise FeishuApiError(f"Feishu request failed: {exc}") from exc
 

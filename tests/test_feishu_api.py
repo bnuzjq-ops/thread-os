@@ -1,7 +1,9 @@
 import json
+import io
 import unittest
+from urllib.error import HTTPError
 
-from threads_bot_system.feishu_api import FeishuClient
+from threads_bot_system.feishu_api import FeishuApiError, FeishuClient
 from threads_bot_system.reply_card import ReplyCardAction, ReplyCardPayload
 
 
@@ -15,6 +17,25 @@ class DummyResponse:
 
 
 class FeishuApiTests(unittest.TestCase):
+    def test_http_error_preserves_feishu_response_body(self) -> None:
+        def fake_request(request: object) -> DummyResponse:
+            raise HTTPError(
+                request.full_url,
+                400,
+                "Bad Request",
+                hdrs=None,
+                fp=io.BytesIO(b'{"code":99991663,"msg":"invalid receive_id"}'),
+            )
+
+        client = FeishuClient(
+            app_id="app-id",
+            app_secret="app-secret",
+            chat_id="chat-id",
+            request_impl=fake_request,
+        )
+
+        with self.assertRaisesRegex(FeishuApiError, "invalid receive_id"):
+            client.send_text_message("test")
     def test_send_review_card_uses_tenant_token_and_interactive_payload(self) -> None:
         requests: list[object] = []
 
