@@ -138,6 +138,33 @@ test('handleFeishuCallback dispatches a valid card action to GitHub', async () =
   });
 });
 
+test('handleFeishuCallback accepts the current card callback body token', async () => {
+  const body = JSON.stringify({
+    token: 'verification-token',
+    action: { value: { action: 'skip', reply_task_id: 'reply:comment-2' } },
+  });
+  const requests = [];
+  const response = await handleFeishuCallback(
+    new Request('https://jqxblue.cc/feishu/callback', { method: 'POST', body }),
+    {
+      FEISHU_VERIFICATION_TOKEN: 'verification-token',
+      GITHUB_DISPATCH_EVENT: 'threads_reply_action',
+      GITHUB_PAT: 'github-pat',
+      GITHUB_REPO: 'bnuzjq-ops/thread-os',
+    },
+    {
+      fetch: async (url, init) => {
+        requests.push({ url, init });
+        return new Response(null, { status: 204 });
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(requests.length, 1);
+  assert.equal(JSON.parse(requests[0].init.body).client_payload.action, 'skip');
+});
+
 test('handleFeishuCallback returns a challenge response when Feishu verifies the URL', async () => {
   const body = JSON.stringify({
     challenge: 'challenge-token',

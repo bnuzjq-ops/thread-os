@@ -125,7 +125,7 @@ function readHeader(headers, name) {
   return headers.get(name) ?? headers.get(name.toLowerCase()) ?? '';
 }
 
-async function verifyFeishuSignature(request, bodyText, verificationToken) {
+async function verifyFeishuSignature(request, bodyText, verificationToken, payload = null) {
   const timestamp = readHeader(request.headers, 'x-lark-request-timestamp');
   const nonce = readHeader(request.headers, 'x-lark-request-nonce');
   const signature = readHeader(request.headers, 'x-lark-signature');
@@ -140,11 +140,10 @@ async function verifyFeishuSignature(request, bodyText, verificationToken) {
   }
 
   if (!timestamp || !nonce || !signature) {
-    return {
-      ok: false,
-      status: 401,
-      error: 'Missing Feishu signature headers',
-    };
+    if (payload && typeof payload.token === 'string' && payload.token.trim() === normalizedToken) {
+      return { ok: true, mode: 'body-token' };
+    }
+    return { ok: false, status: 401, error: 'Missing Feishu signature headers' };
   }
 
   const expectedSignature = await computeFeishuSignature({
@@ -206,21 +205,22 @@ export async function handleFeishuCallback(request, env = {}, runtime = {}) {
   }
 
   const bodyText = await request.text();
-  const verification = await verifyFeishuSignature(
-    request,
-    bodyText,
-    env.FEISHU_VERIFICATION_TOKEN,
-  );
-
-  if (!verification.ok) {
-    return jsonResponse({ error: verification.error }, verification.status);
-  }
-
   let payload;
   try {
     payload = JSON.parse(bodyText);
   } catch {
     return jsonResponse({ error: 'invalid json' }, 400);
+  }
+
+  const verification = await verifyFeishuSignature(
+    request,
+    bodyText,
+    env.FEISHU_VERIFICATION_TOKEN,
+    payload,
+  );
+
+  if (!verification.ok) {
+    return jsonResponse({ error: verification.error }, verification.status);
   }
 
   if (payload?.challenge) {
