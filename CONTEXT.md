@@ -7,12 +7,15 @@
 
 - Execution repository: `bnuzjq-ops/thread-os`, remote `main` includes the
   latest permalink-auth fix (`6e4786c` after rebase).
-- Content source repository: `bnuzjq-ops/threads-content-library`.
-- Publish snapshot repository: `bnuzjq-ops/threads-publish-feed`.
-- The execution workflow reads `CONTENT_REPO = bnuzjq-ops/threads-publish-feed`;
-  it does not read the content library directly.
-- The content export workflow is the bridge from the content library to the
-  publish snapshot repository.
+- Content system repository: `bnuzjq-ops/threads-content-library`, checked out
+  at `D:\Obsidian\Threads os`.
+- The content system contains both source content and generated
+  `publish-feed/` snapshots.
+- The execution workflow is being switched to read
+  `CONTENT_REPO = bnuzjq-ops/threads-content-library` at
+  `publish-feed/posts/queue`.
+- `bnuzjq-ops/threads-publish-feed` is retained as a historical backup and is
+  no longer part of the target runtime after this migration.
 
 ## Real Publish Evidence
 

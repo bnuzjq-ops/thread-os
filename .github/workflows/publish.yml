@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       source_path:
-        description: "Optional single content-repo queue file to publish"
+        description: "Optional single content-system queue file to publish"
         required: false
         default: ""
         type: string
@@ -51,7 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
-            source="$(python -m threads_bot_system select-scheduled-source content-repo/posts/queue)"
+            source="$(python -m threads_bot_system select-scheduled-source content-repo/publish-feed/posts/queue)"
             if [ -n "$source" ]; then
               python -m threads_bot_system publish --source "$source"
             else
@@ -62,7 +62,7 @@ jobs:
             test -f "$source"
             python -m threads_bot_system publish --source "$source"
           else
-            for source in content-repo/posts/queue/*.md; do
+            for source in content-repo/publish-feed/posts/queue/*.md; do
               [ -f "$source" ] || continue
               if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
                  grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source"; then

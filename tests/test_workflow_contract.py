@@ -30,7 +30,7 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("source_path:", text)
         self.assertIn("repository: ${{ vars.CONTENT_REPO }}", text)
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
-        self.assertIn("content-repo/posts/queue", text)
+        self.assertIn("content-repo/publish-feed/posts/queue", text)
 
     def test_reply_dispatch_is_frozen_to_manual_dispatch(self) -> None:
         text = (WORKFLOW_ROOT / "reply-dispatch.yml").read_text(encoding="utf-8")

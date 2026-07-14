@@ -7,9 +7,8 @@
 ## 仓库分工
 
 - `C:\jq\AI\Thread OS\Threads-bot system`: 自动化执行仓库
-- `D:\Obsidian`: 个人知识主库
-- `D:\Obsidian\Work\Content Library`: 新的正式内容资产主库
-- `C:\jq\AI\Thread OS\Threads-publish-feed`: 发布快照仓库，只保存从内容库导出的 approved / scheduled 快照
+- `D:\Obsidian`: 个人知识主库，独立定期备份
+- `D:\Obsidian\Threads os`: Threads 内容系统仓库，保存内容库和生成的 `publish-feed/` 快照
 
 ## 敏感配置索引
 
@@ -20,7 +19,7 @@
 
 ## 核心链路
 
-- 发布链路: Content Library -> 发布快照仓库 -> 执行仓库 -> Threads API -> 状态记录
+- 发布链路: Threads 内容系统 -> `publish-feed/` 快照 -> 执行仓库 -> Threads API -> 状态记录
 - 回复链路: 已冻结；旧代码保留，主动触发器已退出运行路径
 
 ## 当前状态

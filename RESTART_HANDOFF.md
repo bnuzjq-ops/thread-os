@@ -5,11 +5,13 @@
 
 ## Current System Map
 
-- `bnuzjq-ops/threads-content-library`: approved content source.
-- `bnuzjq-ops/threads-publish-feed`: generated publication snapshots.
+- `bnuzjq-ops/threads-content-library`: content system repository at
+  `D:\Obsidian\Threads os`, containing source content and `publish-feed/` snapshots.
+- `bnuzjq-ops/threads-publish-feed`: historical snapshot backup only; do not
+  use it as the runtime source after migration.
 - `bnuzjq-ops/thread-os`: execution code, GitHub Actions, and runtime state.
-- The publish workflow reads the snapshot repository through `CONTENT_REPO`;
-  the content export workflow performs the repository-to-repository sync.
+- The publish workflow reads `publish-feed/posts/queue` inside the content
+  system repository through `CONTENT_REPO`.
 - JSON remains the runtime state backend. D1 is deferred.
 
 ## Latest Verified Result
