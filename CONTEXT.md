@@ -1,5 +1,58 @@
 # Current Context
 
+> **Latest baseline: 2026-07-14.** This section supersedes older dated
+> overrides below. Older entries are historical evidence only.
+
+## Current Truth
+
+- Execution repository: `bnuzjq-ops/thread-os`, remote `main` includes the
+  latest permalink-auth fix (`6e4786c` after rebase).
+- Content source repository: `bnuzjq-ops/threads-content-library`.
+- Publish snapshot repository: `bnuzjq-ops/threads-publish-feed`.
+- The execution workflow reads `CONTENT_REPO = bnuzjq-ops/threads-publish-feed`;
+  it does not read the content library directly.
+- The content export workflow is the bridge from the content library to the
+  publish snapshot repository.
+
+## Real Publish Evidence
+
+- Direct GitHub-only `123` test reached Threads and published successfully.
+- Full content-library `1234` test passed end to end:
+  content library -> export workflow -> publish snapshot -> publish workflow
+  -> Threads.
+- Content export run: `29320765520`.
+- Publish run: `29320802183`.
+- Real post: `https://www.threads.com/@jq.sifu/post/DaxI7uam9Um`.
+- `platform_post_id`: `18201324496321542`.
+- Remote state recorded `status=published`, `platform_post_id`, and a valid
+  permalink.
+- The temporary `1234` source file and publish snapshot were removed after
+  verification. The real Threads post remains as evidence.
+
+## Root Cause Found And Fixed
+
+- The earlier `Media Not Found` runs occurred before the current Token state
+  was working; they are terminal historical failures and must not be retried.
+- A separate bug made permalink lookup omit `access_token`. The fix is in
+  `threads_bot_system/threads_api.py` and is covered by tests.
+- Publish correlation diagnostics now log only user ID, endpoints, and a
+  redacted creation ID. Tokens are never logged.
+- Current test result after the fix: `101 tests passed`.
+
+## Current Acceptance Boundary
+
+- Content library -> publish snapshot: **PASS**.
+- Publish snapshot -> GitHub Actions -> Threads: **PASS**.
+- Real Threads publish and permalink persistence: **PASS** for the `1234`
+  evidence post.
+- Scheduled automatic publishing: **NOT_TESTED as a full online cycle**;
+  manual dispatch was used for the end-to-end proof.
+- Automatic reply triggers remain frozen by design. Reply code and manual
+  entry points are retained, but no automatic monitor/scheduler should be
+  re-enabled without an explicit decision.
+- Real reply acceptance remains **BLOCKED** until a fresh unprocessed real
+  comment is available and the frozen reply flow is intentionally resumed.
+
 ## Menu Exit Override (2026-07-13)
 
 - Current remote `main` is `e59559a`; local branch is aligned with `origin/main` and the worktree is clean.

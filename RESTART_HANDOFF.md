@@ -1,5 +1,54 @@
 # Restart Handoff
 
+> **Latest handoff baseline: 2026-07-14.** Read this section first. Older
+> sections below are historical and may contain superseded run IDs or status.
+
+## Current System Map
+
+- `bnuzjq-ops/threads-content-library`: approved content source.
+- `bnuzjq-ops/threads-publish-feed`: generated publication snapshots.
+- `bnuzjq-ops/thread-os`: execution code, GitHub Actions, and runtime state.
+- The publish workflow reads the snapshot repository through `CONTENT_REPO`;
+  the content export workflow performs the repository-to-repository sync.
+- JSON remains the runtime state backend. D1 is deferred.
+
+## Latest Verified Result
+
+The full online publication chain is verified with content `1234`:
+
+```text
+threads-content-library
+  -> Export workflow 29320765520
+  -> threads-publish-feed
+  -> Publish workflow 29320802183
+  -> Threads post
+```
+
+- Post: `https://www.threads.com/@jq.sifu/post/DaxI7uam9Um`
+- Platform ID: `18201324496321542`
+- State: `published`
+- Permalink: persisted successfully.
+- Test source and snapshot were deleted after verification.
+
+## Important Debugging Facts
+
+- A green GitHub workflow is not enough; inspect `publish_tasks.json` and the
+  real Threads post ID/permalink.
+- Earlier `Media Not Found` failures were from the pre-fix Token/runtime
+  state, not proof that the content library bridge was broken.
+- The permalink bug was caused by a missing `access_token` in
+  `get_post_permalink()`. It is fixed and tested.
+- Do not republish tasks already marked `published`, `unknown`, `sent`, or
+  `sending`. Historical failed tasks require manual diagnosis first.
+- Do not add `THREADS_MEDIA_IDS` back into the design.
+
+## Remaining Work
+
+- Validate one scheduled online cycle separately from manual dispatch.
+- Keep automatic reply workflows frozen unless explicitly resumed.
+- If reply work resumes, use a fresh real comment and verify the complete
+  Feishu -> Worker -> GitHub dispatch -> Threads -> state回写 chain.
+
 ## Start Here
 
 Read, in order:
