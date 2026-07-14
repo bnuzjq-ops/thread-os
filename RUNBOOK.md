@@ -155,3 +155,10 @@ Reply dry-run sets `dry_run: true` in the dispatch payload. It records a `dry-ru
 The code-level reply checks are covered by `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py`, `tests/test_feishu_api.py`, and `tests/reply_worker.test.mjs`. These tests do not prove a live Feishu callback or a real Threads reply.
 
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。
+# 当前权威基线（2026-07-14）
+
+- C 盘执行仓库只保存代码、Workflow、测试和运行状态。
+- D 盘 `D:\Obsidian\Threads os` 保存原稿、版本、生成快照和 `receipts/publishing/` 回执。
+- 当前远程内容仓库是 `bnuzjq-ops/threads-content-library`。
+- `bnuzjq-ops/threads-publish-feed` 仅为历史备份。
+- 自动回复系统已冻结，以下旧回复配置只供历史排查，不得作为当前发布入口。

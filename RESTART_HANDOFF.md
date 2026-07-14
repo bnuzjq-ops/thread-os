@@ -107,3 +107,16 @@ of truth. Do not wait for manual review or external test input before
 continuing non-blocked code, test, documentation, and diagnosis work. Record
 external dependencies as `NOT_TESTED` or `BLOCKED` without pausing the rest of
 the objective.
+# 当前权威基线（2026-07-14）
+
+以下内容覆盖本文件中的旧路径和旧仓库描述：
+
+- 执行系统：`C:\jq\AI\Thread OS\Threads-bot system`
+- 内容主库：`D:\Obsidian\Threads os`
+- 内容远程仓库：`bnuzjq-ops/threads-content-library`
+- 内容主库内生成快照：`publish-feed/posts/queue/`
+- 内容主库内发布回执：`receipts/publishing/`
+- 历史快照仓库：`bnuzjq-ops/threads-publish-feed`，不参与当前主流程
+- 自动回复系统：冻结，不恢复、不部署、不参与自动发布
+
+当前发布链路：内容主库 -> 导出 Workflow -> 内容仓库内快照 -> Cloudflare 单篇 Workflow -> GitHub repository_dispatch -> 指定快照发布 -> 执行状态 -> 内容主库发布回执。

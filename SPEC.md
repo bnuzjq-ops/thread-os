@@ -17,7 +17,7 @@
 ## 关键边界
 
 - 个人知识主库是 `D:\Obsidian`
-- 新内容事实源是 `D:\Obsidian\Work\Content Library`
+- 新内容事实源是 `D:\Obsidian\Threads os`
 - 发布快照仓库是 `C:\jq\AI\Thread OS\Threads-publish-feed`
 - 执行仓库只负责自动化、状态、测试和部署
 - 旧自动回复系统已冻结，只保留手动恢复入口

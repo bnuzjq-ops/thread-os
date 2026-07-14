@@ -11,7 +11,7 @@
 
 - 本仓库是执行仓库，不是内容仓库
 - 个人知识主库：`D:\Obsidian`
-- 新内容资产主库：`D:\Obsidian\Work\Content Library`
+- 新内容资产主库：`D:\Obsidian\Threads os`
 - 发布快照仓库：`C:\jq\AI\Thread OS\Threads-publish-feed`
 - 旧自动回复代码保留但已冻结
 

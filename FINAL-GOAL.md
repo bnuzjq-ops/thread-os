@@ -36,3 +36,12 @@ The external blocker is no longer comment discovery for the existing test task. 
 ## Completion Rule
 
 Do not mark the whole system complete until every non-blocked acceptance item is `PASS`. Real reply acceptance may remain `BLOCKED` only with its cause and unblock condition recorded.
+# 当前权威基线（2026-07-14）
+
+当前实现以 `C:\jq\AI\Thread OS\THREADS_SYSTEM_HANDOFF.md` 为准：
+
+- 执行仓库：`C:\jq\AI\Thread OS\Threads-bot system`
+- 内容主库：`D:\Obsidian\Threads os`
+- 远程内容仓库：`bnuzjq-ops/threads-content-library`
+- 历史快照仓库：`bnuzjq-ops/threads-publish-feed`
+- 自动回复冻结

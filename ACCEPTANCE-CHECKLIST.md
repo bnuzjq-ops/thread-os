@@ -36,3 +36,6 @@ Allowed statuses: `PASS`, `FAIL`, `BLOCKED`, `NOT_TESTED`.
 - `BLOCKED` does not mean `FAIL` and does not pause unrelated development.
 - A real publish or reply must never be repeated solely because state writeback or permalink lookup failed.
 - Mock and dry-run evidence must not be described as real platform success.
+# 当前验收修正（2026-07-14）
+
+动态排期发布当前状态：代码已部署，`/health` 已通过，但“内容推送 -> 自动注册 -> Cloudflare 到点唤醒 -> GitHub dispatch -> Threads 真实发布 -> 内容库回执”的完整自然到点链路尚未完成真实验收。不得把它标记为 PASS。
