@@ -1,6 +1,25 @@
 {
   "version": 1,
   "tasks": {
+    "publish:threads-20260714-bazi-slice-03": {
+      "publish_task_id": "publish:threads-20260714-bazi-slice-03",
+      "source_key": "threads-20260714-bazi-slice-03",
+      "text": "有些算命，不像是在算未来。\n\n像是在查你的旧档案。\n\n我第一次见神婆，她问的不是“你最近顺不顺”，而是我小时候的事、身体的事，还有家族里的事。\n\n其中有些细节，连我自己都不知道。\n\n所以我到现在也没法简单把它归结为巧合。",
+      "status": "published",
+      "post_id": "18210632572356893",
+      "platform_post_id": "18210632572356893",
+      "permalink": "https://www.threads.com/@jq.sifu/post/DaxxZKhG3ky",
+      "scheduled_time": "2026-07-14T23:05:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T15:05:19.905669+00:00",
+      "last_error": null,
+      "created_at": "2026-07-14T15:05:19.877967+00:00",
+      "updated_at": "2026-07-14T15:05:25.764866+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
