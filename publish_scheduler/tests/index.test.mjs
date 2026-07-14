@@ -14,3 +14,10 @@ test("scheduler alert failures are visible and do not depend on a custom label",
   assert.match(source, /if \(!response\.ok\)/);
   assert.match(source, /GitHub issue creation failed/);
 });
+
+test("lead-time validation applies only when registering a schedule", async () => {
+  const source = await (await import("node:fs/promises")).readFile(new URL("../src/index.ts", import.meta.url), "utf8");
+  assert.match(source, /validateSchedule\(event\.payload, false\)/);
+  assert.match(source, /validateSchedule\(await request\.json\(\) as ScheduleParams, true\)/);
+  assert.match(source, /if \(requireLeadTime && scheduled - Date\.now\(\) < MIN_LEAD_MS\)/);
+});

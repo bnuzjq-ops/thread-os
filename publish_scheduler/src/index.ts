@@ -25,7 +25,7 @@ const DEFAULT_EVENT_TYPE = "threads_publish_scheduled";
 
 export class PublishScheduleWorkflow extends WorkflowEntrypoint<Env, ScheduleParams> {
   async run(event: WorkflowEvent<ScheduleParams>, step: WorkflowStep) {
-    const params = validateSchedule(event.payload);
+    const params = validateSchedule(event.payload, false);
     await step.sleepUntil("wait-until-scheduled", new Date(params.scheduled_time));
     const now = Date.now();
     if (now > Date.parse(params.latest_publish_time)) {
@@ -52,7 +52,7 @@ export default {
     if (request.method === "POST" && url.pathname === "/schedules") {
       if (!authorized(request, env)) return json({ error: "unauthorized" }, 401);
       try {
-        const params = validateSchedule(await request.json() as ScheduleParams);
+        const params = validateSchedule(await request.json() as ScheduleParams, true);
         const id = await instanceId(params);
         let existing = false;
         try {
@@ -72,7 +72,7 @@ export default {
   },
 };
 
-function validateSchedule(value: ScheduleParams): ScheduleParams {
+function validateSchedule(value: ScheduleParams, requireLeadTime: boolean): ScheduleParams {
   const required = ["content_id", "scheduled_time", "latest_publish_time", "snapshot_repo", "snapshot_commit", "snapshot_path", "trace_id"] as const;
   for (const key of required) if (!value?.[key]) throw new Error(`${key} is required`);
   if (!Number.isInteger(value.content_version) || value.content_version < 1) throw new Error("content_version must be a positive integer");
@@ -80,7 +80,7 @@ function validateSchedule(value: ScheduleParams): ScheduleParams {
   const latest = Date.parse(value.latest_publish_time);
   if (Number.isNaN(scheduled) || !value.scheduled_time.match(/[+-]\d\d:\d\d|Z$/)) throw new Error("scheduled_time must be ISO 8601 with timezone");
   if (Number.isNaN(latest) || latest <= scheduled) throw new Error("latest_publish_time must be later than scheduled_time");
-  if (scheduled - Date.now() < MIN_LEAD_MS) throw new Error("scheduled_time must be at least five minutes in the future");
+  if (requireLeadTime && scheduled - Date.now() < MIN_LEAD_MS) throw new Error("scheduled_time must be at least five minutes in the future");
   return value;
 }
 
