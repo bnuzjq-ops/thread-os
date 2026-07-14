@@ -54,7 +54,13 @@ export default {
       try {
         const params = validateSchedule(await request.json() as ScheduleParams);
         const id = await instanceId(params);
-        const existing = await env.PUBLISH_SCHEDULES.get(id);
+        let existing = false;
+        try {
+          await env.PUBLISH_SCHEDULES.get(id);
+          existing = true;
+        } catch (error) {
+          if (!String(error).includes("instance.not_found")) throw error;
+        }
         if (existing) return json({ instance_id: id, status: "waiting", ...params });
         await env.PUBLISH_SCHEDULES.create({ id, params });
         return json({ instance_id: id, status: "waiting", ...params }, 202);
