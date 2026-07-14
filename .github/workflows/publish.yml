@@ -2,6 +2,12 @@ name: Publish Threads
 
 on:
   workflow_dispatch:
+    inputs:
+      source_path:
+        description: "Optional single content-repo queue file to publish"
+        required: false
+        default: ""
+        type: string
   schedule:
     - cron: "0 2 * * *"
 
@@ -41,6 +47,7 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
           PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
+          PUBLISH_SOURCE_PATH: ${{ inputs.source_path }}
         run: |
           set -euo pipefail
           if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
@@ -50,6 +57,10 @@ jobs:
             else
               echo "No scheduled source is due."
             fi
+          elif [ -n "$PUBLISH_SOURCE_PATH" ]; then
+            source="content-repo/$PUBLISH_SOURCE_PATH"
+            test -f "$source"
+            python -m threads_bot_system publish --source "$source"
           else
             for source in content-repo/posts/queue/*.md; do
               [ -f "$source" ] || continue

@@ -27,6 +27,7 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_publish_workflow_uses_queue_and_content_secret(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn("source_path:", text)
         self.assertIn("repository: ${{ vars.CONTENT_REPO }}", text)
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
         self.assertIn("content-repo/posts/queue", text)
