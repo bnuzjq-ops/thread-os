@@ -7,12 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       source_path:
-        description: "Optional single content-system queue file to publish"
-        required: false
-        default: ""
+        description: "Single content-system queue file to publish"
+        required: true
         type: string
-  schedule:
-    - cron: "0 2 * * *"
 
 permissions:
   contents: write
@@ -50,7 +47,6 @@ jobs:
           THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
-          PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
           PUBLISH_SOURCE_PATH: ${{ inputs.source_path }}
           PUBLISH_DISPATCH_SOURCE_PATH: ${{ github.event.client_payload.snapshot_path }}
           PUBLISH_DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
@@ -65,29 +61,23 @@ jobs:
             test -n "$PUBLISH_DISPATCH_VERSION"
             test -n "$PUBLISH_DISPATCH_SCHEDULED_TIME"
             test -n "$PUBLISH_DISPATCH_LATEST_TIME"
+            case "$PUBLISH_DISPATCH_SOURCE_PATH" in
+              publish-feed/posts/queue/*.md) ;;
+              *) echo "Invalid dispatch source path: $PUBLISH_DISPATCH_SOURCE_PATH"; exit 1 ;;
+            esac
             source="content-repo/$PUBLISH_DISPATCH_SOURCE_PATH"
             test -f "$source"
             python -m threads_bot_system publish --source "$source" \
               --task-id "publish:$PUBLISH_DISPATCH_TASK_ID"
-          elif [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
-            source="$(python -m threads_bot_system select-scheduled-source content-repo/publish-feed/posts/queue)"
-            if [ -n "$source" ]; then
-              python -m threads_bot_system publish --source "$source"
-            else
-              echo "No scheduled source is due."
-            fi
-          elif [ -n "$PUBLISH_SOURCE_PATH" ]; then
+          else
+            test -n "$PUBLISH_SOURCE_PATH"
+            case "$PUBLISH_SOURCE_PATH" in
+              publish-feed/posts/queue/*.md) ;;
+              *) echo "Invalid manual source path: $PUBLISH_SOURCE_PATH"; exit 1 ;;
+            esac
             source="content-repo/$PUBLISH_SOURCE_PATH"
             test -f "$source"
             python -m threads_bot_system publish --source "$source"
-          else
-            for source in content-repo/publish-feed/posts/queue/*.md; do
-              [ -f "$source" ] || continue
-              if grep -q '^platform:[[:space:]]*threads[[:space:]]*$' "$source" && \
-                 grep -q '^editorial_status:[[:space:]]*ready[[:space:]]*$' "$source"; then
-                python -m threads_bot_system publish --source "$source"
-              fi
-            done
           fi
 
       - name: Commit publish task state

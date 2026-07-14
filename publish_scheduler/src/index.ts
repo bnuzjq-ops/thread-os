@@ -105,11 +105,15 @@ async function dispatchGitHub(env: Env, params: ScheduleParams): Promise<boolean
 }
 
 async function createIssue(env: Env, params: ScheduleParams, kind: string, detail: string) {
-  await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/issues`, {
+  const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/issues`, {
     method: "POST",
     headers: { Authorization: `Bearer ${env.GITHUB_PAT}`, Accept: "application/vnd.github+json", "User-Agent": "threads-publish-scheduler", "Content-Type": "application/json" },
-    body: JSON.stringify({ title: `[publish-alert] ${kind}: ${params.content_id} v${params.content_version}`, labels: ["publish-alert"], body: `${detail}\n\ncontent_id: ${params.content_id}\ncontent_version: ${params.content_version}\nscheduled_time: ${params.scheduled_time}\nlatest_publish_time: ${params.latest_publish_time}\nsnapshot_commit: ${params.snapshot_commit}\nsnapshot_path: ${params.snapshot_path}\ntrace_id: ${params.trace_id}\nretry_allowed: false` }),
+    body: JSON.stringify({ title: `[publish-alert] ${kind}: ${params.content_id} v${params.content_version}`, body: `${detail}\n\ncontent_id: ${params.content_id}\ncontent_version: ${params.content_version}\nscheduled_time: ${params.scheduled_time}\nlatest_publish_time: ${params.latest_publish_time}\nsnapshot_commit: ${params.snapshot_commit}\nsnapshot_path: ${params.snapshot_path}\ntrace_id: ${params.trace_id}\nretry_allowed: false` }),
   });
+  if (!response.ok) {
+    const responseBody = await response.text();
+    throw new Error(`GitHub issue creation failed (${response.status}): ${responseBody.slice(0, 500)}`);
+  }
 }
 
 function authorized(request: Request, env: Env) { return request.headers.get("Authorization") === `Bearer ${env.SCHEDULER_API_TOKEN}`; }

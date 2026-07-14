@@ -30,7 +30,17 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("source_path:", text)
         self.assertIn("repository: ${{ vars.CONTENT_REPO }}", text)
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
-        self.assertIn("content-repo/publish-feed/posts/queue", text)
+        self.assertIn("publish-feed/posts/queue/*.md", text)
+
+    def test_publish_workflow_has_only_single_source_entrypoints(self) -> None:
+        text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn("repository_dispatch:", text)
+        self.assertIn("workflow_dispatch:", text)
+        self.assertNotIn("\n  schedule:", text)
+        self.assertNotIn('elif [ "$GITHUB_EVENT_NAME" = "schedule" ]', text)
+        self.assertNotIn("for source in content-repo/publish-feed/posts/queue/*.md", text)
+        source_input = text.split("source_path:", 1)[1].split("type: string", 1)[0]
+        self.assertIn("required: true", source_input)
 
     def test_reply_dispatch_is_frozen_to_manual_dispatch(self) -> None:
         text = (WORKFLOW_ROOT / "reply-dispatch.yml").read_text(encoding="utf-8")
