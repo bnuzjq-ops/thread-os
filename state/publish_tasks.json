@@ -39,6 +39,25 @@
       "created_at": "2026-07-14T08:19:59.412861+00:00",
       "updated_at": "2026-07-14T08:34:19.099417+00:00"
     },
+    "publish:threads-content-library-1234-20260714": {
+      "publish_task_id": "publish:threads-content-library-1234-20260714",
+      "source_key": "threads-content-library-1234-20260714",
+      "text": "1234",
+      "status": "published",
+      "post_id": "18201324496321542",
+      "platform_post_id": "18201324496321542",
+      "permalink": "https://www.threads.com/@jq.sifu/post/DaxI7uam9Um",
+      "scheduled_time": "2026-07-14T17:01:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T09:11:47.118223+00:00",
+      "last_error": null,
+      "created_at": "2026-07-14T09:11:47.117997+00:00",
+      "updated_at": "2026-07-14T09:11:52.764574+00:00"
+    },
     "publish:threads-diagnostic-123-20260714": {
       "publish_task_id": "publish:threads-diagnostic-123-20260714",
       "source_key": "threads-diagnostic-123-20260714",
