@@ -72,7 +72,7 @@
 ## Repository Boundaries
 
 - `D:\Obsidian`: personal knowledge vault.
-- `D:\Obsidian\Work\Content Library`: formal content source of truth.
+- `D:\Obsidian\Threads os`: formal content source of truth.
 - `bnuzjq-ops/threads-publish-feed`: approved/scheduled publication snapshots only.
 - `bnuzjq-ops/thread-os`: code, workflows, tests, and JSON runtime state.
 - Auto-reply is frozen; Feishu/Worker reply entry points are preserved but not part of active automation.
