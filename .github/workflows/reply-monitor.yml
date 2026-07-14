@@ -6,11 +6,8 @@ on:
       dry_run:
         description: "Create review tasks that cannot call the real Threads reply API"
         required: false
-        default: false
+        default: true
         type: boolean
-  repository_dispatch:
-    types:
-      - threads_reply_monitor
 permissions:
   contents: write
 
@@ -42,7 +39,7 @@ jobs:
           THREADS_STORE_PATH: state/reply_tasks.json
           THREADS_MONITOR_CURSOR_PATH: state/reply_monitor_cursor.json
           REPLY_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
-          REPLY_TRIGGER_SOURCE: ${{ github.event_name == 'schedule' && 'schedule' || github.event_name == 'workflow_dispatch' && 'workflow_dispatch' || 'repository_dispatch' }}
+          REPLY_TRIGGER_SOURCE: workflow_dispatch
         run: python -m threads_bot_system monitor
 
       - name: Commit reply task state

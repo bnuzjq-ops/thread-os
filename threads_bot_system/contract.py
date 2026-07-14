@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 PROJECT_NAME = "Threads 自动化系统 V2"
 EXECUTION_REPO_ROOT = Path(__file__).resolve().parents[1]
-CONTENT_REPO_ROOT = Path(r"C:\jq\OBS\threads-system")
-LEGACY_REPO_ROOT = Path(r"C:\jq\AI\threads-bot os")
+CONTENT_REPO_ROOT = Path(os.environ.get("CONTENT_LIBRARY_ROOT", "D:/Obsidian/Work/Content Library"))
+PUBLISH_FEED_ROOT = Path(os.environ.get("PUBLISH_FEED_ROOT", "C:/jq/AI/Thread OS/Threads-publish-feed"))
+LEGACY_REPO_ROOT = Path(os.environ.get("LEGACY_REPLY_REPO_ROOT", "legacy-reply-system"))
 
 
 def project_manifest() -> dict[str, object]:
@@ -20,24 +22,26 @@ def project_manifest() -> dict[str, object]:
         "chains": {
             "publish": [
                 "内容仓库",
+                "发布快照仓库",
                 "执行仓库",
                 "Threads API",
                 "状态记录",
             ],
             "reply": [
-                "评论监控",
-                "草稿生成",
-                "飞书审核",
-                "Cloudflare Worker",
-                "GitHub dispatch",
-                "reply-action",
-                "Threads API",
+                "冻结的评论监控",
+                "冻结的草稿生成",
+                "冻结的飞书审核",
+                "Cloudflare Worker retained",
+                "GitHub dispatch disabled for replies",
+                "manual recovery only",
+                "Threads reply API not called automatically",
             ],
         },
         "boundaries": [
-            "content_repo is for素材、草稿、待发布内容",
+            "content_repo is the formal Content Library source of truth",
+            "publish_feed stores exported approved/scheduled snapshots only",
             "execution_repo is for automation code, tests, state, and docs",
-            "legacy_repo is read-only reference only",
+            "legacy auto-reply code is frozen unless manually recovered",
             "secrets do not belong in git",
         ],
     }
@@ -53,6 +57,7 @@ def render_project_summary() -> str:
         manifest["project_name"],
         f"执行仓库: {manifest['execution_repo_root']}",
         f"内容仓库: {manifest['content_repo_root']}",
+        f"发布快照仓库: {PUBLISH_FEED_ROOT}",
         f"旧仓库: {manifest['legacy_repo_root']}",
         "",
         "发布链路:",

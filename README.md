@@ -7,7 +7,9 @@
 ## 仓库分工
 
 - `C:\jq\AI\Thread OS\Threads-bot system`: 自动化执行仓库
-- `C:\jq\OBS\threads-system`: 内容仓库，只存素材、草稿、待发布内容，必要时人工编辑
+- `D:\Obsidian`: 个人知识主库
+- `D:\Obsidian\Work\Content Library`: 新的正式内容资产主库
+- `C:\jq\AI\Thread OS\Threads-publish-feed`: 发布快照仓库，只保存从内容库导出的 approved / scheduled 快照
 
 ## 敏感配置索引
 
@@ -18,8 +20,8 @@
 
 ## 核心链路
 
-- 发布链路: 内容仓库 -> 执行仓库 -> Threads API -> 状态记录
-- 回复链路: 评论监控 -> 草稿生成 -> 飞书审核 -> Worker 回调 -> GitHub dispatch -> 回复执行
+- 发布链路: Content Library -> 发布快照仓库 -> 执行仓库 -> Threads API -> 状态记录
+- 回复链路: 已冻结；旧代码保留，主动触发器已退出运行路径
 
 ## 当前状态
 
@@ -27,7 +29,7 @@
 - 已有 Python 核心、单元测试和 Feishu 回调桥源码
 - 已接入 DeepSeek 草稿生成入口、GitHub dispatch 执行入口和回复任务状态文件
 - 发布链路已真实验证：Threads post `18060289736735869` ([permalink](https://www.threads.com/@jq.sifu/post/DasjI8XETAR))
-- 回复链路已真实验证：reply_id `17988946037829563`，workflow `29227348273`
+- 回复链路历史上做过真实联调，但当前按冻结处理，不再主动扫描评论、生成草稿或推送飞书提醒。
 
 ## 下一步
 
@@ -48,4 +50,4 @@ JSON MVP 已有发布和人工审核回复链路的本地测试。运行 `python
 - The live Feishu `skip` path has completed through Worker and GitHub `repository_dispatch` (runs `29226259880`, `29226261576`, `29226273680`).
 - The skipped task is terminal and is not reused for a real send. A new comment is required for real reply or live dry-run acceptance.
 
-发布输入契约是带有 `content_id`、`platform: threads`、`status: ready` frontmatter 和非空正文的 Markdown。执行仓库读取输入，Obsidian 内容仓库保持独立且本轮不修改。
+发布输入契约是发布快照仓库 `posts/queue/<content_id>.md` 中带有 `content_id`、`platform: threads`、`editorial_status: ready` frontmatter 和非空正文的 Markdown。Content Library 是正式内容事实源，发布快照仓库只保存导出结果。

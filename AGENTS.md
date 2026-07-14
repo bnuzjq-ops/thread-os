@@ -10,8 +10,10 @@
 ## 当前仓库边界
 
 - 本仓库是执行仓库，不是内容仓库
-- 旧仓库 `C:\jq\AI\threads-bot os` 只读参考
-- 内容仓库 `C:\jq\OBS\threads-system` 独立存在
+- 个人知识主库：`D:\Obsidian`
+- 新内容资产主库：`D:\Obsidian\Work\Content Library`
+- 发布快照仓库：`C:\jq\AI\Thread OS\Threads-publish-feed`
+- 旧自动回复代码保留但已冻结
 
 ## 变更要求
 
