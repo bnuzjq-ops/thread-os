@@ -51,7 +51,7 @@ class CliTests(unittest.TestCase):
             )
             captured: list[object] = []
 
-            def fake_run_publish(store, client):
+            def fake_run_publish(store, client, task_ids=None):
                 captured.append(store)
                 return SimpleNamespace(attempted=0, posted=0)
 

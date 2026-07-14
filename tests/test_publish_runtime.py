@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from tempfile import TemporaryDirectory
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -60,10 +61,20 @@ class PublishRuntimeTests(unittest.TestCase):
             task = store.create_task("future", "Not yet", future).task
 
             report = run_publish(store, FakeThreadsClient())
-
-            self.assertEqual(report.attempted, 0)
             self.assertEqual(report.posted, 0)
             self.assertEqual(JsonPublishStore.load(path).get_task(task.publish_task_id).status, PublishTaskStatus.READY)
+
+        self.assertEqual(report.attempted, 0)
+
+    def test_run_publish_can_target_one_task(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            store = JsonPublishStore.load(Path(tmpdir) / "state.json")
+            first = store.create_task("first", "First").task
+            second = store.create_task("second", "Second").task
+            report = run_publish(store, FakeThreadsClient(), task_ids=[first.publish_task_id])
+            self.assertEqual(report.attempted, 1)
+            self.assertEqual(report.posted, 1)
+            self.assertEqual(store.get(second.publish_task_id).status, PublishTaskStatus.READY)
 
     def test_permalink_failure_keeps_published_state_without_retry(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

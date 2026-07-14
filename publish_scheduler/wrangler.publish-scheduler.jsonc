@@ -1,0 +1,16 @@
+{
+  "name": "threads-publish-scheduler",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-14",
+  "workflows": [
+    {
+      "name": "publish_schedule_workflow",
+      "binding": "PUBLISH_SCHEDULES",
+      "class_name": "PublishScheduleWorkflow"
+    }
+  ],
+  "vars": {
+    "GITHUB_REPOSITORY": "bnuzjq-ops/thread-os",
+    "GITHUB_EVENT_TYPE": "threads_publish_scheduled"
+  }
+}
