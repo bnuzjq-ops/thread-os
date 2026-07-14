@@ -196,6 +196,7 @@ class ThreadsApiClient:
         if not creation_id:
             raise ThreadsApiError("Threads create response did not include a creation id")
 
+        self._log_publish_diagnostic(creation_id)
         payload = self._publish_container(creation_id)
         post_id = self._optional_text(payload.get("id"))
         if post_id:
@@ -247,6 +248,22 @@ class ThreadsApiClient:
             data=urlencode(payload).encode("utf-8"),
             content_type="application/x-www-form-urlencoded",
         )
+
+    def _log_publish_diagnostic(self, creation_id: str) -> None:
+        """Expose enough correlation data to debug remote two-step publishing."""
+        print(
+            "Threads publish diagnostic: "
+            f"user_id={self.user_id}; "
+            f"create_endpoint={self.base_url}/{self.user_id}/threads; "
+            f"publish_endpoint={self.base_url}/{self.user_id}/threads_publish; "
+            f"creation_id={self._redact_identifier(creation_id)}"
+        )
+
+    @staticmethod
+    def _redact_identifier(identifier: str) -> str:
+        if len(identifier) <= 8:
+            return "<short>"
+        return f"{identifier[:4]}...{identifier[-4:]}"
 
     def _parse_comment(self, item: dict[str, object]) -> ThreadsComment:
         comment_id = self._required_text(item.get("id"), "comment id")

@@ -2,6 +2,7 @@ import json
 from urllib.error import HTTPError
 import io
 import unittest
+from contextlib import redirect_stdout
 
 from threads_bot_system.threads_api import ThreadsApiClient, ThreadsApiError
 
@@ -211,6 +212,29 @@ class ThreadsApiTests(unittest.TestCase):
         self.assertIn("text=Hello+Threads", create_body)
         publish_body = requests[1].data.decode("utf-8")
         self.assertIn("creation_id=creation-1", publish_body)
+
+    def test_publish_post_logs_correlated_endpoints_without_token(self) -> None:
+        def fake_request(request: object) -> DummyResponse:
+            if request.full_url.endswith("/threads"):
+                return DummyResponse(json.dumps({"id": "creation-12345678"}))
+            return DummyResponse(json.dumps({"id": "post-1"}))
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="secret-token",
+            request_impl=fake_request,
+        )
+
+        output = io.StringIO()
+        with redirect_stdout(output):
+            client.publish_post(text="123")
+
+        diagnostic = output.getvalue()
+        self.assertIn("user_id=user-1", diagnostic)
+        self.assertIn("create_endpoint=https://graph.threads.net/v1.0/user-1/threads", diagnostic)
+        self.assertIn("publish_endpoint=https://graph.threads.net/v1.0/user-1/threads_publish", diagnostic)
+        self.assertIn("creation_id=crea...5678", diagnostic)
+        self.assertNotIn("secret-token", diagnostic)
 
 
 if __name__ == "__main__":
