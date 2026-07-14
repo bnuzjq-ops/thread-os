@@ -20,6 +20,25 @@
       "created_at": "2026-07-14T15:05:19.877967+00:00",
       "updated_at": "2026-07-14T15:05:25.764866+00:00"
     },
+    "publish:threads-20260714-bazi-slice-04": {
+      "publish_task_id": "publish:threads-20260714-bazi-slice-04",
+      "source_key": "threads-20260714-bazi-slice-04",
+      "text": "所谓“通灵”，会不会只是信息读取？\n\n“直觉”和“灵感”也是。\n\n只是以前的人解释不了，就给它们起了更神秘的名字。\n\n我不知道这个猜想对不对。\n\n但有些经历，确实会让人怀疑：人能接收到的信息，可能比自己以为的多。",
+      "status": "published",
+      "post_id": "18100400080907382",
+      "platform_post_id": "18100400080907382",
+      "permalink": "https://www.threads.com/@jq.sifu/post/Dax0z3hmzMv",
+      "scheduled_time": "2026-07-14T23:35:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T15:35:11.723650+00:00",
+      "last_error": null,
+      "created_at": "2026-07-14T15:35:11.723252+00:00",
+      "updated_at": "2026-07-14T15:35:15.687025+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
