@@ -39,6 +39,25 @@
       "created_at": "2026-07-14T08:19:59.412861+00:00",
       "updated_at": "2026-07-14T08:34:19.099417+00:00"
     },
+    "publish:threads-diagnostic-123-20260714": {
+      "publish_task_id": "publish:threads-diagnostic-123-20260714",
+      "source_key": "threads-diagnostic-123-20260714",
+      "text": "123",
+      "status": "published",
+      "post_id": "18067962437480496",
+      "platform_post_id": "18067962437480496",
+      "permalink": null,
+      "scheduled_time": null,
+      "error_type": "external_api_error",
+      "error_phase": "permalink_lookup",
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T08:52:24.583323+00:00",
+      "last_error": "permalink lookup failed: Threads API returned HTTP 500: {\"error\":{\"message\":\"Invalid OAuth 2.0 Access Token\",\"type\":\"THApiException\",\"code\":190,\"error_data\":{},\"fbtrace_id\":\"AtxvJW_jBnNaxQ1Sc9iENtD\"}}",
+      "created_at": "2026-07-14T08:52:24.583033+00:00",
+      "updated_at": "2026-07-14T08:52:27.613582+00:00"
+    },
     "publish:threads-direct-api-123-20260714": {
       "publish_task_id": "publish:threads-direct-api-123-20260714",
       "source_key": "threads-direct-api-123-20260714",
