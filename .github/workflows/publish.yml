@@ -131,6 +131,28 @@ jobs:
           PY
           fi
 
+      - name: Write publishing receipt to content library
+        if: always() && github.event_name == 'repository_dispatch'
+        env:
+          DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
+          DISPATCH_SOURCE_PATH: ${{ github.event.client_payload.snapshot_path }}
+        run: |
+          set -euo pipefail
+          python scripts/write_publish_receipt.py \
+            --state state/publish_tasks.json \
+            --content-root content-repo \
+            --snapshot-path "$DISPATCH_SOURCE_PATH" \
+            --task-id "publish:$DISPATCH_TASK_ID"
+          git -C content-repo fetch origin main
+          git -C content-repo checkout -B main origin/main
+          git -C content-repo config user.name "github-actions[bot]"
+          git -C content-repo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git -C content-repo status --short -- receipts/publishing)" ]; then
+            git -C content-repo add receipts/publishing
+            git -C content-repo commit -m "Record Threads publishing receipt"
+            git -C content-repo push origin main
+          fi
+
       - name: Upload publish state recovery artifact
         if: failure()
         uses: actions/upload-artifact@v4
