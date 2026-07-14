@@ -1,3 +1,5 @@
+import { WorkflowEntrypoint } from "cloudflare:workers";
+
 export interface ScheduleParams {
   content_id: string;
   content_version: number;
