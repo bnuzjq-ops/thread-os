@@ -236,6 +236,23 @@ class ThreadsApiTests(unittest.TestCase):
         self.assertIn("creation_id=crea...5678", diagnostic)
         self.assertNotIn("secret-token", diagnostic)
 
+    def test_get_post_permalink_sends_access_token(self) -> None:
+        requests: list[object] = []
+
+        def fake_request(request: object) -> DummyResponse:
+            requests.append(request)
+            return DummyResponse(json.dumps({"permalink": "https://www.threads.com/post/1"}))
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="token-1",
+            request_impl=fake_request,
+        )
+
+        self.assertEqual(client.get_post_permalink("post-1"), "https://www.threads.com/post/1")
+        self.assertIn("fields=permalink", requests[0].full_url)
+        self.assertIn("access_token=token-1", requests[0].full_url)
+
 
 if __name__ == "__main__":
     unittest.main()

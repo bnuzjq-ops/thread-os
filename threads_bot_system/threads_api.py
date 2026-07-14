@@ -212,7 +212,8 @@ class ThreadsApiClient:
 
     def get_post_permalink(self, post_id: str) -> str | None:
         """Read the permalink after publishing without changing external state."""
-        url = f"{self.base_url}/{post_id}?fields=permalink"
+        params = urlencode({"fields": "permalink", "access_token": self.access_token})
+        url = f"{self.base_url}/{post_id}?{params}"
         payload = self._request_json("GET", url)
         return self._optional_text(payload.get("permalink"))
 
