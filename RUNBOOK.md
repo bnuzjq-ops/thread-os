@@ -28,6 +28,8 @@
 
 ## 这套自动回复现在会用到的变量
 
+当前自动回复系统已冻结。以下变量仅在人工恢复或手动验证旧回复链时使用。
+
 - `FEISHU_APP_ID`
 - `FEISHU_APP_SECRET`
 - `FEISHU_CHAT_ID`
@@ -44,6 +46,8 @@
 游标文件和 `state/reply_tasks.json` 必须一起提交，不能只更新其中一个。
 
 ## Cloudflare Worker 仍然需要的变量
+
+当前 Worker 保留，但回复 workflow 不再接受外部 `repository_dispatch` 触发。
 
 - `FEISHU_VERIFICATION_TOKEN`
 - `GITHUB_PAT`
@@ -126,15 +130,15 @@ python -m threads_bot_system publish --help
 
 ## Publish feed export
 
-Export an approved Obsidian draft explicitly; do not synchronize the whole vault:
+Export an approved or scheduled Content Library post explicitly; do not synchronize the whole vault:
 
 ```powershell
-& .\scripts\export-threads-post.ps1 `
-  -Source 'C:\jq\OBS\Threads\20_Drafts\example.md' `
-  -ContentId 'stable-content-id'
+python ".\scripts\export_to_publish_feed.py" `
+  --source ".\content\approved\example.md" `
+  --feed-root "<publish-feed-root>"
 ```
 
-The source must contain `platform: threads` and `editorial_status: ready`. The exporter writes only `posts/queue/<content_id>.md` to `bnuzjq-ops/threads-publish-feed`.
+The Content Library source must be a `post` with `platform: threads` and `status: approved` or `status: scheduled`. The exporter writes only `posts/queue/<content_id>.md` to `bnuzjq-ops/threads-publish-feed` using `editorial_status: ready`.
 
 Scheduled runs use `scheduled_time` as timezone-aware ISO 8601, compare in UTC, select the earliest due source, and publish at most one item. Sources without `scheduled_time` are manual-only.
 

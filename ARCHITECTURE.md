@@ -4,26 +4,21 @@
 
 ```mermaid
 flowchart LR
-  A[内容仓库 C:\\jq\\OBS\\threads-system] --> B[执行仓库 C:\\jq\\AI\\Thread OS\\Threads-bot system]
-  B --> C[Threads API 发布]
-  B --> D[GitHub Actions 评论监控]
-  D --> E[DeepSeek 草稿]
-  E --> F[飞书审核]
-  F --> G[Cloudflare Worker]
-  G --> H[GitHub repository_dispatch]
-  H --> I[reply-action]
-  I --> J[Threads API 回复]
+  A[Content Library] --> B[发布快照仓库]
+  B --> C[执行仓库 GitHub Actions]
+  C --> D[Threads API 发布]
+  E[旧自动回复代码] -. 冻结，仅手动恢复 .-> F[Reply Monitor / Dispatch]
 ```
 
 ## 责任划分
 
-- 内容仓库: 存放可发布素材、待审草稿、人工整理内容
+- Content Library: 正式内容事实源，存放可发布内容、选题、评论、回复资产和发布回执
+- 发布快照仓库: 只保存从 Content Library 导出的 approved / scheduled 发布快照
 - 执行仓库: 存放自动化代码、状态文件、测试和运行文档
 - 回复任务状态文件: `state/reply_tasks.json`
 - Threads API: 执行发布和回复动作
-- GitHub Actions: 定时监控与任务调度
-- 飞书: 人工审核入口
-- Cloudflare Worker: 飞书回调桥接
+- GitHub Actions: 发布编排；回复相关 workflow 当前仅手动触发
+- 飞书与 Cloudflare Worker: 旧自动回复入口保留但不主动运行
 
 ## 设计约束
 

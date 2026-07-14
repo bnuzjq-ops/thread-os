@@ -15,10 +15,11 @@
 
 ## Repository Boundaries
 
-- `C:\jq\OBS\Threads`: local Obsidian content production.
-- `bnuzjq-ops/threads-publish-feed`: approved publication snapshots only.
+- `D:\Obsidian`: personal knowledge vault.
+- `D:\Obsidian\Work\Content Library`: formal content source of truth.
+- `bnuzjq-ops/threads-publish-feed`: approved/scheduled publication snapshots only.
 - `bnuzjq-ops/thread-os`: code, workflows, tests, and JSON runtime state.
-- Feishu Callback Worker only verifies and forwards actions.
+- Auto-reply is frozen; Feishu/Worker reply entry points are preserved but not part of active automation.
 - D1 is deferred; JSON is the current runtime state backend.
 
 ## Verified Publish Capability

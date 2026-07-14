@@ -26,16 +26,20 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
         self.assertIn("content-repo/posts/queue", text)
 
-    def test_reply_dispatch_exposes_explicit_dry_run_switch(self) -> None:
+    def test_reply_dispatch_is_frozen_to_manual_dispatch(self) -> None:
         text = (WORKFLOW_ROOT / "reply-dispatch.yml").read_text(encoding="utf-8")
         self.assertIn("REPLY_DRY_RUN", text)
         self.assertIn("CLIENT_PAYLOAD_JSON", text)
-        self.assertIn("if: ${{ github.event_name == 'repository_dispatch' }}", text)
+        self.assertIn("workflow_dispatch:", text)
+        self.assertNotIn("repository_dispatch:", text)
+        self.assertNotIn("types:", text)
 
-    def test_reply_monitor_uses_repository_dispatch_after_scheduler_cutover(self) -> None:
+    def test_reply_monitor_is_frozen_to_manual_dispatch(self) -> None:
         text = (WORKFLOW_ROOT / "reply-monitor.yml").read_text(encoding="utf-8")
-        self.assertIn("threads_reply_monitor", text)
+        self.assertIn("workflow_dispatch:", text)
         self.assertNotIn("schedule:", text)
+        self.assertNotIn("repository_dispatch:", text)
+        self.assertNotIn("threads_reply_monitor", text)
 
     def test_state_writers_upload_recovery_artifacts_on_failure(self) -> None:
         for name in ("publish.yml", "reply-monitor.yml", "reply-dispatch.yml"):
