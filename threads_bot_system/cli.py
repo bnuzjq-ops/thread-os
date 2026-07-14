@@ -46,7 +46,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if command == "monitor":
             return _run_monitor(Path(args.store_path), list(args.media_id), Path(args.cursor_path))
         if command == "publish":
-            return _run_publish(Path(args.store_path), args.source)
+            return _run_publish(Path(args.store_path), args.source, args.task_id)
         if command == "select-scheduled-source":
             selected = select_due_source(args.root)
             if selected is not None:
@@ -111,6 +111,12 @@ def _build_parser() -> argparse.ArgumentParser:
     publish.add_argument(
         "--source",
         help="Markdown source to add to the publish task store before publishing",
+    )
+    publish.add_argument(
+        "--task-id",
+        action="append",
+        default=[],
+        help="Publish only the specified existing task ID; may be repeated",
     )
 
     return parser
@@ -272,13 +278,23 @@ def _run_monitor(store_path: Path, media_ids: list[str], cursor_path: Path) -> i
     return 0
 
 
-def _run_publish(store_path: Path, source_path: str | None = None) -> int:
+def _run_publish(
+    store_path: Path,
+    source_path: str | None = None,
+    task_ids: list[str] | None = None,
+) -> int:
     threads_client = _build_threads_client(os.environ)
     store = JsonPublishStore.load(store_path)
     if source_path:
         source = load_publish_source(source_path)
         store.create_task(source.content_id, source.text, source.scheduled_time)
-    report = run_publish(store, threads_client)
+    selected_task_ids = task_ids or None
+    if source_path and selected_task_ids is None:
+        selected_task_ids = [f"publish:{source.content_id}"]
+    if selected_task_ids is None:
+        report = run_publish(store, threads_client)
+    else:
+        report = run_publish(store, threads_client, task_ids=selected_task_ids)
     print(
         json.dumps(
             {
