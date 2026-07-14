@@ -71,8 +71,11 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/publish_tasks.json
+          git stash push --include-untracked -m "publish-state"
           git fetch origin "${BRANCH_NAME}"
           git rebase "origin/${BRANCH_NAME}"
+          git stash pop
           git add state/publish_tasks.json
           git commit -m "Update publish task state"
           git push origin "HEAD:${BRANCH_NAME}"

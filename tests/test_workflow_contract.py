@@ -20,6 +20,11 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertIn("git stash push --include-untracked", text)
             self.assertIn("git stash pop", text)
 
+    def test_publish_state_writer_preserves_changes_before_rebase(self) -> None:
+        text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn('git stash push --include-untracked -m "publish-state"', text)
+        self.assertIn("git stash pop", text)
+
     def test_publish_workflow_uses_queue_and_content_secret(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
         self.assertIn("repository: ${{ vars.CONTENT_REPO }}", text)
