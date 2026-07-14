@@ -39,6 +39,25 @@
       "created_at": "2026-07-14T15:35:11.723252+00:00",
       "updated_at": "2026-07-14T15:35:15.687025+00:00"
     },
+    "publish:threads-20260714-bazi-slice-05": {
+      "publish_task_id": "publish:threads-20260714-bazi-slice-05",
+      "source_key": "threads-20260714-bazi-slice-05",
+      "text": "姓名和八字，会不会不是用来算命的？\n\n而是用来定位一个人的？\n\n再加上仪式、咒语和上香，像是在建立连接。\n\n先找到你。\n\n再读取一些和你有关的东西。\n\n这只是我个人的理解，但那次经历之后，我很难再把八字只看成一张命运表。",
+      "status": "published",
+      "post_id": "18092551673457487",
+      "platform_post_id": "18092551673457487",
+      "permalink": "https://www.threads.com/@jq.sifu/post/Dax4QAyFKFx",
+      "scheduled_time": "2026-07-15T00:05:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T16:05:14.866179+00:00",
+      "last_error": null,
+      "created_at": "2026-07-14T16:05:14.865789+00:00",
+      "updated_at": "2026-07-14T16:05:19.165257+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
