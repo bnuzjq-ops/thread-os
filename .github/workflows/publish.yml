@@ -1,6 +1,9 @@
 name: Publish Threads
 
 on:
+  repository_dispatch:
+    types:
+      - threads_publish_scheduled
   workflow_dispatch:
     inputs:
       source_path:
@@ -32,6 +35,7 @@ jobs:
           repository: ${{ vars.CONTENT_REPO }}
           token: ${{ secrets.CONTENT_REPO_TOKEN }}
           path: content-repo
+          ref: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.snapshot_commit || 'main' }}
           fetch-depth: 1
 
       - name: Set up Python
@@ -48,9 +52,24 @@ jobs:
           PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
           PUBLISH_TRIGGER_SCHEDULE: ${{ github.event.schedule }}
           PUBLISH_SOURCE_PATH: ${{ inputs.source_path }}
+          PUBLISH_DISPATCH_SOURCE_PATH: ${{ github.event.client_payload.snapshot_path }}
+          PUBLISH_DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
+          PUBLISH_DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
+          PUBLISH_DISPATCH_SCHEDULED_TIME: ${{ github.event.client_payload.scheduled_time }}
+          PUBLISH_DISPATCH_LATEST_TIME: ${{ github.event.client_payload.latest_publish_time }}
         run: |
           set -euo pipefail
-          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+          if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
+            test -n "$PUBLISH_DISPATCH_SOURCE_PATH"
+            test -n "$PUBLISH_DISPATCH_TASK_ID"
+            test -n "$PUBLISH_DISPATCH_VERSION"
+            test -n "$PUBLISH_DISPATCH_SCHEDULED_TIME"
+            test -n "$PUBLISH_DISPATCH_LATEST_TIME"
+            source="content-repo/$PUBLISH_DISPATCH_SOURCE_PATH"
+            test -f "$source"
+            python -m threads_bot_system publish --source "$source" \
+              --task-id "publish:$PUBLISH_DISPATCH_TASK_ID"
+          elif [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
             source="$(python -m threads_bot_system select-scheduled-source content-repo/publish-feed/posts/queue)"
             if [ -n "$source" ]; then
               python -m threads_bot_system publish --source "$source"
