@@ -1,6 +1,25 @@
 {
   "version": 1,
   "tasks": {
+    "publish:threads-20260714-bazi-slice-01": {
+      "publish_task_id": "publish:threads-20260714-bazi-slice-01",
+      "source_key": "threads-20260714-bazi-slice-01",
+      "text": "八字可能根本不是用来算命的。\n\n它更像一个人的出生坐标。\n\n神婆通过这个坐标，读取你已经发生过的人生。\n\n这是我那次经历之后的个人猜想。\n\n没有证据。\n\n但比起“预测未来”，我更愿意这样理解。",
+      "status": "published",
+      "post_id": "18118457788830308",
+      "platform_post_id": "18118457788830308",
+      "permalink": "https://www.threads.com/@jq.sifu/post/Dax_HroiB0F",
+      "scheduled_time": "2026-07-15T01:05:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-14T17:05:15.655513+00:00",
+      "last_error": null,
+      "created_at": "2026-07-14T17:05:15.655079+00:00",
+      "updated_at": "2026-07-14T17:05:27.444193+00:00"
+    },
     "publish:threads-20260714-bazi-slice-03": {
       "publish_task_id": "publish:threads-20260714-bazi-slice-03",
       "source_key": "threads-20260714-bazi-slice-03",
