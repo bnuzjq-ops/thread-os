@@ -34,3 +34,13 @@
 3. 最小业务闭环
 4. 测试
 5. 验证
+
+## Temporary Artifacts And Logs
+
+- Do not write temporary logs, GitHub Actions download archives, screenshots,
+  diagnostic exports, or other runtime artifacts directly into `C:\jq\AI`.
+- Use `$env:TEMP`, `C:\jq\AI\_artifacts`, or the current repository's ignored
+  `.tmp` directory instead.
+- Remove temporary artifacts when the investigation is complete. Retained
+  evidence must stay in a task-specific artifact directory, never in the
+  `C:\jq\AI` root.
