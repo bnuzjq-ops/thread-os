@@ -14,6 +14,7 @@ from .contract import render_project_summary
 from .deepseek_api import DeepSeekClient
 from .feishu_api import FeishuClient
 from .operator_state import OperatorStateStore, active_task_for, select_next_review_task
+from .production_guard import ProductionGuardConfig, pre_publish_check
 from .publish_runtime import run_publish
 from .publish_source import load_publish_source, select_due_source
 from .publish_store import JsonPublishStore
@@ -283,11 +284,53 @@ def _run_publish(
     source_path: str | None = None,
     task_ids: list[str] | None = None,
 ) -> int:
-    threads_client = _build_threads_client(os.environ)
+    config = ProductionGuardConfig.from_env(os.environ)
     store = JsonPublishStore.load(store_path)
+
     if source_path:
         source = load_publish_source(source_path)
+        # Run pre-publish safety check
+        published_ids = {
+            t.source_key for t in store.tasks.values()
+            if t.status.value == "published"
+        }
+        recent_texts = [
+            t.text for t in store.tasks.values()
+            if t.status.value == "published"
+        ]
+        report = pre_publish_check(
+            text=source.text,
+            content_id=source.content_id,
+            config=config,
+            published_content_ids=published_ids,
+            recent_texts=recent_texts,
+        )
+        print(
+            f"Pre-publish check: allowed={report.allowed}, mode={report.mode}",
+            file=sys.stderr,
+        )
+        for d in report.decisions:
+            if not d.allowed:
+                print(f"  BLOCKED: {d.reason}", file=sys.stderr)
+        if not report.allowed:
+            print(
+                f"Publish blocked by production guard: "
+                + "; ".join(d.reason for d in report.decisions if not d.allowed),
+                file=sys.stderr,
+            )
+            return 1
+        if report.is_dry_run:
+            print(
+                f"[DRY-RUN] Would publish: content_id={source.content_id}, "
+                f"length={len(source.text)}, "
+                f"scheduled_time={source.scheduled_time or 'immediate'}",
+                file=sys.stderr,
+            )
+            return 0  # dry-run success — no real publish
         store.create_task(source.content_id, source.text, source.scheduled_time)
+
+    # Lazy-build Threads client only when real publish is needed
+    threads_client = _build_threads_client(os.environ)
     selected_task_ids = task_ids or None
     if source_path and selected_task_ids is None:
         selected_task_ids = [f"publish:{source.content_id}"]

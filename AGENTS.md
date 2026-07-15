@@ -1,11 +1,35 @@
 # Agent 操作约束
 
+## 最高优先级：生产安全
+
+**在操作本仓库之前，必须先阅读：**
+
+1. `C:\jq\AI\Thread OS\PRODUCTION_SAFETY.md`
+2. `C:\jq\AI\Thread OS\INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md`
+3. `C:\jq\AI\Thread OS\CURRENT_STATUS.md`
+
+违反生产安全规则的后果是账号资产永久损失。
+
+## 强制约束
+
+任何 Agent：
+- 不得自行开启生产发布
+- 不得自行修改生产 Secret
+- 不得自行重配 Threads API
+- 不得自行切换新账号
+- 不得自行绕过 dry-run
+- 不得自行发布真实测试内容（纯数字、test、hello 等）
+- 不得自行恢复自动回复
+- 不得把聊天结果视为已完成
+- 不得在新账号未授权时触发真实发布
+
 ## 基本原则
 
 - 先读背景，再动手
 - 先确认链路，再改代码
 - 先验证，再扩大范围
 - 每次只做最小必要修改
+- 默认 development，默认 dry-run，默认不调用真实 Threads API
 
 ## 当前仓库边界
 

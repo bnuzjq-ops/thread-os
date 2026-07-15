@@ -1,7 +1,21 @@
 # Current Context
 
-> **Latest baseline: 2026-07-14.** This section supersedes older dated
-> overrides below. Older entries are historical evidence only.
+> **Latest baseline: 2026-07-15 — POST-INCIDENT.** This section supersedes all
+> older overrides below. Older entries are historical evidence only.
+>
+> ⚠️ Threads account `@jq.sifu` was banned during integration testing.
+> Full postmortem: `C:\jq\AI\Thread OS\INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md`.
+> Production safety rules: `C:\jq\AI\Thread OS\PRODUCTION_SAFETY.md`.
+
+## Post-Incident State (2026-07-15)
+
+- **ENV**: `development`
+- **PUBLISH_ENABLED**: `false`
+- **DRY_RUN**: `true`
+- **Auto-reply**: frozen, not restored
+- **Real publish capability**: code-verified, production-disabled
+- **New account**: pending user creation and authorization
+- **Old account state**: archived in `state/publish_tasks.json`, not reused
 
 ## Current Truth
 

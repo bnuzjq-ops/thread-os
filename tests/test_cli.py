@@ -51,12 +51,22 @@ class CliTests(unittest.TestCase):
             )
             captured: list[object] = []
 
-            def fake_run_publish(store, client, task_ids=None):
+            def fake_run_publish(store, client, task_ids=None, config=None):
                 captured.append(store)
                 return SimpleNamespace(attempted=0, posted=0)
 
+            prod_config = SimpleNamespace(
+                env="production", publish_enabled=True, dry_run=False,
+                is_production=True,
+                max_daily_posts=10, min_post_interval_minutes=60,
+                max_consecutive_failures=5, max_consecutive_unknown=5,
+            )
+
             with patch("threads_bot_system.cli._build_threads_client", return_value=object()), patch(
                 "threads_bot_system.cli.run_publish", side_effect=fake_run_publish
+            ), patch(
+                "threads_bot_system.cli.ProductionGuardConfig.from_env",
+                return_value=prod_config,
             ):
                 exit_code = main(
                     ["publish", "--store-path", str(store_path), "--source", str(source_path)]

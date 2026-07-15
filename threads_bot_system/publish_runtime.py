@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 import sys
 from datetime import datetime, timezone
 from typing import Iterable
 
+from .production_guard import ProductionGuardConfig, pre_publish_check
 from .publish_store import JsonPublishStore
 from .publish_task import PublishTask, PublishTaskStatus
 from .threads_api import ThreadsApiClient
@@ -36,8 +38,36 @@ def run_publish(
     store: JsonPublishStore | str | Path,
     threads_client: ThreadsApiClient,
     task_ids: Iterable[str] | None = None,
+    *,
+    config: ProductionGuardConfig | None = None,
 ) -> PublishRunReport:
-    """Publish pending tasks and persist the result."""
+    """Publish pending tasks and persist the result.
+
+    If config is not provided, it is built from os.environ.
+    Production safety checks run before any real API call.
+    """
+    if config is None:
+        config = ProductionGuardConfig.from_env(os.environ)
+
+    if not config.is_production:
+        # In non-production mode, run as dry-run — log what would happen
+        print(
+            f"[DRY-RUN] Publish blocked: ENV={config.env}, "
+            f"PUBLISH_ENABLED={config.publish_enabled}, DRY_RUN={config.dry_run}",
+            file=sys.stderr,
+        )
+        publish_store = _resolve_publish_store(store)
+        selected_task_ids = _normalize_task_ids(task_ids)
+        tasks = _select_tasks(publish_store, selected_task_ids)
+        for task in tasks:
+            print(
+                f"[DRY-RUN] Would publish: task_id={task.publish_task_id}, "
+                f"text_len={len(task.text)}, "
+                f"scheduled={task.scheduled_time or 'immediate'}",
+                file=sys.stderr,
+            )
+        return PublishRunReport(attempted=0, posted=0, tasks=tasks)
+
     publish_store = _resolve_publish_store(store)
     selected_task_ids = _normalize_task_ids(task_ids)
     tasks = _select_tasks(publish_store, selected_task_ids)

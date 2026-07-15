@@ -1,6 +1,9 @@
 # Auto-Reply System Frozen
 
 Freeze date: 2026-07-14
+Reaffirmed: 2026-07-15 (post-incident — see `C:\jq\AI\Thread OS\INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md`)
+
+## Freeze Status: ACTIVE — DO NOT RESTORE
 
 ## Scope
 

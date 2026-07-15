@@ -2,10 +2,14 @@
 
 ## 开工前
 
-1. 读 `README.md`
-2. 读 `SPEC.md`
-3. 读 `ARCHITECTURE.md`
-4. 确认当前修改只影响目标链路
+1. 读 `C:\jq\AI\Thread OS\README.md`
+2. 读 `C:\jq\AI\Thread OS\PRODUCTION_SAFETY.md`（最高优先级）
+3. 读 `C:\jq\AI\Thread OS\INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md`
+4. 读 `CURRENT_STATUS.md`
+5. 读 `SPEC.md`
+6. 读 `ARCHITECTURE.md`
+7. 确认当前修改只影响目标链路
+8. 确认 ENV、PUBLISH_ENABLED、DRY_RUN 设置
 
 ## 本地验证
 
@@ -155,13 +159,63 @@ Reply dry-run sets `dry_run: true` in the dispatch payload. It records a `dry-ru
 The code-level reply checks are covered by `tests/test_reply_runtime.py`, `tests/test_task_store_contract.py`, `tests/test_feishu_api.py`, and `tests/reply_worker.test.mjs`. These tests do not prove a live Feishu callback or a real Threads reply.
 
 GitHub Actions 当前通过共享并发组和 commit 回写 JSON，这是 MVP 过渡方案，不是最终生产数据库架构；后续仍需迁移到 State API/D1。
-# 当前权威基线（2026-07-14）
+# 当前权威基线（2026-07-15 — POST-INCIDENT）
 
+- 原 Threads 账号 `@jq.sifu` 已被禁用。事故复盘见 `C:\jq\AI\Thread OS\INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md`。
+- 生产安全规则见 `C:\jq\AI\Thread OS\PRODUCTION_SAFETY.md`。
+- `ENV=development`，`PUBLISH_ENABLED=false`，`DRY_RUN=true`（默认值）。
 - C 盘执行仓库只保存代码、Workflow、测试和运行状态。
 - D 盘 `D:\Obsidian\Threads os` 保存原稿、版本、生成快照和 `receipts/publishing/` 回执。
 - 当前远程内容仓库是 `bnuzjq-ops/threads-content-library`。
 - `bnuzjq-ops/threads-publish-feed` 仅为历史备份。
 - 自动回复系统已冻结，以下旧回复配置只供历史排查，不得作为当前发布入口。
+
+## 新账号恢复上线流程
+
+严格按照以下阶段执行，不得跳过。
+
+### 阶段一：人工养号（用户执行）
+
+- 正常设置头像、简介
+- 发布少量真实内容
+- 正常浏览和互动
+- 不发布测试内容、不调用 API、不自动发布
+- 时长由用户决定
+
+### 阶段二：API 授权验证
+
+1. 确认现有 Meta App 是否允许新账号授权
+2. 获取新的 `THREADS_USER_ID` 和 `THREADS_ACCESS_TOKEN`
+3. 使用只读接口验证（`GET /{user_id}/threads?fields=id`）
+4. **不执行真实发布**
+
+### 阶段三：全链 dry-run
+
+完整执行：
+```
+内容库 → 发布快照 → Cloudflare 调度 → GitHub dispatch → publish runtime → 状态机
+```
+但不调用真实 Threads Publish API。输出 `Would publish` 日志。
+
+### 阶段四：第一次真实灰度发布
+
+必须满足：
+- 用户明确确认
+- 内容是真实、有语义的正式内容
+- PUBLISH_ENABLED=true、ENV=production、DRY_RUN=false
+- 当日没有其他自动发布
+
+只发布一条。
+
+### 阶段五：低频运行
+
+- 单日最多 1 条
+- 发帖间隔至少 6 小时
+- 连续失败 1 次即暂停
+- unknown 立即暂停
+- 不自动补发、不自动回复、不发布测试内容
+
+# 历史基线（2026-07-14）
 
 ## Cloudflare Scheduler 注册返回 403 / error code 1010
 
