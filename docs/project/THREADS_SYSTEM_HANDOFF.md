@@ -5,8 +5,9 @@
 > ⚠️ **2026-07-15 重要更新**：`@jq.sifu` 封禁已确认 Meta 官方大面积误封，账号已恢复。
 > 当前主账号 `@jq.sifu`（User ID `27382011494786050`），长效 Token 60 天有效（至 2026-09-13）。
 > 备用账号 `@qq.sifu`（User ID `27572263929068860`）Token 保留本地。
-> 事故复盘见 [INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md](INCIDENT_THREADS_ACCOUNT_BAN_2026-07-15.md)。
-> 生产安全规则见 [PRODUCTION_SAFETY.md](PRODUCTION_SAFETY.md)。**所有 Agent 必须先读这两个文件。**
+> Cloudflare Worker 仅负责定时唤醒 GitHub，不直接调用 Threads API。
+> CW Secrets（GITHUB_PAT + SCHEDULER_API_TOKEN）不随 Threads 账号变动而变。
+> 换号时只需更新 GitHub Secrets 中的 THREADS_USER_ID + THREADS_ACCESS_TOKEN。
 
 ## 1. 系统边界
 
