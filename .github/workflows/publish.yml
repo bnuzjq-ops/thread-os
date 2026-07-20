@@ -45,6 +45,13 @@ jobs:
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_PUBLISH_STORE_PATH: state/publish_tasks.json
+          ENV: ${{ vars.ENV }}
+          PUBLISH_ENABLED: ${{ vars.PUBLISH_ENABLED }}
+          DRY_RUN: ${{ vars.DRY_RUN }}
+          MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS }}
+          MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES }}
+          MAX_CONSECUTIVE_FAILURES: ${{ vars.MAX_CONSECUTIVE_FAILURES }}
+          MAX_CONSECUTIVE_UNKNOWN: ${{ vars.MAX_CONSECUTIVE_UNKNOWN }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           PUBLISH_TRIGGER_EVENT: ${{ github.event_name }}
           PUBLISH_SOURCE_PATH: ${{ inputs.source_path }}

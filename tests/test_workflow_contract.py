@@ -32,6 +32,25 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
         self.assertIn("publish-feed/posts/queue/*.md", text)
 
+    def test_publish_workflow_maps_production_guard_variables(self) -> None:
+        text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn("ENV: ${{ vars.ENV }}", text)
+        self.assertIn("PUBLISH_ENABLED: ${{ vars.PUBLISH_ENABLED }}", text)
+        self.assertIn("DRY_RUN: ${{ vars.DRY_RUN }}", text)
+        self.assertIn("MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS }}", text)
+        self.assertIn(
+            "MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES }}",
+            text,
+        )
+        self.assertIn(
+            "MAX_CONSECUTIVE_FAILURES: ${{ vars.MAX_CONSECUTIVE_FAILURES }}",
+            text,
+        )
+        self.assertIn(
+            "MAX_CONSECUTIVE_UNKNOWN: ${{ vars.MAX_CONSECUTIVE_UNKNOWN }}",
+            text,
+        )
+
     def test_publish_workflow_has_only_single_source_entrypoints(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
         self.assertIn("repository_dispatch:", text)
