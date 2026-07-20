@@ -221,6 +221,26 @@
       "created_at": "2026-07-20T13:00:09.967950+00:00",
       "updated_at": "2026-07-20T13:00:12.488456+00:00"
     },
+    "publish:threads-20260720-shishen-dark-01:v3": {
+      "publish_task_id": "publish:threads-20260720-shishen-dark-01:v3",
+      "source_key": "threads-20260720-shishen-dark-01",
+      "text": "你最讨厌的自己，可能不是你的本性。\n只是命盘里的某个十神失控了。\n\n十神像十种生存方式。\n\n正官用规则保护自己。\n七杀用力量保护自己。\n正印靠被接纳获得安全。\n偏印靠看透一切避免受伤。\n\n每一种优势走到极端，\n都会长出自己的暗面。\n\n负责过头，变成自我审判。\n聪明过头，变成拒绝相信。\n温柔过头，变成讨好牺牲。\n独立过头，变成谁也进不来。\n\n看十神暗面，不是为了贴标签。\n\n是为了认出：\n\n你以为自己在做选择，\n其实可能只是旧的防御习惯又启动了。\n\n明天先写正官。\n\n一个看起来最体面的人，\n为什么心里可能住着最严厉的法官？",
+      "content_version": 3,
+      "status": "failed",
+      "post_id": null,
+      "platform_post_id": null,
+      "permalink": null,
+      "scheduled_time": "2026-07-20T22:00:00+08:00",
+      "error_type": "external_api_error",
+      "error_phase": "threads_publish",
+      "external_action": false,
+      "retry_allowed": false,
+      "recovery_action": "Inspect the error and correct the configuration before a manual retry.",
+      "claimed_at": "2026-07-20T14:00:39.293479+00:00",
+      "last_error": "Threads API returned HTTP 400: {\"error\":{\"message\":\"The requested resource does not exist\",\"type\":\"OAuthException\",\"code\":24,\"error_subcode\":4279009,\"is_transient\":false,\"error_user_title\":\"Media Not Found\",\"error_user_msg\":\"The media with id 17908351107446902 cannot be found.\",\"fbtrace_id\":\"AIJ5xoKFzreqiEjgTXL8Ab4\"}}",
+      "created_at": "2026-07-20T14:00:39.292717+00:00",
+      "updated_at": "2026-07-20T14:00:42.123765+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
