@@ -15,6 +15,7 @@ class PublishSource:
     platform: str
     status: str
     text: str
+    content_version: int = 1
     scheduled_time: str | None = None
 
 
@@ -50,6 +51,13 @@ def load_publish_source(path: str | Path) -> PublishSource:
     if not text:
         raise ValueError("Publish source body is empty")
 
+    try:
+        content_version = int(fields.get("content_version", "1"))
+    except ValueError as exc:
+        raise ValueError("content_version must be a positive integer") from exc
+    if content_version < 1:
+        raise ValueError("content_version must be a positive integer")
+
     scheduled_time = fields.get("scheduled_time", "").strip() or None
     if scheduled_time is not None:
         try:
@@ -64,6 +72,7 @@ def load_publish_source(path: str | Path) -> PublishSource:
         platform=platform,
         status=status,
         text=text,
+        content_version=content_version,
         scheduled_time=scheduled_time,
     )
 

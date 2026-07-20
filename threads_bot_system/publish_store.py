@@ -94,8 +94,9 @@ class JsonPublishStore:
         source_key: str,
         text: str,
         scheduled_time: str | None = None,
+        content_version: int = 1,
     ) -> PublishCreateResult:
-        task_id = publish_task_id_for(source_key)
+        task_id = publish_task_id_for(source_key, content_version)
         existing = self.get(task_id)
         if existing is not None:
             return PublishCreateResult(
@@ -105,7 +106,12 @@ class JsonPublishStore:
                 task=existing,
             )
 
-        task = new_publish_task(source_key, text, scheduled_time=scheduled_time)
+        task = new_publish_task(
+            source_key,
+            text,
+            scheduled_time=scheduled_time,
+            content_version=content_version,
+        )
         self.upsert(task)
         self.save()
         return PublishCreateResult(

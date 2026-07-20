@@ -63,6 +63,20 @@ class PublishStoreTests(unittest.TestCase):
                 PublishTaskStatus.READY,
             )
 
+    def test_new_content_version_gets_a_distinct_task_after_old_version_failed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "publish_tasks.json"
+            store = JsonPublishStore.load(path)
+
+            first = store.create_task("draft-1", "First post", content_version=1)
+            store.fail_task(first.task.publish_task_id, "old version failed")
+            second = store.create_task("draft-1", "Revised post", content_version=2)
+
+            self.assertNotEqual(first.task.publish_task_id, second.task.publish_task_id)
+            self.assertEqual(second.task.publish_task_id, "publish:draft-1:v2")
+            self.assertTrue(second.created)
+            self.assertEqual(second.task.status, PublishTaskStatus.READY)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -74,8 +74,13 @@ jobs:
             esac
             source="content-repo/$PUBLISH_DISPATCH_SOURCE_PATH"
             test -f "$source"
+            if [ "$PUBLISH_DISPATCH_VERSION" = "1" ]; then
+              task_id="publish:$PUBLISH_DISPATCH_TASK_ID"
+            else
+              task_id="publish:$PUBLISH_DISPATCH_TASK_ID:v$PUBLISH_DISPATCH_VERSION"
+            fi
             python -m threads_bot_system publish --source "$source" \
-              --task-id "publish:$PUBLISH_DISPATCH_TASK_ID"
+              --task-id "$task_id"
           else
             test -n "$PUBLISH_SOURCE_PATH"
             case "$PUBLISH_SOURCE_PATH" in
@@ -132,14 +137,20 @@ jobs:
         if: always() && github.event_name == 'repository_dispatch'
         env:
           DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
           DISPATCH_SOURCE_PATH: ${{ github.event.client_payload.snapshot_path }}
         run: |
           set -euo pipefail
+          if [ "$DISPATCH_VERSION" = "1" ]; then
+            receipt_task_id="publish:$DISPATCH_TASK_ID"
+          else
+            receipt_task_id="publish:$DISPATCH_TASK_ID:v$DISPATCH_VERSION"
+          fi
           python scripts/write_publish_receipt.py \
             --state state/publish_tasks.json \
             --content-root content-repo \
             --snapshot-path "$DISPATCH_SOURCE_PATH" \
-            --task-id "publish:$DISPATCH_TASK_ID"
+            --task-id "$receipt_task_id"
           git -C content-repo fetch origin main
           git -C content-repo checkout -B main origin/main
           git -C content-repo config user.name "github-actions[bot]"

@@ -25,6 +25,20 @@ class PublishSourceTests(unittest.TestCase):
 
             self.assertEqual(source.content_id, "content-1")
             self.assertEqual(source.text, "Hello Threads")
+            self.assertEqual(source.content_version, 1)
+
+    def test_load_publish_source_reads_content_version(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "post.md"
+            path.write_text(
+                "---\ncontent_id: content-1\ncontent_version: 3\nplatform: threads\n"
+                "status: ready\n---\n\nHello Threads\n",
+                encoding="utf-8",
+            )
+
+            source = load_publish_source(path)
+
+            self.assertEqual(source.content_version, 3)
 
     def test_load_publish_source_rejects_non_ready_content(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

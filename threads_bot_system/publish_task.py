@@ -29,6 +29,7 @@ class PublishTask:
     status: PublishTaskStatus
     post_id: str | None = None
     permalink: str | None = None
+    content_version: int = 1
     scheduled_time: str | None = None
     error_type: str | None = None
     error_phase: str | None = None
@@ -41,8 +42,10 @@ class PublishTask:
     updated_at: str | None = None
 
 
-def publish_task_id_for(source_key: str) -> str:
-    """Derive a stable task identifier from the source key."""
+def publish_task_id_for(source_key: str, content_version: int | None = None) -> str:
+    """Derive a stable task identifier, preserving the legacy v1 format."""
+    if content_version is not None and content_version > 1:
+        return f"publish:{source_key}:v{content_version}"
     return f"publish:{source_key}"
 
 
@@ -50,6 +53,7 @@ def new_publish_task(
     source_key: str,
     text: str,
     scheduled_time: str | None = None,
+    content_version: int = 1,
 ) -> PublishTask:
     """Create a fresh publish task record."""
     source_key = source_key.strip()
@@ -58,10 +62,11 @@ def new_publish_task(
 
     now = datetime.now(timezone.utc).isoformat()
     return PublishTask(
-        publish_task_id=publish_task_id_for(source_key),
+        publish_task_id=publish_task_id_for(source_key, content_version),
         source_key=source_key,
         text=text,
         status=PublishTaskStatus.READY,
+        content_version=content_version,
         scheduled_time=scheduled_time,
         created_at=now,
         updated_at=now,
