@@ -70,6 +70,15 @@ D:\Obsidian\Threads os\content\scheduled\<content_id>.md
 - 内容库已生成发布回执。
 - 自动回复系统仍冻结，不参与当前发布流程。
 
+### 2026-07-20 实时核验（北京时间 14:15）
+
+- 12 篇“十神暗面”源文件、12 个发布快照、12 份排期回执均存在。
+- 12 个 Cloudflare Workflow 实例均为 `Waiting`；首篇实例明确睡眠至 `2026-07-20 21:00 +08:00`。
+- Scheduler `/health` 返回 HTTP 200，正文为 `ok`。
+- GitHub 生产变量为 `ENV=production`、`PUBLISH_ENABLED=true`、`DRY_RUN=false`，保险丝为每日 1 篇、间隔 360 分钟、失败/unknown 阈值 1。
+- 当前没有这组内容的 GitHub 发布运行，也没有 `receipts/publishing/` 回执；首篇尚未到发布时间，不能据此判定失败。
+- 首篇到点后必须继续核验 `attempted`、`posted`、`status`、`platform_post_id`、Threads 页面和发布回执。
+
 2026-07-14 已修复的两个线上问题：
 
 1. Workflow 到点醒来后不再重复执行“至少提前 5 分钟”校验；该校验只在注册时执行。
