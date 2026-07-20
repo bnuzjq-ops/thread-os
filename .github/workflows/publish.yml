@@ -60,22 +60,39 @@ jobs:
           PUBLISH_DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
           PUBLISH_DISPATCH_SCHEDULED_TIME: ${{ github.event.client_payload.scheduled_time }}
           PUBLISH_DISPATCH_LATEST_TIME: ${{ github.event.client_payload.latest_publish_time }}
+          PUBLISH_DISPATCH_BATCH_ID: ${{ github.event.client_payload.batch_id }}
+          PUBLISH_DISPATCH_TASKS: ${{ toJson(github.event.client_payload.tasks) }}
         run: |
           set -euo pipefail
           if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
-            test -n "$PUBLISH_DISPATCH_SOURCE_PATH"
-            test -n "$PUBLISH_DISPATCH_TASK_ID"
-            test -n "$PUBLISH_DISPATCH_VERSION"
+            test -n "$PUBLISH_DISPATCH_BATCH_ID"
+            test -n "$PUBLISH_DISPATCH_TASKS"
             test -n "$PUBLISH_DISPATCH_SCHEDULED_TIME"
             test -n "$PUBLISH_DISPATCH_LATEST_TIME"
-            case "$PUBLISH_DISPATCH_SOURCE_PATH" in
-              publish-feed/posts/queue/*.md) ;;
-              *) echo "Invalid dispatch source path: $PUBLISH_DISPATCH_SOURCE_PATH"; exit 1 ;;
-            esac
-            source="content-repo/$PUBLISH_DISPATCH_SOURCE_PATH"
-            test -f "$source"
-            python -m threads_bot_system publish --source "$source" \
-              --task-id "publish:$PUBLISH_DISPATCH_TASK_ID:v$PUBLISH_DISPATCH_VERSION"
+            failures=0
+            while IFS= read -r task; do
+              content_id=$(printf '%s' "$task" | jq -r '.content_id')
+              version=$(printf '%s' "$task" | jq -r '.content_version')
+              source_path=$(printf '%s' "$task" | jq -r '.snapshot_path')
+              case "$source_path" in
+                publish-feed/posts/queue/*.md) ;;
+                *) echo "Invalid dispatch source path: $source_path"; failures=$((failures + 1)); continue ;;
+              esac
+              source="content-repo/$source_path"
+              if [ ! -f "$source" ]; then
+                echo "Missing batch source: $source"
+                failures=$((failures + 1))
+                continue
+              fi
+              if ! python -m threads_bot_system publish --source "$source" \
+                --task-id "publish:$content_id:v$version"; then
+                failures=$((failures + 1))
+              fi
+            done < <(printf '%s' "$PUBLISH_DISPATCH_TASKS" | jq -c '.[]')
+            if [ "$failures" -gt 0 ]; then
+              echo "Batch $PUBLISH_DISPATCH_BATCH_ID completed with $failures failed task(s)."
+              exit 1
+            fi
           else
             test -n "$PUBLISH_SOURCE_PATH"
             case "$PUBLISH_SOURCE_PATH" in
@@ -112,6 +129,7 @@ jobs:
         env:
           DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
           DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
+          DISPATCH_TASKS: ${{ toJson(github.event.client_payload.tasks) }}
         run: |
           {
             echo "## Threads publish failure"
@@ -126,14 +144,21 @@ jobs:
           import os
           from pathlib import Path
           state = json.loads(Path("state/publish_tasks.json").read_text(encoding="utf-8"))
-          task_id = None
+          task_ids = []
           if os.environ.get("GITHUB_EVENT_NAME") == "repository_dispatch":
-              content_id = os.environ.get("DISPATCH_TASK_ID", "")
-              version = os.environ.get("DISPATCH_VERSION", "")
-              task_id = f"publish:{content_id}:v{version}" if version != "1" else f"publish:{content_id}"
+              raw_tasks = os.environ.get("DISPATCH_TASKS", "")
+              if raw_tasks:
+                  task_ids = [
+                      f"publish:{item['content_id']}:v{item['content_version']}"
+                      for item in json.loads(raw_tasks)
+                  ]
+              else:
+                  content_id = os.environ.get("DISPATCH_TASK_ID", "")
+                  version = os.environ.get("DISPATCH_VERSION", "")
+                  task_ids = [f"publish:{content_id}:v{version}"] if version else []
           tasks = state.get("tasks", {}).values()
-          if task_id:
-              tasks = [task for task in tasks if task.get("publish_task_id") == task_id]
+          if task_ids:
+              tasks = [task for task in tasks if task.get("publish_task_id") in task_ids]
           for task in tasks:
               if task.get("status") in {"failed", "unknown"}:
                   print(f"- Task: `{task.get('publish_task_id')}`; phase: `{task.get('error_phase')}`; type: `{task.get('error_type')}`; external action: `{task.get('external_action')}`; retry allowed: `{task.get('retry_allowed')}`; recovery: {task.get('recovery_action')}")
@@ -146,13 +171,27 @@ jobs:
           DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
           DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
           DISPATCH_SOURCE_PATH: ${{ github.event.client_payload.snapshot_path }}
+          DISPATCH_TASKS: ${{ toJson(github.event.client_payload.tasks) }}
         run: |
           set -euo pipefail
-          python scripts/write_publish_receipt.py \
-            --state state/publish_tasks.json \
-            --content-root content-repo \
-            --snapshot-path "$DISPATCH_SOURCE_PATH" \
-            --task-id "publish:$DISPATCH_TASK_ID:v$DISPATCH_VERSION"
+          if [ -n "$DISPATCH_TASKS" ]; then
+            while IFS= read -r task; do
+              content_id=$(printf '%s' "$task" | jq -r '.content_id')
+              version=$(printf '%s' "$task" | jq -r '.content_version')
+              snapshot_path=$(printf '%s' "$task" | jq -r '.snapshot_path')
+              python scripts/write_publish_receipt.py \
+                --state state/publish_tasks.json \
+                --content-root content-repo \
+                --snapshot-path "$snapshot_path" \
+                --task-id "publish:$content_id:v$version"
+            done < <(printf '%s' "$DISPATCH_TASKS" | jq -c '.[]')
+          else
+            python scripts/write_publish_receipt.py \
+              --state state/publish_tasks.json \
+              --content-root content-repo \
+              --snapshot-path "$DISPATCH_SOURCE_PATH" \
+              --task-id "publish:$DISPATCH_TASK_ID:v$DISPATCH_VERSION"
+          fi
           git -C content-repo fetch origin main
           git -C content-repo checkout -B main origin/main
           git -C content-repo config user.name "github-actions[bot]"

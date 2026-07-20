@@ -32,6 +32,13 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("token: ${{ secrets.CONTENT_REPO_TOKEN }}", text)
         self.assertIn("publish-feed/posts/queue/*.md", text)
 
+    def test_publish_workflow_executes_a_batch_as_one_run(self) -> None:
+        text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
+        self.assertIn("PUBLISH_DISPATCH_TASKS", text)
+        self.assertIn("batch_id", text)
+        self.assertIn("while IFS= read -r task", text)
+        self.assertIn("--source \"$source\"", text)
+
     def test_publish_workflow_maps_production_guard_variables(self) -> None:
         text = (WORKFLOW_ROOT / "publish.yml").read_text(encoding="utf-8")
         self.assertIn("ENV: ${{ vars.ENV }}", text)

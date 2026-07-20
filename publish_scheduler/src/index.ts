@@ -1,6 +1,7 @@
 import { WorkflowEntrypoint } from "cloudflare:workers";
 
 export interface ScheduleParams {
+  batch_id: string;
   content_id: string;
   content_version: number;
   scheduled_time: string;
@@ -9,6 +10,16 @@ export interface ScheduleParams {
   snapshot_commit: string;
   snapshot_path: string;
   trace_id: string;
+  tasks: Array<{
+    content_id: string;
+    content_version: number;
+    scheduled_time: string;
+    latest_publish_time: string;
+    snapshot_repo: string;
+    snapshot_commit: string;
+    snapshot_path: string;
+    trace_id: string;
+  }>;
 }
 
 interface Env {
@@ -73,19 +84,38 @@ export default {
 };
 
 function validateSchedule(value: ScheduleParams, requireLeadTime: boolean): ScheduleParams {
-  const required = ["content_id", "scheduled_time", "latest_publish_time", "snapshot_repo", "snapshot_commit", "snapshot_path", "trace_id"] as const;
-  for (const key of required) if (!value?.[key]) throw new Error(`${key} is required`);
-  if (!Number.isInteger(value.content_version) || value.content_version < 1) throw new Error("content_version must be a positive integer");
-  const scheduled = Date.parse(value.scheduled_time);
-  const latest = Date.parse(value.latest_publish_time);
-  if (Number.isNaN(scheduled) || !value.scheduled_time.match(/[+-]\d\d:\d\d|Z$/)) throw new Error("scheduled_time must be ISO 8601 with timezone");
+  const candidate = { ...value } as ScheduleParams;
+  // Existing waiting instances may still carry the pre-batch single-task payload.
+  // Normalize those payloads into a one-task batch without changing their schedule.
+  if (!candidate.batch_id) {
+    candidate.batch_id = `publish-batch-${candidate.content_id}-v${candidate.content_version}`;
+  }
+  if (!candidate.tasks) {
+    candidate.tasks = [{
+      content_id: candidate.content_id,
+      content_version: candidate.content_version,
+      scheduled_time: candidate.scheduled_time,
+      latest_publish_time: candidate.latest_publish_time,
+      snapshot_repo: candidate.snapshot_repo,
+      snapshot_commit: candidate.snapshot_commit,
+      snapshot_path: candidate.snapshot_path,
+      trace_id: candidate.trace_id,
+    }];
+  }
+  const required = ["batch_id", "content_id", "scheduled_time", "latest_publish_time", "snapshot_repo", "snapshot_commit", "snapshot_path", "trace_id", "tasks"] as const;
+  for (const key of required) if (!candidate?.[key]) throw new Error(`${key} is required`);
+  if (!Number.isInteger(candidate.content_version) || candidate.content_version < 1) throw new Error("content_version must be a positive integer");
+  if (!Array.isArray(candidate.tasks) || candidate.tasks.length < 1) throw new Error("tasks must contain at least one task");
+  const scheduled = Date.parse(candidate.scheduled_time);
+  const latest = Date.parse(candidate.latest_publish_time);
+  if (Number.isNaN(scheduled) || !candidate.scheduled_time.match(/[+-]\d\d:\d\d|Z$/)) throw new Error("scheduled_time must be ISO 8601 with timezone");
   if (Number.isNaN(latest) || latest <= scheduled) throw new Error("latest_publish_time must be later than scheduled_time");
   if (requireLeadTime && scheduled - Date.now() < MIN_LEAD_MS) throw new Error("scheduled_time must be at least five minutes in the future");
-  return value;
+  return candidate;
 }
 
 async function instanceId(params: ScheduleParams): Promise<string> {
-  const bytes = new TextEncoder().encode(`${params.content_id}:${params.content_version}:${params.scheduled_time}`);
+  const bytes = new TextEncoder().encode(`${params.batch_id}:${params.scheduled_time}`);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return `publish-${[...new Uint8Array(digest)].map((x) => x.toString(16).padStart(2, "0")).join("").slice(0, 32)}`;
 }
