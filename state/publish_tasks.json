@@ -153,6 +153,25 @@
       "created_at": "2026-07-20T10:00:09.782150+00:00",
       "updated_at": "2026-07-20T10:00:12.761049+00:00"
     },
+    "publish:threads-20260720-resign-shangguan-01": {
+      "publish_task_id": "publish:threads-20260720-resign-shangguan-01",
+      "source_key": "threads-20260720-resign-shangguan-01",
+      "text": "裸辞一年后，我给所有人的建议只有一句：\n\n能不裸辞，尽量别裸辞。\n\n我以前以为，裸辞是勇敢。\n\n学了命理才发现，可能只是我的“伤官”被引动了：\n\n看不惯领导，\n受不了规则，\n觉得自己出去一定能闯出一片天。\n\n于是辞得很潇洒。\n\n后来才发现，伤官给你的不只是才气，\n还有不服管、不想忍、容易冲动。\n\n它能让你跳出烂环境，\n也能让你在还没想好下一步时，先把退路砍了。\n\n所以，想裸辞的时候，先别急着递交申请。\n\n至少先问自己：\n\n我是在离开不适合的地方，\n还是只是在逃离当下的情绪？",
+      "status": "failed",
+      "post_id": null,
+      "platform_post_id": null,
+      "permalink": null,
+      "scheduled_time": "2026-07-20T19:00:00+08:00",
+      "error_type": "external_api_error",
+      "error_phase": "threads_publish",
+      "external_action": false,
+      "retry_allowed": false,
+      "recovery_action": "Inspect the error and correct the configuration before a manual retry.",
+      "claimed_at": "2026-07-20T11:00:11.008404+00:00",
+      "last_error": "Threads API returned HTTP 400: {\"error\":{\"message\":\"The requested resource does not exist\",\"type\":\"OAuthException\",\"code\":24,\"error_subcode\":4279009,\"is_transient\":false,\"error_user_title\":\"Media Not Found\",\"error_user_msg\":\"The media with id 17908328181446902 cannot be found.\",\"fbtrace_id\":\"Ar489TYKqRifqvfVxL48lwC\"}}",
+      "created_at": "2026-07-20T11:00:11.007836+00:00",
+      "updated_at": "2026-07-20T11:00:13.244376+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
