@@ -1,6 +1,6 @@
 # Thread OS — Threads 自动化运营系统
 
-> **生产状态：@jq.sifu 主账号就绪，长效 Token 60 天有效，PUBLISH_ENABLED=false 待用户首次灰度发布。**
+> **生产状态：@jq.sifu 主账号真实发布已开启；12 篇“十神暗面”内容从 2026-07-20 21:00 起每日一篇，等待首次自然到点核验。**
 
 ## 项目定位
 
@@ -45,7 +45,8 @@
 - 事故复盘完成，生产安全边界已建立（[PRODUCTION_SAFETY.md](PRODUCTION_SAFETY.md)）
 - 发布链路技术验证已通过，136 个测试全部通过
 - 自动回复系统继续冻结
-- PUBLISH_ENABLED=false，真实发布保持关闭，待用户首次灰度发布
+- ENV=production、PUBLISH_ENABLED=true、DRY_RUN=false，真实发布已开启
+- 12 个 Cloudflare Workflow 实例正在等待 2026-07-20 至 2026-07-31 每日 21:00 的发布时间
 
 ## 敏感配置索引
 

@@ -1,7 +1,7 @@
 # 当前系统状态
 
-> 更新：2026-07-15
-> 状态：@jq.sifu 主账号就绪，长效 Token 60 天有效（至 2026-09-13），CW 调度器正常，等待用户首次灰度发布。
+> 更新：2026-07-20
+> 状态：@jq.sifu 主账号真实发布已开启；12 篇“十神暗面”内容从 2026-07-20 21:00 起每日一篇，等待首次自然到点发布核验。
 
 ## 整体状态
 
@@ -11,7 +11,7 @@
 | 生产安全规则 | ✅ 已建立 | 见 [PRODUCTION_SAFETY.md](PRODUCTION_SAFETY.md)（安全边界为长期运营而建，不是为这次事故补的） |
 | 项目主文档 | ✅ 已创建 | 见 [README.md](README.md) |
 | 发布链路（技术） | ✅ 已验证 | 两阶段容器 + 发布 + 回执链已验证 |
-| 发布链路（生产） | 🔴 关闭 | PUBLISH_ENABLED=false，待用户发起第一次灰度发布 |
+| 发布链路（生产） | 🟢 已开启 | ENV=production、PUBLISH_ENABLED=true、DRY_RUN=false |
 | 自动回复系统 | 🔴 冻结 | 不恢复，不部署，不参与当前流程 |
 | Threads 主账号 `@jq.sifu` | 🟢 就绪 | 长效 Token（60天），GitHub Secrets 已更新 |
 | Threads 备用账号 `@qq.sifu` | 🟡 备用 | Token 保留本地 |
@@ -24,7 +24,7 @@
 
 - 动态定时单条发布闭环：✅ 技术验证通过
 - 内容库 → 快照 → Cloudflare → GitHub Actions → Threads API：✅ 链验证
-- 生产环境真实发布：🔴 关闭（PUBLISH_ENABLED=false）
+- 生产环境真实发布：🟢 已开启，等待 2026-07-20 21:00 首篇自然到点核验
 - 自动回复：🔴 冻结
 
 ## 旧账号状态
@@ -41,9 +41,9 @@
 
 | 开关 | 当前值 | 说明 |
 | --- | --- | --- |
-| `ENV` | `development` | 默认开发环境 |
-| `PUBLISH_ENABLED` | `false` | 禁止真实发布 |
-| `DRY_RUN` | `true` | 默认干运行 |
+| `ENV` | `production` | 当前生产环境 |
+| `PUBLISH_ENABLED` | `true` | 允许真实发布 |
+| `DRY_RUN` | `false` | 关闭干运行 |
 | `MAX_DAILY_POSTS` | `1` | 新账号初期每日上限 |
 | `MIN_POST_INTERVAL_MINUTES` | `360` | 最小发帖间隔 |
 | `MAX_CONSECUTIVE_FAILURES` | `1` | 连续失败即暂停 |
