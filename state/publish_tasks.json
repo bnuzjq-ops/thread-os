@@ -96,6 +96,25 @@
       "created_at": "2026-07-14T16:05:14.865789+00:00",
       "updated_at": "2026-07-14T16:05:19.165257+00:00"
     },
+    "publish:threads-20260720-ai-fate-01": {
+      "publish_task_id": "publish:threads-20260720-ai-fate-01",
+      "source_key": "threads-20260720-ai-fate-01",
+      "text": "AI 说你命不好，你就开始对号入座了？\n\n先别急着给自己判刑。\n\n人最容易信这种话的时候，\n往往正是被现实锤得没力气的时候。\n\n工作不顺，是命不好。\n感情失败，是命不好。\n钱没赚到，还是命不好。\n\n这套解释很省事。\n不用复盘，也不用改变。\n\n可你一旦信了，就会慢慢变成：\n\n不敢开始，\n不敢换路，\n也不敢期待好事发生。\n\n你不是命不好。\n你只是现在很难。\n\n别让 AI 的一句话，替你决定后半生。",
+      "status": "published",
+      "post_id": "18086373851543960",
+      "platform_post_id": "18086373851543960",
+      "permalink": "https://www.threads.com/@jq.sifu/post/DbAkYKioO3a",
+      "scheduled_time": "2026-07-20T17:00:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-20T09:00:12.265552+00:00",
+      "last_error": null,
+      "created_at": "2026-07-20T09:00:12.264923+00:00",
+      "updated_at": "2026-07-20T09:00:21.566796+00:00"
+    },
     "publish:threads-codex-123": {
       "publish_task_id": "publish:threads-codex-123",
       "source_key": "threads-codex-123",
