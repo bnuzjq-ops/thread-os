@@ -98,6 +98,8 @@ class JsonPublishStore:
     ) -> PublishCreateResult:
         task_id = publish_task_id_for(source_key, content_version)
         existing = self.get(task_id)
+        if existing is None and content_version == 1:
+            existing = self.get(f"publish:{source_key}")
         if existing is not None:
             return PublishCreateResult(
                 ok=True,

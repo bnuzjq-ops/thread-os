@@ -77,6 +77,14 @@ class PublishStoreTests(unittest.TestCase):
             self.assertTrue(second.created)
             self.assertEqual(second.task.status, PublishTaskStatus.READY)
 
+    def test_new_v1_task_uses_versioned_id(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = JsonPublishStore.load(Path(tmpdir) / "publish_tasks.json")
+
+            created = store.create_task("new-draft", "First post", content_version=1)
+
+            self.assertEqual(created.task.publish_task_id, "publish:new-draft:v1")
+
 
 if __name__ == "__main__":
     unittest.main()

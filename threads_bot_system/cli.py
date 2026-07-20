@@ -327,7 +327,7 @@ def _run_publish(
                 file=sys.stderr,
             )
             return 0  # dry-run success — no real publish
-        store.create_task(
+        created = store.create_task(
             source.content_id,
             source.text,
             source.scheduled_time,
@@ -338,11 +338,7 @@ def _run_publish(
     threads_client = _build_threads_client(os.environ)
     selected_task_ids = task_ids or None
     if source_path and selected_task_ids is None:
-        selected_task_ids = [
-            f"publish:{source.content_id}"
-            if source.content_version == 1
-            else f"publish:{source.content_id}:v{source.content_version}"
-        ]
+        selected_task_ids = [created.task.publish_task_id]
     if selected_task_ids is None:
         report = run_publish(store, threads_client)
     else:

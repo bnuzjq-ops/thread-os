@@ -23,6 +23,8 @@ def main() -> int:
     args = parser.parse_args()
     state = json.loads(Path(args.state).read_text(encoding="utf-8"))
     task = state.get("tasks", {}).get(args.task_id)
+    if not task and args.task_id.endswith(":v1"):
+        task = state.get("tasks", {}).get(args.task_id[:-3])
     if not task:
         raise ValueError(f"publish task not found: {args.task_id}")
     root = Path(args.content_root)

@@ -43,10 +43,9 @@ class PublishTask:
 
 
 def publish_task_id_for(source_key: str, content_version: int | None = None) -> str:
-    """Derive a stable task identifier, preserving the legacy v1 format."""
-    if content_version is not None and content_version > 1:
-        return f"publish:{source_key}:v{content_version}"
-    return f"publish:{source_key}"
+    """Derive a stable task identifier that includes the content version."""
+    version = 1 if content_version is None else content_version
+    return f"publish:{source_key}:v{version}"
 
 
 def new_publish_task(

@@ -73,7 +73,7 @@ class CliTests(unittest.TestCase):
                 )
 
             self.assertEqual(exit_code, 0)
-            self.assertEqual(captured[0].get_task("publish:content-1").text, "Hello Threads")
+            self.assertEqual(captured[0].get_task("publish:content-1:v1").text, "Hello Threads")
 
     def test_monitor_command_discovers_user_threads_when_no_media_id_is_given(self) -> None:
         with TemporaryDirectory() as tmpdir:
