@@ -147,6 +147,8 @@ class ThreadsApiTests(unittest.TestCase):
 
         def fake_request(request: object) -> DummyResponse:
             requests.append(request)
+            if request.get_method() == "GET":
+                return DummyResponse(json.dumps({"id": "creation-1", "status": "FINISHED"}))
             if request.full_url.endswith("/threads"):
                 return DummyResponse(json.dumps({"id": "creation-1"}))
             return DummyResponse(json.dumps({"id": "reply-1"}))
@@ -155,6 +157,7 @@ class ThreadsApiTests(unittest.TestCase):
             user_id="user-1",
             access_token="token-1",
             request_impl=fake_request,
+            sleep_impl=lambda seconds: None,
         )
 
         reply_id = client.publish_reply(reply_to_id="comment-1", text="谢谢你的提问")
@@ -192,6 +195,8 @@ class ThreadsApiTests(unittest.TestCase):
 
         def fake_request(request: object) -> DummyResponse:
             requests.append(request)
+            if request.get_method() == "GET":
+                return DummyResponse(json.dumps({"id": "creation-1", "status": "FINISHED"}))
             if request.full_url.endswith("/threads"):
                 return DummyResponse(json.dumps({"id": "creation-1"}))
             return DummyResponse(json.dumps({"id": "post-1"}))
@@ -200,21 +205,24 @@ class ThreadsApiTests(unittest.TestCase):
             user_id="user-1",
             access_token="token-1",
             request_impl=fake_request,
+            sleep_impl=lambda seconds: None,
         )
 
         post_id = client.publish_post(text="Hello Threads")
 
         self.assertEqual(post_id, "post-1")
-        self.assertEqual(len(requests), 2)
+        self.assertEqual(len(requests), 3)
         self.assertEqual(requests[0].get_method(), "POST")
         create_body = requests[0].data.decode("utf-8")
         self.assertIn("media_type=TEXT", create_body)
         self.assertIn("text=Hello+Threads", create_body)
-        publish_body = requests[1].data.decode("utf-8")
+        publish_body = requests[2].data.decode("utf-8")
         self.assertIn("creation_id=creation-1", publish_body)
 
     def test_publish_post_logs_correlated_endpoints_without_token(self) -> None:
         def fake_request(request: object) -> DummyResponse:
+            if request.get_method() == "GET":
+                return DummyResponse(json.dumps({"id": "creation-1", "status": "FINISHED"}))
             if request.full_url.endswith("/threads"):
                 return DummyResponse(json.dumps({"id": "creation-12345678"}))
             return DummyResponse(json.dumps({"id": "post-1"}))
@@ -223,6 +231,7 @@ class ThreadsApiTests(unittest.TestCase):
             user_id="user-1",
             access_token="secret-token",
             request_impl=fake_request,
+            sleep_impl=lambda seconds: None,
         )
 
         output = io.StringIO()
@@ -236,6 +245,32 @@ class ThreadsApiTests(unittest.TestCase):
         self.assertIn("creation_id=crea...5678", diagnostic)
         self.assertNotIn("secret-token", diagnostic)
 
+    def test_publish_post_waits_until_container_is_finished(self) -> None:
+        requests: list[object] = []
+        status_calls = 0
+
+        def fake_request(request: object) -> DummyResponse:
+            nonlocal status_calls
+            requests.append(request)
+            if request.full_url.endswith("/threads"):
+                return DummyResponse(json.dumps({"id": "creation-1"}))
+            if request.get_method() == "GET":
+                status_calls += 1
+                status = "IN_PROGRESS" if status_calls == 1 else "FINISHED"
+                return DummyResponse(json.dumps({"id": "creation-1", "status": status}))
+            return DummyResponse(json.dumps({"id": "post-1"}))
+
+        client = ThreadsApiClient(
+            user_id="user-1",
+            access_token="token-1",
+            request_impl=fake_request,
+            sleep_impl=lambda seconds: None,
+        )
+
+        self.assertEqual(client.publish_post(text="Hello Threads"), "post-1")
+        self.assertEqual(status_calls, 2)
+        self.assertEqual(requests[-1].get_method(), "POST")
+
     def test_get_post_permalink_sends_access_token(self) -> None:
         requests: list[object] = []
 
@@ -247,6 +282,7 @@ class ThreadsApiTests(unittest.TestCase):
             user_id="user-1",
             access_token="token-1",
             request_impl=fake_request,
+            sleep_impl=lambda seconds: None,
         )
 
         self.assertEqual(client.get_post_permalink("post-1"), "https://www.threads.com/post/1")

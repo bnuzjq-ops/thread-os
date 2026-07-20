@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from dataclasses import dataclass
 from typing import Callable
 from urllib.error import HTTPError
@@ -49,6 +50,9 @@ class ThreadsApiClient:
     access_token: str
     base_url: str = "https://graph.threads.net/v1.0"
     request_impl: Callable[[Request], object] = urlopen
+    sleep_impl: Callable[[float], None] = time.sleep
+    container_poll_attempts: int = 6
+    container_poll_seconds: float = 5.0
 
     def fetch_replies(self, media_id: str, limit: int = 100) -> list[ThreadsComment]:
         comments: list[ThreadsComment] = []
@@ -196,6 +200,7 @@ class ThreadsApiClient:
         if not creation_id:
             raise ThreadsApiError("Threads create response did not include a creation id")
 
+        self._wait_for_container(creation_id)
         self._log_publish_diagnostic(creation_id)
         payload = self._publish_container(creation_id)
         post_id = self._optional_text(payload.get("id"))
@@ -209,6 +214,35 @@ class ThreadsApiClient:
                 return post_id
 
         raise ThreadsApiError("Threads publish response did not include a post id")
+
+    def get_container_status(self, container_id: str) -> dict[str, object]:
+        params = {
+            "access_token": self.access_token,
+            "fields": "id,status,error_message",
+        }
+        url = f"{self.base_url}/{container_id}?{urlencode(params)}"
+        return self._request_json("GET", url)
+
+    def _wait_for_container(self, container_id: str) -> None:
+        for attempt in range(self.container_poll_attempts):
+            payload = self.get_container_status(container_id)
+            status = (self._optional_text(payload.get("status")) or "").upper()
+            if status == "FINISHED":
+                return
+            if status in {"ERROR", "EXPIRED", "PUBLISHED"}:
+                detail = self._optional_text(payload.get("error_message")) or status
+                raise ThreadsApiError(
+                    f"Threads container {container_id} is not publishable: {detail}"
+                )
+            if status not in {"IN_PROGRESS", ""}:
+                raise ThreadsApiError(
+                    f"Threads container {container_id} returned unexpected status: {status}"
+                )
+            if attempt < self.container_poll_attempts - 1:
+                self.sleep_impl(self.container_poll_seconds)
+        raise ThreadsApiError(
+            f"Threads container {container_id} did not reach FINISHED status"
+        )
 
     def get_post_permalink(self, post_id: str) -> str | None:
         """Read the permalink after publishing without changing external state."""
