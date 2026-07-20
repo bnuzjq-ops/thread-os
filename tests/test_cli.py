@@ -75,6 +75,41 @@ class CliTests(unittest.TestCase):
             self.assertEqual(exit_code, 0)
             self.assertEqual(captured[0].get_task("publish:content-1:v1").text, "Hello Threads")
 
+    def test_publish_source_never_falls_back_to_publishing_the_whole_due_queue(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            store_path = Path(tmpdir) / "publish_tasks.json"
+            source_path = Path(tmpdir) / "post.md"
+            source_path.write_text(
+                "---\ncontent_id: content-1\ncontent_version: 2\nplatform: threads\n"
+                "status: ready\n---\n\nHello Threads\n",
+                encoding="utf-8",
+            )
+            captured: list[set[str] | None] = []
+            prod_config = SimpleNamespace(
+                env="production", publish_enabled=True, dry_run=False,
+                is_production=True, max_daily_posts=10,
+                min_post_interval_minutes=60, max_consecutive_failures=5,
+                max_consecutive_unknown=5,
+            )
+
+            def fake_run_publish(store, client, task_ids=None, config=None):
+                captured.append(set(task_ids) if task_ids is not None else None)
+                return SimpleNamespace(attempted=0, posted=0)
+
+            with patch("threads_bot_system.cli._build_threads_client", return_value=object()), patch(
+                "threads_bot_system.cli.run_publish", side_effect=fake_run_publish
+            ), patch(
+                "threads_bot_system.cli.ProductionGuardConfig.from_env",
+                return_value=prod_config,
+            ):
+                exit_code = main([
+                    "publish", "--store-path", str(store_path), "--source", str(source_path),
+                    "--task-id", "publish:unrelated:v1",
+                ])
+
+            self.assertEqual(exit_code, 0)
+            self.assertEqual(captured, [{"publish:content-1:v2"}])
+
     def test_monitor_command_discovers_user_threads_when_no_media_id_is_given(self) -> None:
         with TemporaryDirectory() as tmpdir:
             store_path = Path(tmpdir) / "reply_tasks.json"

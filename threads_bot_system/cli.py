@@ -337,7 +337,7 @@ def _run_publish(
     # Lazy-build Threads client only when real publish is needed
     threads_client = _build_threads_client(os.environ)
     selected_task_ids = task_ids or None
-    if source_path and selected_task_ids is None:
+    if source_path:
         selected_task_ids = [created.task.publish_task_id]
     if selected_task_ids is None:
         report = run_publish(store, threads_client)

@@ -74,7 +74,8 @@ jobs:
             esac
             source="content-repo/$PUBLISH_DISPATCH_SOURCE_PATH"
             test -f "$source"
-            python -m threads_bot_system publish --source "$source"
+            python -m threads_bot_system publish --source "$source" \
+              --task-id "publish:$PUBLISH_DISPATCH_TASK_ID:v$PUBLISH_DISPATCH_VERSION"
           else
             test -n "$PUBLISH_SOURCE_PATH"
             case "$PUBLISH_SOURCE_PATH" in
@@ -108,6 +109,9 @@ jobs:
 
       - name: Publish failure summary
         if: failure()
+        env:
+          DISPATCH_TASK_ID: ${{ github.event.client_payload.content_id }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.content_version }}
         run: |
           {
             echo "## Threads publish failure"
@@ -117,11 +121,20 @@ jobs:
             echo "- Automatic retry: disabled; inspect the task's error_type and last_error before manual recovery."
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -f state/publish_tasks.json ]; then
-            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
+          import os
           from pathlib import Path
           state = json.loads(Path("state/publish_tasks.json").read_text(encoding="utf-8"))
-          for task in state.get("tasks", {}).values():
+          task_id = None
+          if os.environ.get("GITHUB_EVENT_NAME") == "repository_dispatch":
+              content_id = os.environ.get("DISPATCH_TASK_ID", "")
+              version = os.environ.get("DISPATCH_VERSION", "")
+              task_id = f"publish:{content_id}:v{version}" if version != "1" else f"publish:{content_id}"
+          tasks = state.get("tasks", {}).values()
+          if task_id:
+              tasks = [task for task in tasks if task.get("publish_task_id") == task_id]
+          for task in tasks:
               if task.get("status") in {"failed", "unknown"}:
                   print(f"- Task: `{task.get('publish_task_id')}`; phase: `{task.get('error_phase')}`; type: `{task.get('error_type')}`; external action: `{task.get('external_action')}`; retry allowed: `{task.get('retry_allowed')}`; recovery: {task.get('recovery_action')}")
           PY
