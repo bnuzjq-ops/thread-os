@@ -44,9 +44,9 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("ENV: ${{ vars.ENV }}", text)
         self.assertIn("PUBLISH_ENABLED: ${{ vars.PUBLISH_ENABLED }}", text)
         self.assertIn("DRY_RUN: ${{ vars.DRY_RUN }}", text)
-        self.assertIn("MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS }}", text)
+        self.assertIn("MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS || '10' }}", text)
         self.assertIn(
-            "MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES }}",
+            "MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES || '10' }}",
             text,
         )
         self.assertIn(

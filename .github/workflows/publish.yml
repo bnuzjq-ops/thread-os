@@ -48,8 +48,8 @@ jobs:
           ENV: ${{ vars.ENV }}
           PUBLISH_ENABLED: ${{ vars.PUBLISH_ENABLED }}
           DRY_RUN: ${{ vars.DRY_RUN }}
-          MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS }}
-          MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES }}
+          MAX_DAILY_POSTS: ${{ vars.MAX_DAILY_POSTS || '10' }}
+          MIN_POST_INTERVAL_MINUTES: ${{ vars.MIN_POST_INTERVAL_MINUTES || '10' }}
           MAX_CONSECUTIVE_FAILURES: ${{ vars.MAX_CONSECUTIVE_FAILURES }}
           MAX_CONSECUTIVE_UNKNOWN: ${{ vars.MAX_CONSECUTIVE_UNKNOWN }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}

@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from threads_bot_system.publish_source import load_publish_source
-from threads_bot_system.publish_source import select_due_source
+from threads_bot_system.publish_source import select_due_source, find_duplicate_scheduled_times
 
 
 class PublishSourceTests(unittest.TestCase):
@@ -76,7 +76,7 @@ class PublishSourceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_publish_source(path)
 
-    def test_select_due_source_uses_time_then_content_id(self) -> None:
+    def test_select_due_source_blocks_duplicate_times(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             for content_id in ("b", "a"):
@@ -86,7 +86,23 @@ class PublishSourceTests(unittest.TestCase):
                     "---\n\nHello\n",
                     encoding="utf-8",
                 )
-            self.assertEqual(select_due_source(root).name, "a.md")
+            with self.assertRaisesRegex(ValueError, "duplicate scheduled_time"):
+                select_due_source(root)
+
+    def test_find_duplicate_scheduled_times(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            for content_id in ("a", "b"):
+                (root / f"{content_id}.md").write_text(
+                    f"---\ncontent_id: {content_id}\nplatform: threads\n"
+                    "editorial_status: ready\nscheduled_time: 2026-07-20T22:00:00+08:00\n"
+                    "---\n\nHello Threads\n",
+                    encoding="utf-8",
+                )
+            self.assertEqual(
+                find_duplicate_scheduled_times(root),
+                {"2026-07-20T22:00:00+08:00": ["a", "b"]},
+            )
 
 
 if __name__ == "__main__":

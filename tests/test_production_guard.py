@@ -228,7 +228,7 @@ class PrePublishCheckTests(unittest.TestCase):
             "This is a valid real piece of content.",
             "fresh-content-001",
             self._prod_config(),
-            todays_post_count=5,
+            todays_post_count=10,
         )
         self.assertFalse(report.allowed)
 

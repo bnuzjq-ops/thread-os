@@ -79,6 +79,10 @@ def load_publish_source(path: str | Path) -> PublishSource:
 
 def select_due_source(root: str | Path, now: datetime | None = None) -> Path | None:
     """Select the earliest due scheduled source, stably ordered by content ID."""
+    duplicates = find_duplicate_scheduled_times(root)
+    if duplicates:
+        details = "; ".join(f"{when}: {', '.join(ids)}" for when, ids in duplicates.items())
+        raise ValueError(f"duplicate scheduled_time; reschedule before publishing: {details}")
     current = now or datetime.now(timezone.utc)
     if current.tzinfo is None:
         raise ValueError("now must include a timezone")
@@ -95,3 +99,13 @@ def select_due_source(root: str | Path, now: datetime | None = None) -> Path | N
         return None
     candidates.sort(key=lambda item: (item[0], item[1]))
     return candidates[0][2]
+
+
+def find_duplicate_scheduled_times(root: str | Path) -> dict[str, list[str]]:
+    """Return scheduled timestamps that are assigned to more than one source."""
+    by_time: dict[str, list[str]] = {}
+    for path in sorted(Path(root).glob("*.md")):
+        source = load_publish_source(path)
+        if source.scheduled_time:
+            by_time.setdefault(source.scheduled_time, []).append(source.content_id)
+    return {when: ids for when, ids in by_time.items() if len(ids) > 1}

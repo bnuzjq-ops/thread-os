@@ -223,6 +223,15 @@ class ThreadsApiClient:
         url = f"{self.base_url}/{container_id}?{urlencode(params)}"
         return self._request_json("GET", url)
 
+    def get_publishing_limit(self) -> dict[str, object]:
+        """Read Meta's current account publishing quota configuration."""
+        params = urlencode({
+            "fields": "quota_usage,config,reply_quota_usage,reply_config",
+            "access_token": self.access_token,
+        })
+        url = f"{self.base_url}/{self.user_id}/threads_publishing_limit?{params}"
+        return self._request_json("GET", url)
+
     def _wait_for_container(self, container_id: str) -> None:
         for attempt in range(self.container_poll_attempts):
             payload = self.get_container_status(container_id)
