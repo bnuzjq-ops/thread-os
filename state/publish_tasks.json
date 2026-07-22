@@ -201,6 +201,26 @@
       "created_at": "2026-07-20T11:00:11.007836+00:00",
       "updated_at": "2026-07-20T11:00:13.244376+00:00"
     },
+    "publish:threads-20260720-resign-shangguan-01:v2": {
+      "publish_task_id": "publish:threads-20260720-resign-shangguan-01:v2",
+      "source_key": "threads-20260720-resign-shangguan-01",
+      "text": "裸辞一年后，我给所有人的建议只有一句：\n\n能不裸辞，尽量别裸辞。\n\n我以前以为，裸辞是勇敢。\n\n学了命理才发现，可能只是我的“伤官”被引动了：\n\n看不惯领导，\n受不了规则，\n觉得自己出去一定能闯出一片天。\n\n于是辞得很潇洒。\n\n后来才发现，伤官给你的不只是才气，\n还有不服管、不想忍、容易冲动。\n\n它能让你跳出烂环境，\n也能让你在还没想好下一步时，先把退路砍了。\n\n所以，想裸辞的时候，先别急着递交申请。\n\n至少先问自己：\n\n我是在离开不适合的地方，\n还是只是在逃离当下的情绪？",
+      "content_version": 2,
+      "status": "published",
+      "post_id": "18370053955239558",
+      "platform_post_id": "18370053955239558",
+      "permalink": "https://www.threads.com/@jq.sifu/post/DbGQTwemrT_",
+      "scheduled_time": "2026-07-22T22:00:00+08:00",
+      "error_type": null,
+      "error_phase": null,
+      "external_action": true,
+      "retry_allowed": false,
+      "recovery_action": "Query the post ID manually; do not republish.",
+      "claimed_at": "2026-07-22T14:00:17.050421+00:00",
+      "last_error": null,
+      "created_at": "2026-07-22T14:00:17.049782+00:00",
+      "updated_at": "2026-07-22T14:00:28.176974+00:00"
+    },
     "publish:threads-20260720-shishen-dark-01": {
       "publish_task_id": "publish:threads-20260720-shishen-dark-01",
       "source_key": "threads-20260720-shishen-dark-01",
